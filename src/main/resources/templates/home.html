@@ -24,8 +24,9 @@
 
 			<input type="submit" value="Login" />
 		</form>
+		<a th:href="@{/register}">Register</a>
 	</div>
-	<form method="POST" th:action="@{/issue}" id="createIssue">
+	<form method="POST" th:action="@{/new_issue}" id="createIssue">
 		<label for="summary">Summary: </label>
 		<input type="text" name="summary" id="summary" /><br />
 		<label for="contents">Contents: </label>
@@ -34,7 +35,7 @@
 	</form>
 	<p>Issue List</p>
 	<ul th:each="issue : ${issueList}">
-		<li th:text="${issue.data.summary}"></li>
+		<li th:text="|${issue.data.summary}: ${issue.user.username}|"></li>
 	</ul>
 </body>
 
