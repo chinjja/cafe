@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="EUC-KR">
+	<title>Issue</title>
+</head>
+
+<body>
+	<h1>Welcome to...</h1>
+
+	<div th:if="${user}">
+		<p th:text="${user.username}">
+		<form method="POST" th:action="@{/logout}" id="logoutForm">
+			<input type="submit" value="Logout" />
+		</form>
+	</div>
+	<div th:unless="${user}">
+		<form method="POST" th:action="@{/login}" id="loginForm">
+			<label for="username">Username: </label>
+			<input type="text" name="username" id="username" /><br />
+			<label for="password">Password: </label>
+			<input type="password" name="password" id="password" /><br />
+
+			<input type="submit" value="Login" />
+		</form>
+	</div>
+	<form method="POST" th:action="@{/issue}" id="createIssue">
+		<label for="summary">Summary: </label>
+		<input type="text" name="summary" id="summary" /><br />
+		<label for="contents">Contents: </label>
+		<input type="text" name="contents" id="contents" /><br />
+		<input type="submit" />
+	</form>
+	<p>Issue List</p>
+	<ul th:each="issue : ${issueList}">
+		<li th:text="${issue.data.summary}"></li>
+	</ul>
+</body>
+
+</html>
