@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
@@ -23,7 +24,7 @@ public class Issue {
 	@NotNull
 	private User user;
 	
-	@NotNull
+	@Valid
 	@Embedded
 	private IssueData data;
 	
