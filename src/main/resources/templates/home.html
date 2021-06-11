@@ -4,6 +4,7 @@
 <head>
 	<meta charset="EUC-KR">
 	<title>Issue</title>
+	<link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
@@ -34,9 +35,24 @@
 		<input type="submit" />
 	</form>
 	<p>Issue List</p>
-	<ul th:each="issue : ${issueList}">
-		<li th:text="|${issue.data.summary}: ${issue.user.username}|"></li>
-	</ul>
+	<table>
+		<thead>
+			<tr>
+				<th>Summary</th>
+				<th>Contents</th>
+				<th>Created At</th>
+				<th>Username</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="issue : ${issueList}">
+				<td th:text="${issue.data.summary}"></td>
+				<td th:text="${issue.data.contents}"></td>
+				<td th:text="${issue.createdAt}"></td>
+				<td th:text="${issue.user.username}"></td>
+			</tr>
+		</tbody>
+	</table>
 </body>
 
 </html>
