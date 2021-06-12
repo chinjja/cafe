@@ -11,7 +11,7 @@
 	<h1>Welcome to...</h1>
 
 	<div th:if="${user}">
-		<p th:text="${user.username}">
+		<p th:text="|${user.username}: ${user.authorities[0]}|">
 		<form method="POST" th:action="@{/logout}" id="logoutForm">
 			<input type="submit" value="Logout" />
 		</form>
