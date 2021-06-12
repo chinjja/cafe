@@ -1,5 +1,6 @@
 package com.chinjja.issue.web;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,7 @@ public class HomeController {
 		return "home";
 	}
 	
+	@Secured("ROLE_USER")
 	@PostMapping("/new_issue")
 	public String createIssue(@AuthenticationPrincipal User user, IssueData data) {
 		val issue = new Issue();
