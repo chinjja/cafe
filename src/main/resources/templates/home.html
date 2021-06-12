@@ -15,6 +15,7 @@
 		<form method="POST" th:action="@{/logout}" id="logoutForm">
 			<input type="submit" value="Logout" />
 		</form>
+		<hr/>
 		<form method="POST" th:action="@{/new_issue}" id="createIssue">
 			<label for="summary">Summary: </label>
 			<input type="text" name="summary" id="summary" /><br />
@@ -35,6 +36,7 @@
 		<a th:href="@{/register}">Register</a>
 	</div>
 
+	<hr/>
 	<p>Issue List</p>
 	<table>
 		<thead>
