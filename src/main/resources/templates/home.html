@@ -56,7 +56,9 @@
 				<td th:text="${issue.data.summary}"></td>
 				<td th:text="${issue.data.contents}"></td>
 				<td th:text="${issue.createdAt}"></td>
-				<td th:text="${issue.user.username}"></td>
+				<td>
+					<a th:href="@{/users/} + ${issue.user.username}" th:text="${issue.user.username}"/>
+				</td>
 			</tr>
 		</tbody>
 	</table>

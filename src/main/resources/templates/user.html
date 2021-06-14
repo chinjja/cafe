@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="EUC-KR">
+	<title>User Details</title>
+</head>
+
+<body>
+	<h1>User Details</h1>
+	<div>
+		<label for="username">Username</label>
+		<span th:text="${user.username}"/>
+	</div>
+	<div>
+		<label for="role">Role</label>
+		<span th:text="${user.authorities[0]}"/>
+	</div>
+</body>
+
+</html>

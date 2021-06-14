@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
@@ -66,5 +67,11 @@ public class HomeController {
 		user.setPassword(passwordEncoder.encode(form.getPassword()));
 		userRepo.save(user);
 		return "redirect:/";
+	}
+	
+	@GetMapping("/users/{username}")
+	public String users(@PathVariable String username, Model model) {
+		model.addAttribute("user", userRepo.findByUsername(username));
+		return "user";
 	}
 }
