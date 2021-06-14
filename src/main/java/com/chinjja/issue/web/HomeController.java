@@ -42,8 +42,8 @@ public class HomeController {
 	}
 	
 	@Secured("ROLE_USER")
-	@PostMapping("/new_issue")
-	public String createIssue(@AuthenticationPrincipal User user, @Valid IssueData data, Errors errors, SessionStatus status) {
+	@PostMapping("/issues")
+	public String issueForm(@AuthenticationPrincipal User user, @Valid IssueData data, Errors errors, SessionStatus status) {
 		if(errors.hasErrors()) {
 			return "home";
 		}

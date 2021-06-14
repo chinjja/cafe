@@ -16,7 +16,7 @@
 			<input type="submit" value="Logout" />
 		</form>
 		<hr/>
-		<form method="POST" th:action="@{/new_issue}" th:object="${issueData}" id="createIssue">
+		<form method="POST" th:action="@{/issues}" th:object="${issueData}" id="createIssue">
 			<label for="summary">Summary: </label>
 			<input type="text" th:field="*{summary}"/>
 			<span class="validationError" th:if="${#fields.hasErrors('summary')}" th:errors="*{summary}")></span>
