@@ -6,3 +6,7 @@ table, th, td {
 th {
 	background-color: #ddc8fe;
 }
+
+span.validationError {
+	color: red;
+}

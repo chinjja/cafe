@@ -32,7 +32,7 @@ public class HomeController {
 	private final PasswordEncoder passwordEncoder;
 	
 	@GetMapping("/")
-	public String home(@AuthenticationPrincipal User user, Model model) {
+	public String home(@AuthenticationPrincipal User user, IssueData data, Model model) {
 		if(user != null) {
 			model.addAttribute("user", user);
 		}

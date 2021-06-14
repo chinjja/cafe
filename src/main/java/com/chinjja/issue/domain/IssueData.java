@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class IssueData {
 	@NotBlank
 	private String summary;
+	@NotBlank
 	private String contents;
 }

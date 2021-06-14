@@ -16,11 +16,15 @@
 			<input type="submit" value="Logout" />
 		</form>
 		<hr/>
-		<form method="POST" th:action="@{/new_issue}" id="createIssue">
+		<form method="POST" th:action="@{/new_issue}" th:object="${issueData}" id="createIssue">
 			<label for="summary">Summary: </label>
-			<input type="text" name="summary" id="summary" /><br />
+			<input type="text" th:field="*{summary}"/>
+			<span class="validationError" th:if="${#fields.hasErrors('summary')}" th:errors="*{summary}")></span>
+			<br />
 			<label for="contents">Contents: </label>
-			<input type="text" name="contents" id="contents" /><br />
+			<input type="text" th:field="*{contents}"/>
+			<span class="validationError" th:if="${#fields.hasErrors('contents')}" th:errors="*{contents}")></span>
+			<br />
 			<input type="submit" />
 		</form>
 	</div>
