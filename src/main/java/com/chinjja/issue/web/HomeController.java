@@ -99,16 +99,17 @@ public class HomeController {
 	
 	@GetMapping("/users/{username}")
 	public String users(@PathVariable String username, Model model) {
-		model.addAttribute("user", userRepo.findByUsername(username));
+		val user = userRepo.findByUsername(username);
+		model.addAttribute("user", user);
 		return "user";
 	}
 	
 	@GetMapping("/issues/{id}")
 	public String issues(@PathVariable Long id, Model model) {
-		Issue issue = issueRepo.findById(id).orElseThrow();
+		val issue = issueRepo.findById(id).orElseThrow();
 		model.addAttribute("issue", issue);
 		
-		Iterable<Reply> replyList = replyRepo.findAllByIssue(issue);
+		val replyList = replyRepo.findAllByIssue(issue);
 		model.addAttribute("replyList", replyList);
 		
 		return "issue";
@@ -121,7 +122,7 @@ public class HomeController {
 			return "issue";
 		}
 		if(!status.isComplete()) {
-			Reply reply = new Reply();
+			val reply = new Reply();
 			reply.setIssue(issue);
 			reply.setUser(user);
 			reply.setComment(replyForm.getComment());
