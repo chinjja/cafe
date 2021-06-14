@@ -54,7 +54,9 @@
 		</thead>
 		<tbody>
 			<tr th:each="issue : ${issueList}">
-				<td th:text="${issue.id}"></td>
+				<td>
+					<a th:href="@{/issues/} + ${issue.id}" th:text="${issue.id}"/>
+				</td>
 				<td th:text="${issue.data.summary}"></td>
 				<td th:text="${issue.data.contents}"></td>
 				<td th:text="${issue.createdAt}"></td>

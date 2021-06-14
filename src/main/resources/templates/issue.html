@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="EUC-KR">
+	<title>Issue Details</title>
+</head>
+
+<body>
+	<h1>Issue Details</h1>
+	<div th:object="${issue}">
+	<h2 th:text="*{data.summary} + ' : ' + *{createdAt}"/>
+	<p th:text="*{data.contents}"/>
+	</div>
+	<hr/>
+	<ul th:each="reply : ${replyList}")>
+		<li th:text="${reply.createdAt} + ' : ' + ${reply.user.username}"/>
+		<p th:text="${reply.comment}"/>
+	</ul>
+	<form th:if="${user}" method="POST" th:action="@{/reply}" th:object="${replyForm}" id="replyForm">
+		<div>
+			<label for="comment"/>
+			<input type="text" th:field="*{comment}"/>
+			<span class="validationError" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}"/>
+		</div>
+		<input type="submit"/>
+	</form>
+</body>
+
+</html>
