@@ -2,7 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" th:fragment="navFragment">
 	<div class="container-fluid">
-		<a class="navbar-brand" href="#">브랜드</a>
+		<a class="navbar-brand" th:href="@{/}">브랜드</a>
+		<div class="d-flex flex-row me-auto" th:each="profile : ${activeProfileList}">
+			<div class="badge rounded-pill bg-danger me-2" style="border: solid 1px red;" th:if="${profile} != 'prod'" th:text="${profile}"></div>
+		</div>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
 			<span class="navbar-toggler-icon"></span>
 		</button>
@@ -10,10 +13,10 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 				<li class="nav-item">
-					<a class="nav-link" href="#" th:href="@{/}">Home</a>
+					<a class="nav-link" th:href="@{/}">Home</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#" th:href="@{/register}">Register</a>
+					<a class="nav-link" th:href="@{/register}">Register</a>
 				</li>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown">
