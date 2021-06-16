@@ -4,7 +4,8 @@
 	<div layout:fragment="content" class="container-fluid">
 		<div class="row g-4">
 			<div class="col-md-4 order-md-last">
-				<div th:replace="fragments/issue :: issueFragment">
+				<div class="position-sticky" style="top: 4.5rem;">
+					<div th:replace="fragments/issue :: issueFragment"/>
 				</div>
 			</div>
 			<div class="col-md-8">
