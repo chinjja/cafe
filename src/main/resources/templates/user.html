@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
 
-<head>
-	<meta charset="EUC-KR">
-	<title>User Details</title>
-</head>
-
-<body>
-	<h1>User Details</h1>
-	<div>
-		<label for="username">Username</label>
-		<span th:text="${user.username}"/>
+	<div layout:fragment="content" class="container-fluid">
+		<div class="page-header">
+			<h1>User Details</h1>
+		</div>
+		<div class="input-group">
+			<div class="input-group-prepend w-25">
+				<span class="input-group-text">Username</span>
+			</div>
+			<input type="datetime" class="form-control" th:value="${user.username}"/>
+		</div>
+		<div class="input-group">
+			<div class="input-group-prepend w-25">
+				<span class="input-group-text">Role</span>
+			</div>
+			<input type="text" class="form-control" th:value="${user.authorities[0]}"/>
+		</div>
 	</div>
-	<div>
-		<label for="role">Role</label>
-		<span th:text="${user.authorities[0]}"/>
-	</div>
-</body>
 
 </html>

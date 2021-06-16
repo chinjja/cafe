@@ -1,7 +1,11 @@
 package com.chinjja.issue.web;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.validation.Valid;
 
+import org.springframework.core.env.Environment;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,11 +36,16 @@ import lombok.val;
 @RequiredArgsConstructor
 @SessionAttributes(names = {"issueList", "replyList"}, types = {Issue.class})
 public class HomeController {
+	private final Environment env;
 	private final IssueRepository issueRepo;
 	private final UserRepository userRepo;
 	private final ReplyRepository replyRepo;
 	private final PasswordEncoder passwordEncoder;
 	
+	@ModelAttribute("activeProfileList")
+	public List<String> profile() {
+		return Arrays.asList(env.getActiveProfiles());
+	}
 	@ModelAttribute("issueList")
 	public Iterable<Issue> issueList() {
 		return issueRepo.findAll();
@@ -106,7 +115,7 @@ public class HomeController {
 	
 	@GetMapping("/issues/{id}")
 	public String issues(@PathVariable Long id, Model model) {
-		val issue = issueRepo.findById(id).orElseThrow();
+		val issue = issueRepo.findById(id).get();
 		model.addAttribute("issue", issue);
 		
 		val replyList = replyRepo.findAllByIssue(issue);

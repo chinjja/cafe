@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.chinjja.issue.data.IssueRepository;
 import com.chinjja.issue.data.ReplyRepository;
@@ -19,6 +20,7 @@ import com.chinjja.issue.domain.User;
 import lombok.val;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class DataTests {
 	@Autowired IssueRepository issueRepo;
 	@Autowired ReplyRepository replyRepo;

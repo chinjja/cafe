@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" th:fragment="navFragment">
+	<div class="container-fluid">
+		<a class="navbar-brand" th:href="@{/}">브랜드</a>
+		<div class="d-flex flex-row me-auto" th:each="profile : ${activeProfileList}">
+			<div class="badge rounded-pill bg-danger me-2" style="border: solid 1px red;" th:if="${profile} != 'prod'" th:text="${profile}"></div>
+		</div>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+				<li class="nav-item">
+					<a class="nav-link" th:href="@{/}">Home</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:href="@{/register}">Register</a>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown">
+						Link
+					</a>
+					<ul class="dropdown-menu">
+						<li><a class="dropdown-item" href="#">Action</a></li>
+						<li><a class="dropdown-item" href="#">Another action</a></li>
+						<li><hr class="dropdown-divider"/></li>
+						<li><a class="dropdown-item" href="#">Something else here</a></li>
+					</ul>
+				</li>
+			</ul>
+			<span class="navbar-text me-2">Navbar text</span>
+			<form class="d-flex">
+				<input class="form-control me-2" type="search" placeholder="Search" />
+				<button class="btn btn-outline-success" type="submit">Search</button>
+			</form>
+		</div>
+	</div>
+</nav>
+
+</html>

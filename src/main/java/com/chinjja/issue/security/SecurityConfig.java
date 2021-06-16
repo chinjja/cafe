@@ -3,6 +3,7 @@ package com.chinjja.issue.security;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -54,13 +55,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		;
 	}
 	
+	@Profile("dev")
 	@Bean
 	public CommandLineRunner createUser() {
 		return args -> {
-			val user = new User();
-			user.setUsername("chinjja");
-			user.setPassword(encoder().encode("1234"));
-			userRepo.save(user);
+			if(userRepo.count() == 0) {
+				val user = new User();
+				user.setUsername("chinjja");
+				user.setPassword(encoder().encode("1234"));
+				userRepo.save(user);
+			}
 		};
 	}
 
