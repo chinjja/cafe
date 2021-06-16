@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" th:fragment="navFragment">
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light shadow" th:fragment="navFragment">
 	<div class="container-fluid">
 		<a class="navbar-brand" th:href="@{/}">브랜드</a>
 		<div class="d-flex flex-row me-auto" th:each="profile : ${activeProfileList}">
