@@ -1,1 +1,1 @@
-spring.datasource.url: jdbc:sqlite:sqlitetest.db
+spring.datasource.url: jdbc:sqlite:data-dev/dev.db
