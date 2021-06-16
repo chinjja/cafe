@@ -52,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		.and()
 		.csrf()
+		.ignoringAntMatchers("/mes/**")
 		;
 	}
 	
