@@ -1,30 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
-
 	<div layout:fragment="content" class="container-fluid">
-		<div class="page-header">
-			<h1>Issue Details</h1>
-		</div>
-		<div th:object="${issue}">
-			<div class="input-group">
-				<div class="input-group-prepend w-25">
-					<span class="input-group-text">Date</span>
-				</div>
-				<input type="datetime" class="form-control" th:value="*{createdAt}"/>
-			</div>
-			<div class="input-group">
-				<div class="input-group-prepend w-25">
-					<span class="input-group-text">Summary</span>
-				</div>
-				<input type="text" class="form-control" th:value="*{data.summary}"/>
-			</div>
-			<div class="input-group">
-				<div class="input-group-prepend w-25">
-					<span class="input-group-text">Content</span>
-				</div>
-				<textarea type="text" class="form-control" th:text="*{data.contents}" rows=4></textarea>
-			</div>
+	
+		<div th:replace="fragments/issue :: issueFragment">
 		</div>
 		<hr />
 		<div class="page-header">
