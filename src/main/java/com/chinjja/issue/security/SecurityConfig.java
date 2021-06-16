@@ -59,10 +59,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public CommandLineRunner createUser() {
 		return args -> {
-			val user = new User();
-			user.setUsername("chinjja");
-			user.setPassword(encoder().encode("1234"));
-			userRepo.save(user);
+			if(userRepo.count() == 0) {
+				val user = new User();
+				user.setUsername("chinjja");
+				user.setPassword(encoder().encode("1234"));
+				userRepo.save(user);
+			}
 		};
 	}
 
