@@ -5,7 +5,7 @@
 		<div class="row g-4">
 			<div class="col-md-4 order-md-last">
 				<div class="position-sticky" style="top: 4.5rem;">
-					<div th:replace="fragments/issue :: issueFragment"/>
+					<div th:replace="fragments/issue :: issueFragment"></div>
 				</div>
 			</div>
 			<div class="col-md-8">
@@ -13,21 +13,21 @@
 				<div class="page-header">
 					<h1>Reply List</h1>
 				</div>
-				<div class="list-group" th:each="reply : ${replyList}" )>
+				<div class="list-group" th:each="reply : ${replyList}">
 					<div class="list-group-item mb-1">
 					<div class="d-flex justify-content-between">
-						<h5 class="mb-2" th:text="${reply.user.username}"/>
-						<small th:text="${reply.createdAt}"/>
+						<h5 class="mb-2" th:text="${reply.user.username}"></h5>
+						<small th:text="${reply.createdAt}"></small>
 					</div>
-					<textarea class="form-control mb-1" th:text="${reply.comment}" readonly/>
+					<textarea class="form-control mb-1" th:text="${reply.comment}" readonly></textarea>
 					</div>
 				</div>
 				<hr />
 				<form th:if="${user}" method="POST" th:action="@{/reply}" th:object="${replyForm}" id="replyForm" class="row-cols-1">
 					<div class="form-group mb-1">
 						<label for="comment">New Comment</label>
-						<textarea type="text" th:field="*{comment}" class="form-control" autocomplete="off" rows=4/>
-						<span class="alert alert-danger" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}"/>
+						<textarea th:field="*{comment}" class="form-control" autocomplete="off" rows=4></textarea>
+						<span class="alert alert-danger" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}"></span>
 					</div>
 					<input type="submit" class="btn btn-outline-primary"/>
 				</form>
