@@ -8,9 +8,7 @@
 		</div>
 		<div th:if="${user}">
 			<form method="POST" th:action="@{/logout}" id="logoutForm" class="row-cols-1">
-				<div class="mb-3">
-					<span class="form-label mb-3" th:text="${user.username}"/>
-				</div>
+				<span class="form-label mb-3" th:text="${user.username}"/>
 				<input type="submit" value="Logout" class="btn btn-outline-primary" />
 			</form>
 			<hr />

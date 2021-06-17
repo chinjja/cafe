@@ -5,22 +5,16 @@
 			<h1>Issue</h1>
 		</div>
 		<div th:object="${issue}">
-			<div class="input-group">
-				<div class="input-group-prepend w-25">
-					<span class="input-group-text">Date</span>
-				</div>
+			<div class="input-group mb-2">
+				<span class="input-group-text w-25">Date</span>
 				<input type="datetime" class="form-control" th:value="*{createdAt}"/>
 			</div>
-			<div class="input-group">
-				<div class="input-group-prepend w-25">
-					<span class="input-group-text">Summary</span>
-				</div>
+			<div class="input-group mb-2">
+				<span class="input-group-text w-25">Summary</span>
 				<input type="text" class="form-control" th:value="*{data.summary}"/>
 			</div>
 			<div class="input-group">
-				<div class="input-group-prepend w-25">
-					<span class="input-group-text">Content</span>
-				</div>
+				<span class="input-group-text w-25">Content</span>
 				<textarea type="text" class="form-control" th:text="*{data.contents}" rows=4></textarea>
 			</div>
 		</div>

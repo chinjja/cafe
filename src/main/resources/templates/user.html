@@ -6,17 +6,13 @@
 		<div class="page-header">
 			<h1>User Details</h1>
 		</div>
-		<div class="input-group">
-			<div class="input-group-prepend w-25">
-				<span class="input-group-text">Username</span>
-			</div>
-			<input type="datetime" class="form-control" th:value="${user.username}"/>
+		<div class="input-group mb-2">
+			<span class="input-group-text w-25">Username</span>
+			<input type="datetime" class="form-control" th:if="${selectedUser}" th:value="${selectedUser.username}"/>
 		</div>
 		<div class="input-group">
-			<div class="input-group-prepend w-25">
-				<span class="input-group-text">Role</span>
-			</div>
-			<input type="text" class="form-control" th:value="${user.authorities[0]}"/>
+			<span class="input-group-text w-25">Role</span>
+			<input type="text" class="form-control" th:if="${selectedUser}" th:value="${selectedUser.authorities[0]}"/>
 		</div>
 	</div>
 
