@@ -1,6 +1,6 @@
 package com.chinjja.issue.domain;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -29,11 +29,11 @@ public class Issue {
 	private IssueData data;
 	
 	@NotNull
-	private Date createdAt;
+	private LocalDateTime createdAt;
 	
 	@PrePersist
 	private void createdAt() {
-		createdAt = new Date();
+		createdAt = LocalDateTime.now();
 	}
 
 }

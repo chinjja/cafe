@@ -1,6 +1,6 @@
 package com.chinjja.issue.domain;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,10 +30,10 @@ public class Reply {
 	private String comment;
 	
 	@NotNull
-	private Date createdAt;
+	private LocalDateTime createdAt;
 	
 	@PrePersist
 	private void createdAt() {
-		createdAt = new Date();
+		createdAt = LocalDateTime.now();
 	}
 }
