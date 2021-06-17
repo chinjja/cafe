@@ -1,13 +1,10 @@
 package com.chinjja.issue.web;
 
-import java.util.Arrays;
-import java.util.List;
-
 import javax.validation.Valid;
 
-import org.springframework.core.env.Environment;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,24 +33,14 @@ import lombok.val;
 @RequiredArgsConstructor
 @SessionAttributes(names = {"issueList", "replyList"}, types = {Issue.class})
 public class HomeController {
-	private final Environment env;
 	private final IssueRepository issueRepo;
 	private final UserRepository userRepo;
 	private final ReplyRepository replyRepo;
 	private final PasswordEncoder passwordEncoder;
 	
-	@ModelAttribute("activeProfileList")
-	public List<String> profile() {
-		return Arrays.asList(env.getActiveProfiles());
-	}
 	@ModelAttribute("issueList")
 	public Iterable<Issue> issueList() {
 		return issueRepo.findAll();
-	}
-	
-	@ModelAttribute
-	public User getUser(@AuthenticationPrincipal User user) {
-		return user;
 	}
 	
 	@ModelAttribute
@@ -109,7 +96,7 @@ public class HomeController {
 	@GetMapping("/users/{username}")
 	public String users(@PathVariable String username, Model model) {
 		val user = userRepo.findByUsername(username);
-		model.addAttribute("user", user);
+		model.addAttribute("selectedUser", user);
 		return "user";
 	}
 	
