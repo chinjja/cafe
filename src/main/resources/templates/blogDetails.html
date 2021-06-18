@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
+
+	<div layout:fragment="content" class="container-fluid">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>제목</th>
+					<th>작성일</th>
+					<th>작성자</th>
+					<th>좋아요</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td th:text="${blog.id}"></td>
+					<td th:text="${blog.data.title}"></td>
+					<td th:text="${blog.createdAt}"></td>
+					<td>
+						<a th:href="@{/users/} + ${blog.user.username}" th:text="${blog.user.username}"></a>
+					</td>
+					<td th:text="${blog.likeCount}"></td>
+				</tr>
+			</tbody>
+		</table>
+		<pre class="border rounded-3 p-3" th:text="${blog.data.contents}"></pre>
+		<form method="POST" th:action="@{/likeCount}" th:object="${likeCountData}" id="likeCountForm">
+			<input type="hidden" th:value="${blog.id}" th:name="target"/>
+			<input type="submit" class="btn btn-outline-primary" th:value="좋아요"/>
+		</form>
+		<hr/>
+		<div class="page-header">
+			<h4>댓글</h4>
+		</div>
+		<ul class="list-group">
+			<li class="list-group-item" th:each="comment : ${commentList}">
+				<a th:href="@{/users/} + ${comment.user.id}" th:text="${comment.user.username}"></a>
+				<p th:text="${comment.data.comment}"></p>
+				<p class="text-muted" th:text="${comment.createdAt}"></p>
+			</li>
+		</ul>
+		<div th:if="${user}">
+			<hr/>
+			<form method="POST" th:action="@{/comments}" th:object="${commentData}" id="commentForm" class="row-cols-1">
+				<input type="hidden" th:value="${blog.id}" th:name="target"/>
+				<div class="form-group mb-3">
+					<label for="comment" class="form-label" th:text="${user.username}"></label>
+					<input type="text" th:field="*{comment}" class="form-control" autocomplete="off" />
+					<div th:if="${#fields.hasErrors('comment')}" class="alert alert-danger" th:errors="*{comment}"></div>
+				</div>
+				<input type="submit" class="btn btn-outline-primary"/>
+			</form>
+		</div>
+	</div>
+</html>
