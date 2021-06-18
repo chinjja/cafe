@@ -8,20 +8,12 @@ import com.chinjja.issue.domain.BlogData;
 import com.chinjja.issue.domain.Comment;
 import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.LikeCountData;
-import com.chinjja.issue.service.BlogService;
 
 import lombok.RequiredArgsConstructor;
 
 @ControllerAdvice
 @RequiredArgsConstructor
 public class BlogControllerAdvice {
-	private final BlogService blogService;
-	
-	@ModelAttribute("blogList")
-	public Iterable<Blog> blogList() {
-		return blogService.getBlogList();
-	}
-	
 	@ModelAttribute
 	public Blog blog() {
 		return new Blog();
