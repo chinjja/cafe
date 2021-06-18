@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.chinjja.issue.domain.User;
+import com.chinjja.issue.security.RegisterForm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,5 +26,10 @@ public class CommonControllerAdvice {
 	@ModelAttribute
 	public User getUser(@AuthenticationPrincipal User user) {
 		return user;
+	}
+	
+	@ModelAttribute
+	public RegisterForm registerForm() {
+		return new RegisterForm();
 	}
 }
