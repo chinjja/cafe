@@ -24,6 +24,11 @@ import lombok.val;
 public class BlogController {
 	private final BlogService blogService;
 	
+	@GetMapping({"/", "index"})
+	public String index() {
+		return "index";
+	}
+	
 	@GetMapping("/blogs")
 	public String blogs() {
 		return "blogs";
