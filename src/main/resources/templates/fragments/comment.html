@@ -5,7 +5,7 @@
 		<pre class="p mt-2" th:text="${comment.data.comment}"></pre>
 		<div class="d-flex align-items-baseline">
 			<span class="text-muted me-2" th:text="${comment.createdAt}"></span>
-			<button class="btn text-muted" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseExample' + ${comment.id}">
+			<button class="btn text-muted" th:if="${user}" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseExample' + ${comment.id}">
 				답글달기
 			</button>
 		</div>
