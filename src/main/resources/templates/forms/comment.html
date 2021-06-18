@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-	<div th:fragment="commentForm(target)">
+	<div th:fragment="commentForm(target)" th:if="${user}">
 		<form method="POST" th:action="@{/comments}" th:object="${commentData}" id="commentForm" class="row-cols-1 border rounded-3 p-3">
 			<input type="hidden" th:value="${target.id}" th:name="target"/>
 			<div class="form-group mb-3">
