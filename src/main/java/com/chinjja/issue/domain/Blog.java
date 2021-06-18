@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Blog extends Element {
-	private int views;
+	private int viewCount;
 	
 	@Embedded
 	private BlogData data;

@@ -1,9 +1,15 @@
 package com.chinjja.issue.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.chinjja.issue.data.BlogRepository;
@@ -19,6 +25,7 @@ import com.chinjja.issue.domain.LikeCount;
 import com.chinjja.issue.domain.LikeCountData;
 import com.chinjja.issue.domain.User;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -29,6 +36,8 @@ public class BlogService {
 	private final BlogRepository blogRepo;
 	private final CommentRepository commentRepo;
 	private final LikeCountRepository likeCountRepo;
+	
+	private final Map<HashKey, LocalDateTime> lastVisitedTime = new HashMap<>();
 	
 	public Iterable<Blog> getBlogList() {
 		val blogs = blogRepo.findAll(Sort.by(Order.desc("createdAt")));
@@ -93,8 +102,37 @@ public class BlogService {
 		return like == null;
 	}
 	
-	public Blog visit(Blog blog) {
-		blog.setViews(blog.getViews() + 1);
-		return blogRepo.save(blog);
+	public synchronized void visit(User user, Blog blog) {
+		if(user == null) return;
+		val now = LocalDateTime.now();
+		val key = new HashKey(blog.getId(), user.getId());
+		val lastTime = lastVisitedTime.get(key);
+		if(lastTime == null || lastTime.compareTo(now.minusMinutes(1)) < 0) {
+			blog.setViewCount(blog.getViewCount() + 1);
+			blogRepo.save(blog);
+		}
+		lastVisitedTime.put(key, now);
+	}
+	
+	@Scheduled(fixedDelay = 5*1000)
+	public synchronized void cleanupTake() {
+		val bias = LocalDateTime.now().minusMinutes(1);
+		val rem = new ArrayList<>();
+		for(val i : lastVisitedTime.entrySet()) {
+			val k = i.getKey();
+			val v = i.getValue();
+			if(v.compareTo(bias) < 0) {
+				rem.add(k);
+			}
+		}
+		for(val i : rem) {
+			lastVisitedTime.remove(i);
+		}
+	}
+	
+	@Data
+	static class HashKey {
+		final Long blog;
+		final Long user;
 	}
 }

@@ -41,6 +41,8 @@ public class BlogController {
 		model.addAttribute("blog", blog);
 		model.addAttribute("commentList", blogService.getCommentList(blog));
 		model.addAttribute("canLike", blogService.canLikeCount(blog, user));
+		
+		blogService.visit(user, blog);
 		return "blogDetails";
 	}
 	
