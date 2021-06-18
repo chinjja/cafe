@@ -1,7 +1,4 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
-
+<html layout:decorate="~{layouts/layout}">
 	<div layout:fragment="content" class="container-fluid">
 		<div class="page-header">
 			<h1>User Details</h1>
@@ -15,5 +12,4 @@
 			<input type="text" class="form-control" th:if="${selectedUser}" th:value="${selectedUser.authorities[0]}"/>
 		</div>
 	</div>
-
 </html>

@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-	<ul th:fragment="commentListFragment(commentList)" class="list-group">
-		<li class="list-group-item" th:each="comment : ${commentList}">
-			<div th:replace="fragments/comment :: commentFragment(${comment})"></div>
-			<div th:replace="fragments/commentList :: commentListFragment(${comment.comments})"></div>
-		</li>
-	</ul>
-</html>
+<ul th:fragment="commentList(commentList)" class="list-group">
+	<li class="list-group-item" th:each="comment : ${commentList}">
+		<div th:replace="fragments/comment(${comment})"></div>
+		<div th:replace="fragments/commentList(${comment.comments})"></div>
+	</li>
+</ul>

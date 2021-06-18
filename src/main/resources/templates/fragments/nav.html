@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light shadow" th:fragment="navFragment">
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light shadow" th:fragment="nav">
 	<div class="container-fluid">
 		<a class="navbar-brand" th:href="@{/}">브랜드</a>
 		<div class="d-flex flex-row me-auto" th:each="profile : ${activeProfileList}">
@@ -40,7 +38,7 @@
 				<a class="btn btn-outline-primary w-50 me-2" th:href="@{/login}">Login</a>
 				<a class="btn btn-outline-primary w-50" th:href="@{/register}">Register</a>
 			</div>
-			<form class="d-flex justify-content-end" method="POST" th:if="${user}" th:action="@{/logout}" id="logoutForm">
+			<form class="d-flex justify-content-end m-0" method="POST" th:if="${user}" th:action="@{/logout}" id="logoutForm">
 				<span class="navbar-text me-2" th:text="${user.username}"></span>
 				<input type="submit" value="Logout" class="btn btn-outline-primary w-100" />
 			</form>
@@ -48,4 +46,3 @@
 	</div>
 </nav>
 
-</html>

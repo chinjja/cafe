@@ -1,7 +1,4 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
-
+<html layout:decorate="~{layouts/layout}">
 	<div layout:fragment="content" class="container-fluid">
 		<table class="table table-bordered">
 			<thead>
@@ -20,7 +17,7 @@
 					<td th:text="${blog.data.title}"></td>
 					<td th:text="${blog.createdAt}"></td>
 					<td>
-						<a th:href="@{/users/} + ${blog.user.username}" th:text="${blog.user.username}"></a>
+						<a th:href="@{/users/} + ${blog.user.id}" th:text="${blog.user.username}"></a>
 					</td>
 					<td th:text="${blog.viewCount}"></td>
 					<td th:text="${blog.likeCount}"></td>
@@ -36,10 +33,10 @@
 		<div class="page-header">
 			<h4>댓글</h4>
 		</div>
-		<div th:replace="fragments/commentList :: commentListFragment(${blog.comments})"></div>
+		<div th:replace="fragments/commentList(${blog.comments})"></div>
 		<div th:if="${user}">
 			<hr/>
-			<div th:replace="forms/comment :: commentForm(${blog})"></div>
+			<div th:replace="forms/comment(${blog})"></div>
 		</div>
 	</div>
 </html>
