@@ -9,8 +9,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.chinjja.issue.data.CategoryRepository;
 import com.chinjja.issue.domain.BlogData;
+import com.chinjja.issue.domain.CategoryData;
 import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.LikeCountData;
 import com.chinjja.issue.domain.User;
@@ -23,17 +26,26 @@ import lombok.val;
 @RequiredArgsConstructor
 public class BlogController {
 	private final BlogService blogService;
+	private final CategoryRepository categoryRepo;
 	
-	@GetMapping({"/", "/index", "/blogs"})
-	public String blogs(Model model) {
-		model.addAttribute("blogList", blogService.getBlogList());
+	@GetMapping({"/", "/index"})
+	public String blogs(@RequestParam(required = false) Long category, Model model) {
+		if(category == null) {
+			model.addAttribute("blogList", blogService.getBlogList());
+			model.addAttribute("activeCategory", null);
+		}
+		else {
+			val c = categoryRepo.findById(category).get();
+			model.addAttribute("blogList", blogService.getBlogList(c));
+			model.addAttribute("activeCategory", c);
+		}
 		return "blogs";
 	}
 	
 	@PostMapping("/blogs")
 	public String blogForm(@AuthenticationPrincipal User user, @Valid BlogData form) {
 		blogService.createBlog(user, form);
-		return "redirect:/blogs";
+		return "redirect:/?category="+form.getCategory();
 	}
 	
 	@GetMapping("/blogs/{id}")
@@ -63,6 +75,16 @@ public class BlogController {
 			HttpServletRequest request) {
 		String referer = request.getHeader("Referer");
 		blogService.toggleLikeCount(user, form);
+		return "redirect:" + referer;
+	}
+	
+	@PostMapping("/categories")
+	public String categoryForm(
+			@AuthenticationPrincipal User user,
+			@Valid CategoryData form,
+			HttpServletRequest request) {
+		String referer = request.getHeader("Referer");
+		blogService.createCategory(user, form);
 		return "redirect:" + referer;
 	}
 }

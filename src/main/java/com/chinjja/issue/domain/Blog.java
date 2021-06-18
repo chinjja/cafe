@@ -6,7 +6,9 @@ import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,4 +25,8 @@ public class Blog extends Element {
 	@OneToMany
 	@JoinColumn(name = "target_id")
 	private List<Comment> comments = new ArrayList<>();
+	
+	@ManyToOne
+	@NotNull
+	private Category category;
 }

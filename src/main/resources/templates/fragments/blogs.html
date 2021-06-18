@@ -1,21 +1,10 @@
-<div th:fragment="blogs">
-	<div th:if="${user}">
-		<div class="page-header">
-			<h1>블로그 생성</h1>
-		</div>
-		<form method="POST" th:action="@{/blogs}" th:object="${blogData}" id="createBlog" class="row-cols-1">
-			<div class="form-group mb-3">
-				<label for="title" class="form-label">제목</label>
-				<input type="text" th:field="*{title}" class="form-control" autocomplete="off" />
-				<div th:if="${#fields.hasErrors('title')}" class="alert alert-danger" th:errors="*{title}"></div>
-			</div>
-			<div class="form-group mb-3">
-				<label for="contents" class="form-label">내용</label>
-				<textarea th:field="*{contents}" class="form-control" autocomplete="off" rows=4></textarea>
-				<div th:if="${#fields.hasErrors('contents')}" class="alert alert-danger" th:errors="*{contents}"></div>
-			</div>
-			<input type="submit" class="btn btn-outline-primary"/>
-		</form>
+<div th:fragment="blogs(category)">
+	<div class="page-header" th:if="${category}">
+		<h1 th:text="${category.data.name}"></h1>
+		<hr/>
+	</div>
+	<div th:if="${user} AND ${category}">
+		<div th:replace="forms/blog(${category})"></div>
 		<hr/>
 	</div>
 	<div class="page-header">
@@ -24,6 +13,7 @@
 	<table class="table table-bordered">
 		<thead>
 			<tr>
+				<th th:unless="${category}">분류</th>
 				<th>ID</th>
 				<th>제목</th>
 				<th>작성일</th>
@@ -34,6 +24,7 @@
 		</thead>
 		<tbody>
 			<tr th:each="blog : ${blogList}">
+				<td th:text="${blog.category.data.name}" th:unless="${category}"></td>
 				<td th:text="${blog.id}"></td>
 				<td>
 					<a th:href="@{/blogs/} + ${blog.id}" th:text="${blog.data.title}"></a>

@@ -1,5 +1,5 @@
 <html layout:decorate="~{layouts/layout}">
 	<div layout:fragment="content" class="container-fluid">
-		<div th:replace="fragments/blogs"></div>
+		<div th:replace="fragments/blogs(${activeCategory})"></div>
 	</div>
 </html>

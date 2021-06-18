@@ -1,6 +1,8 @@
 package com.chinjja.issue.domain;
 
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,4 +18,8 @@ public class BlogData {
 	private String title;
 	@NotBlank
 	private String contents;
+	
+	@Transient
+	@NotNull
+	private Long category;
 }

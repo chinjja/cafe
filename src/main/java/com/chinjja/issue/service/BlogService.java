@@ -13,11 +13,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.chinjja.issue.data.BlogRepository;
+import com.chinjja.issue.data.CategoryRepository;
 import com.chinjja.issue.data.CommentRepository;
 import com.chinjja.issue.data.ElementRepository;
 import com.chinjja.issue.data.LikeCountRepository;
 import com.chinjja.issue.domain.Blog;
 import com.chinjja.issue.domain.BlogData;
+import com.chinjja.issue.domain.Category;
+import com.chinjja.issue.domain.CategoryData;
 import com.chinjja.issue.domain.Comment;
 import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.Element;
@@ -36,11 +39,20 @@ public class BlogService {
 	private final BlogRepository blogRepo;
 	private final CommentRepository commentRepo;
 	private final LikeCountRepository likeCountRepo;
+	private final CategoryRepository categoryRepo;
 	
 	private final Map<HashKey, LocalDateTime> lastVisitedTime = new HashMap<>();
 	
 	public Iterable<Blog> getBlogList() {
 		val blogs = blogRepo.findAll(Sort.by(Order.desc("createdAt")));
+		for(Blog blog : blogs) {
+			bind(blog);
+		}
+		return blogs;
+	}
+
+	public Iterable<Blog> getBlogList(Category category) {
+		val blogs = blogRepo.findAllByCategory(category, Sort.by(Order.desc("createdAt")));
 		for(Blog blog : blogs) {
 			bind(blog);
 		}
@@ -58,11 +70,11 @@ public class BlogService {
 		blog.setLikeCount(count);
 	}
 	
-	@Transactional
 	public Blog createBlog(User user, BlogData form) {
 		val blog = new Blog();
 		blog.setData(form);
 		blog.setUser(user);
+		blog.setCategory(categoryRepo.findById(form.getCategory()).get());
 		return blogRepo.save(blog);
 	}
 	
@@ -90,6 +102,21 @@ public class BlogService {
 		} else {
 			likeCountRepo.delete(like);
 		}
+	}
+	
+	public Iterable<Category> getCategories() {
+		return categoryRepo.findAllRootByParentIsNull();
+	}
+	
+	public Category createCategory(User user, CategoryData form) {
+		Category parent = null;
+		if(form.getParent() != null) {
+			parent = categoryRepo.findById(form.getParent()).get();
+		}
+		val category = new Category();
+		category.setData(form);
+		category.setParent(parent);
+		return categoryRepo.save(category);
 	}
 	
 	public boolean canLikeCount(Element target, User user) {
