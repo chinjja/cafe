@@ -16,6 +16,7 @@ import com.chinjja.issue.domain.Comment;
 import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.Element;
 import com.chinjja.issue.domain.LikeCount;
+import com.chinjja.issue.domain.LikeCountData;
 import com.chinjja.issue.domain.User;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,6 @@ import lombok.val;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class BlogService {
 	private final ElementRepository elementRepo;
 	private final BlogRepository blogRepo;
@@ -45,10 +45,11 @@ public class BlogService {
 	}
 	
 	private void bind(Blog blog) {
-		int count = likeCountRepo.countByElement(blog);
+		int count = likeCountRepo.countByTarget(blog);
 		blog.setLikeCount(count);
 	}
 	
+	@Transactional
 	public Blog createBlog(User user, BlogData form) {
 		val blog = new Blog();
 		blog.setData(form);
@@ -60,6 +61,7 @@ public class BlogService {
 		return commentRepo.findAllByTarget(target, Sort.by(Order.asc("createdAt")));
 	}
 	
+	@Transactional
 	public Comment createComment(User user, CommentData form) {
 		val comment = new Comment();
 		comment.setData(form);
@@ -68,10 +70,27 @@ public class BlogService {
 		return commentRepo.save(comment);
 	}
 	
-	public LikeCount likeCount(Element target) {
+	@Transactional
+	public LikeCount createLikeCount(User user, LikeCountData form) {
 		val likeCount = new LikeCount();
-		likeCount.setElement(target);
+		likeCount.setTarget(elementRepo.findById(form.getTarget()).get());
+		likeCount.setUser(user);
 		return likeCountRepo.save(likeCount);
+	}
+	
+	public void toggleLikeCount(User user, LikeCountData form) {
+		val target = elementRepo.findById(form.getTarget()).get();
+		val like = likeCountRepo.findByTargetAndUser(target, user);
+		if(like == null) {
+			createLikeCount(user, form);
+		} else {
+			likeCountRepo.delete(like);
+		}
+	}
+	
+	public boolean canLikeCount(Element target, User user) {
+		val like = likeCountRepo.findByTargetAndUser(target, user);
+		return like == null;
 	}
 	
 	public Blog visit(Blog blog) {

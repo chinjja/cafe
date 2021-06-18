@@ -9,6 +9,7 @@ import com.chinjja.issue.domain.LikeCount;
 import com.chinjja.issue.domain.User;
 
 public interface LikeCountRepository extends CrudRepository<LikeCount, Long> {
-	List<User> findByElement(Element element);
-	int countByElement(Element element);
+	List<User> findByTarget(Element target);
+	int countByTarget(Element target);
+	LikeCount findByTargetAndUser(Element target, User user);
 }
