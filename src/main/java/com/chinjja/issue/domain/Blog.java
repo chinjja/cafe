@@ -1,7 +1,10 @@
 package com.chinjja.issue.domain;
 
+import java.util.ArrayList;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,4 +17,7 @@ public class Blog extends Element {
 	
 	@Embedded
 	private BlogData data;
+	
+	@Transient
+	private Iterable<Comment> comments = new ArrayList<>();
 }

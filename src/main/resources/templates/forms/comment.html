@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+	<div th:fragment="commentForm(target)">
+		<form method="POST" th:action="@{/comments}" th:object="${commentData}" id="commentForm" class="row-cols-1 border rounded-3 p-3">
+			<input type="hidden" th:value="${target.id}" th:name="target"/>
+			<div class="form-group mb-3">
+				<label for="comment" class="form-label" th:text="${user.username}"></label>
+				<textarea th:field="*{comment}" class="form-control" placeholder="댓글을 남겨보세요." autocomplete="off" rows=4></textarea>
+				<div th:if="${#fields.hasErrors('comment')}" class="alert alert-danger" th:errors="*{comment}"></div>
+			</div>
+			<input type="submit" class="btn btn-outline-primary"/>
+		</form>
+	</div>
+</html>

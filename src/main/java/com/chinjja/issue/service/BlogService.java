@@ -42,20 +42,23 @@ public class BlogService {
 	public Iterable<Blog> getBlogList() {
 		val blogs = blogRepo.findAll(Sort.by(Order.desc("createdAt")));
 		for(Blog blog : blogs) {
-			bind(blog);
+			bind(blog, false);
 		}
 		return blogs;
 	}
 	
 	public Blog getBlogById(Long id) {
 		val blog = blogRepo.findById(id).get();
-		bind(blog);
+		bind(blog, true);
 		return blog;
 	}
 	
-	private void bind(Blog blog) {
+	private void bind(Blog blog, boolean bindComment) {
 		int count = likeCountRepo.countByTarget(blog);
 		blog.setLikeCount(count);
+		if(bindComment) {
+			blog.setComments(getCommentList(blog));
+		}
 	}
 	
 	@Transactional
@@ -67,10 +70,13 @@ public class BlogService {
 	}
 	
 	public Iterable<Comment> getCommentList(Element target) {
-		return commentRepo.findAllByTarget(target, Sort.by(Order.asc("createdAt")));
+		val comments = commentRepo.findAllByTarget(target, Sort.by(Order.asc("createdAt")));
+		for(val comment : comments) {
+			comment.setComments(getCommentList(comment));
+		}
+		return comments;
 	}
 	
-	@Transactional
 	public Comment createComment(User user, CommentData form) {
 		val comment = new Comment();
 		comment.setData(form);

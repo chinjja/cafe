@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+	<div th:fragment="commentFragment(comment)" class="d-flex">
+		<i class="bi bi-bootstrap me-2" style="font-size: 3rem;"></i>
+		<div class="w-100">
+			<a th:href="@{/users/} + ${comment.user.id}" th:text="${comment.user.username}"></a>
+			<pre class="p mt-2" th:text="${comment.data.comment}"></pre>
+			<div class="d-flex">
+				<p class="text-muted mt-2" th:text="${comment.createdAt}"></p>
+				<button class="btn text-muted" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseExample' + ${comment.id}">
+					답글달기
+				</button>
+			</div>
+			<div class="collapse" th:id="'collapseExample' + ${comment.id}">
+			<div th:replace="forms/comment :: commentForm(${comment})"></div>
+			</div>
+		</div>
+	</div>
+</html>

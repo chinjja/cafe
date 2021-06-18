@@ -39,7 +39,6 @@ public class BlogController {
 	public String blogs(@AuthenticationPrincipal User user, @PathVariable("id") Long id, Model model) {
 		val blog = blogService.getBlogById(id);
 		model.addAttribute("blog", blog);
-		model.addAttribute("commentList", blogService.getCommentList(blog));
 		model.addAttribute("canLike", blogService.canLikeCount(blog, user));
 		
 		blogService.visit(user, blog);
