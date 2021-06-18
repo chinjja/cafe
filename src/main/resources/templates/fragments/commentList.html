@@ -1,6 +1,8 @@
-<ul th:fragment="commentList(commentList)" class="list-group">
-	<li class="list-group-item pe-1" th:each="comment : ${commentList}">
+<div th:fragment="commentList(commentList)">
+	<div class="pe-1" th:each="comment : ${commentList}">
 		<div th:replace="fragments/comment(${comment})"></div>
-		<div th:replace="fragments/commentList(${comment.comments})"></div>
-	</li>
-</ul>
+		<div class="ps-4">
+			<div th:replace="fragments/commentList(${comment.comments})"></div>
+		</div>
+	</div>
+</div>

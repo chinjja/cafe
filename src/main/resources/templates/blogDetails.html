@@ -33,9 +33,9 @@
 		<div class="page-header">
 			<h4>댓글</h4>
 		</div>
-		<div th:replace="fragments/commentList(${blog.comments})"></div>
-		<div th:if="${user}">
 			<hr/>
+		<div th:replace="fragments/commentList(${blog.comments})"></div>
+		<div class="mt-3" th:if="${user}">
 			<div th:replace="forms/comment(${blog})"></div>
 		</div>
 	</div>

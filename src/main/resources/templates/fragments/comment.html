@@ -1,4 +1,4 @@
-<div th:fragment="comment(comment)" class="d-flex">
+<div th:fragment="comment(comment)" class="d-flex border-bottom mb-2">
 	<i class="bi bi-bootstrap me-2" style="font-size: 3rem;"></i>
 	<div class="w-100">
 		<a th:href="@{/users/} + ${comment.user.id}" th:text="${comment.user.username}"></a>
