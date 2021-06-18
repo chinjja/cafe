@@ -16,8 +16,6 @@
 					<a class="nav-link" th:href="@{/}">Home</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" th:href="@{/register}">Register</a>
-				</li>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown">
 						Link
@@ -35,10 +33,12 @@
 				<input class="form-control me-2" type="search" placeholder="Search" />
 				<button class="btn btn-outline-success" type="submit">Search</button>
 			</form>
-			<div class="d-flex justify-content-end">
-				<a class="btn btn-outline-primary w-100" th:unless="${user}" th:href="@{/login}">Login</a>
+			<div class="d-flex justify-content-end" th:unless="${user}">
+				<a class="btn btn-outline-primary w-50 me-2" th:href="@{/login}">Login</a>
+				<a class="btn btn-outline-primary w-50" th:href="@{/register}">Register</a>
 			</div>
 			<form class="d-flex justify-content-end" method="POST" th:if="${user}" th:action="@{/logout}" id="logoutForm">
+				<span class="navbar-text me-2" th:text="${user.username}"></span>
 				<input type="submit" value="Logout" class="btn btn-outline-primary w-100" />
 			</form>
 		</div>
