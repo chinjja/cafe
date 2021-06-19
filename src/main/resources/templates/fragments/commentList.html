@@ -1,5 +1,5 @@
 <div th:fragment="commentList(commentList)">
-	<div class="pe-1" th:each="comment : ${commentList}">
+	<div th:each="comment : ${commentList}">
 		<div th:replace="fragments/comment(${comment})"></div>
 		<div class="ps-4">
 			<div th:replace="fragments/commentList(${comment.comments})"></div>
