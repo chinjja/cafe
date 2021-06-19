@@ -1,9 +1,9 @@
 <div th:fragment="blogs(category)">
-	<div class="page-header" th:if="${category}">
+	<div class="page-header" th:if="${category != null}">
 		<h1 th:text="${category.data.name}"></h1>
 		<hr/>
 	</div>
-	<div th:if="${user} AND ${category}">
+	<div th:if="${user != null} AND ${category != null}">
 		<div th:replace="forms/blog(${category})"></div>
 		<hr/>
 	</div>

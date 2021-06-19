@@ -2,7 +2,7 @@
 	<div class="container-fluid">
 		<a class="navbar-brand" th:href="@{/}">브랜드</a>
 		<div class="d-flex flex-row me-auto" th:each="profile : ${activeProfileList}">
-			<div class="badge rounded-pill bg-danger me-2" style="border: solid 1px red;" th:if="${profile} != 'prod'" th:text="${profile}"></div>
+			<div class="badge rounded-pill bg-danger me-2" style="border: solid 1px red;" th:if="${profile != null} != 'prod'" th:text="${profile}"></div>
 		</div>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
 			<span class="navbar-toggler-icon"></span>
@@ -35,7 +35,7 @@
 				<a class="btn btn-outline-primary w-50 me-2" th:href="@{/login}">Login</a>
 				<a class="btn btn-outline-primary w-50" th:href="@{/register}">Register</a>
 			</div>
-			<form class="d-flex justify-content-end m-0" method="POST" th:if="${user}" th:action="@{/logout}" id="logoutForm">
+			<form class="d-flex justify-content-end m-0" method="POST" th:if="${user != null}" th:action="@{/logout}" id="logoutForm">
 				<span class="navbar-text me-2" th:text="${user.username}"></span>
 				<input type="submit" value="Logout" class="btn btn-outline-primary w-100" />
 			</form>

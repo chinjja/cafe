@@ -27,7 +27,7 @@
 			</tbody>
 		</table>
 		<pre class="border rounded-3 p-3" th:text="${blog.data.contents}"></pre>
-		<form method="POST" th:action="@{/likeCount}" th:object="${likeCountData}" th:if="${user}" id="likeCountForm">
+		<form method="POST" th:action="@{/likeCount}" th:object="${likeCountData}" th:if="${user != null}" id="likeCountForm">
 			<input type="hidden" th:value="${blog.id}" th:name="target"/>
 			<input type="submit" class="btn btn-outline-primary" th:classappend="${#bools.isFalse(canLike)} ? 'active'" th:value="좋아요"/>
 		</form>
@@ -37,7 +37,7 @@
 		</div>
 			<hr/>
 		<div th:replace="fragments/commentList(${blog.comments})"></div>
-		<div class="mt-3" th:if="${user}">
+		<div class="mt-3" th:if="${user != null}">
 			<div th:replace="forms/comment(${blog})"></div>
 		</div>
 	</div>

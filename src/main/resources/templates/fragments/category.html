@@ -1,13 +1,13 @@
 <div th:fragment="category(category)" class="d-flex border-bottom mb-2">
 	<div class="w-100" th:object="${category}">
 		<div class="d-flex align-items-baseline justify-content-between">
-			<div class="d-flex w-100" th:if="*{data.isBlog}">
+			<div class="d-flex w-100" th:if="*{data.isBlog()}">
 				<a class="btn btn-outline-primary text-start w-100" th:classappend="${activeCategory} and ${activeCategory.id == category.id} ? 'active'" th:text="*{data.name}" th:href="@{/(category=*{id})}"></a>
 			</div>
-			<div th:unless="*{data.isBlog}">
+			<div th:unless="*{data.isBlog()}">
 				<span th:text="*{data.name}"></span>
 			</div>
-			<div th:if="${user} AND ${user.isAdmin()} AND *{data.isDirectory()}">
+			<div th:if="${user != null} AND ${user.isAdmin()} AND *{data.isDirectory()}">
 				<button class="btn text-muted" type="button"
 				data-bs-toggle="collapse"
 				th:data-bs-target="'#collapseExample' + *{id}">
