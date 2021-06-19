@@ -38,4 +38,11 @@
 			</tr>
 		</tbody>
 	</table>
+	<nav class="d-flex justify-content-center">
+		<ul class="pagination" th:with="category_id=${activeCategory != null} ? ${activeCategory.id} : null">
+			<li class="page-item me-2"><a class="page-link" th:with="p=${blogFirstPage}" th:href="@{/(page=${p.pageNumber},size=${p.pageSize},category=${category_id})}">처음</a></li>
+			<li class="page-item"><a class="page-link" th:with="p=${blogPrevPage}" th:href="@{/(page=${p.pageNumber},size=${p.pageSize},category=${category_id})}">이전</a></li>
+			<li class="page-item"><a class="page-link" th:with="p=${blogNextPage}" th:href="@{/(page=${p.pageNumber},size=${p.pageSize},category=${category_id})}">다음</a></li>
+		</ul>
+	</nav>
 </div>

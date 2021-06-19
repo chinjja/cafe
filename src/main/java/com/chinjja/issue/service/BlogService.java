@@ -7,8 +7,8 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -43,16 +43,13 @@ public class BlogService {
 	
 	private final Map<HashKey, LocalDateTime> lastVisitedTime = new HashMap<>();
 	
-	public Iterable<Blog> getBlogList() {
-		val blogs = blogRepo.findAll(Sort.by(Order.desc("createdAt")));
-		for(Blog blog : blogs) {
-			bind(blog);
+	public Page<Blog> getBlogList(Category category, Pageable pageable) {
+		Page<Blog> blogs;
+		if(category == null) {
+			blogs = blogRepo.findAll(pageable);
+		} else {
+			blogs = blogRepo.findAllByCategory(category, pageable);
 		}
-		return blogs;
-	}
-
-	public Iterable<Blog> getBlogList(Category category) {
-		val blogs = blogRepo.findAllByCategory(category, Sort.by(Order.desc("createdAt")));
 		for(Blog blog : blogs) {
 			bind(blog);
 		}

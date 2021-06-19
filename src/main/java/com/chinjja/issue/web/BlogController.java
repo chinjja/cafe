@@ -3,6 +3,8 @@ package com.chinjja.issue.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.chinjja.issue.data.CategoryRepository;
 import com.chinjja.issue.domain.BlogData;
+import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.CategoryData;
 import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.LikeCountData;
@@ -30,16 +33,27 @@ public class BlogController {
 	private final CategoryRepository categoryRepo;
 	
 	@GetMapping({"/", "/index"})
-	public String blogs(@RequestParam(required = false) Long category, Model model) {
-		if(category == null) {
-			model.addAttribute("blogList", blogService.getBlogList());
-			model.addAttribute("activeCategory", null);
+	public String blogs(
+			@RequestParam(required = false) Long category,
+			@RequestParam(required = false) Integer page,
+			@RequestParam(required = false) Integer size,
+			Model model) {
+		Category activeCategory = null;
+		if(category != null) {
+			activeCategory = categoryRepo.findById(category).orElseThrow(() -> new IllegalArgumentException("unknown category id: "+ category));
 		}
-		else {
-			val c = categoryRepo.findById(category).get();
-			model.addAttribute("blogList", blogService.getBlogList(c));
-			model.addAttribute("activeCategory", c);
+		if(page == null || size == null) {
+			page = 0;
+			size = 20;
 		}
+		val pageable = PageRequest.of(page, size, Direction.DESC, "createdAt");
+		
+		val blogList = blogService.getBlogList(activeCategory, pageable);
+		model.addAttribute("blogList", blogList);
+		model.addAttribute("activeCategory", activeCategory);
+		model.addAttribute("blogFirstPage", blogList.getPageable().first());
+		model.addAttribute("blogPrevPage", blogList.previousOrFirstPageable());
+		model.addAttribute("blogNextPage", blogList.nextOrLastPageable());
 		return "index";
 	}
 	
