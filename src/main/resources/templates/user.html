@@ -9,7 +9,13 @@
 		</div>
 		<div class="input-group">
 			<span class="input-group-text w-25">Role</span>
-			<input type="text" class="form-control" th:if="${selectedUser}" th:value="${selectedUser.authorities[0]}"/>
+			<div class="form-control">
+				<ul class="list-group" th:if="${selectedUser}" >
+					<li class="list-group-item" th:each="authority : ${selectedUser.authorities}">
+						<span th:text="${authority}"></span>
+					</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 </html>
