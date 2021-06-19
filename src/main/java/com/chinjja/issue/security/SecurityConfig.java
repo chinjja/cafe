@@ -64,6 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				val user = new User();
 				user.setUsername("chinjja");
 				user.setPassword(encoder().encode("1234"));
+				user.setRoles(new String[] { "ROLE_USER", "ROLE_ADMIN" });
 				userRepo.save(user);
 			}
 		};

@@ -1,5 +1,6 @@
 package com.chinjja.issue.domain;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -25,10 +26,17 @@ public class User implements UserDetails {
 	private String username;
 	private String password;
 	
+	private String[] roles = {"ROLE_USER"};
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+		ArrayList<GrantedAuthority> list = new ArrayList<>();
+		for(String role : getRoles()) {
+			list.add(new SimpleGrantedAuthority(role));
+		}
+		return list;
 	}
+	
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
@@ -44,5 +52,12 @@ public class User implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+	
+	public boolean isAdmin() {
+		for(String role : getRoles()) {
+			if("ROLE_ADMIN".equals(role)) return true;
+		}
+		return false;
 	}
 }

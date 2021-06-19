@@ -3,6 +3,7 @@ package com.chinjja.issue.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -78,6 +79,7 @@ public class BlogController {
 		return "redirect:" + referer;
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@PostMapping("/categories")
 	public String categoryForm(
 			@AuthenticationPrincipal User user,
