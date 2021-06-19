@@ -48,7 +48,7 @@ public class UserController {
 			userRepo.save(user);
 			status.setComplete();
 		}
-		return "redirect:/";
+		return "redirect:/login";
 	}
 	
 	@GetMapping("/users/{id}")
