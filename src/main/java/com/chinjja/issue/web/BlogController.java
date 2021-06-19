@@ -40,7 +40,7 @@ public class BlogController {
 			model.addAttribute("blogList", blogService.getBlogList(c));
 			model.addAttribute("activeCategory", c);
 		}
-		return "blogs";
+		return "index";
 	}
 	
 	@Secured("ROLE_USER")
@@ -55,9 +55,10 @@ public class BlogController {
 		val blog = blogService.getBlogById(id);
 		model.addAttribute("blog", blog);
 		model.addAttribute("canLike", blogService.canLikeCount(blog, user));
+		model.addAttribute("activeCategory", blog.getCategory());
 		
 		blogService.visit(user, blog);
-		return "blogDetails";
+		return "blogs";
 	}
 	
 	@Secured("ROLE_USER")
