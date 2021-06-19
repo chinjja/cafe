@@ -43,6 +43,7 @@ public class BlogController {
 		return "blogs";
 	}
 	
+	@Secured("ROLE_USER")
 	@PostMapping("/blogs")
 	public String blogForm(@AuthenticationPrincipal User user, @Valid BlogData form) {
 		blogService.createBlog(user, form);
@@ -59,6 +60,7 @@ public class BlogController {
 		return "blogDetails";
 	}
 	
+	@Secured("ROLE_USER")
 	@PostMapping("/comments")
 	public String commentForm(
 			@AuthenticationPrincipal User user,
@@ -69,6 +71,7 @@ public class BlogController {
 		return "redirect:" + referer;
 	}
 	
+	@Secured("ROLE_USER")
 	@PostMapping("/likeCount")
 	public String likeCount(
 			@AuthenticationPrincipal User user,
