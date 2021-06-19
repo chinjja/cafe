@@ -26,6 +26,7 @@ import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.Element;
 import com.chinjja.issue.domain.LikeCount;
 import com.chinjja.issue.domain.LikeCountData;
+import com.chinjja.issue.domain.LikeCountId;
 import com.chinjja.issue.domain.User;
 
 import lombok.Data;
@@ -63,7 +64,7 @@ public class BlogService {
 	}
 	
 	private void bind(Blog blog) {
-		int count = likeCountRepo.countByTarget(blog);
+		int count = likeCountRepo.countByIdTarget(blog);
 		blog.setLikeCount(count);
 	}
 	
@@ -85,15 +86,15 @@ public class BlogService {
 	
 	@Transactional
 	public LikeCount createLikeCount(User user, LikeCountData form) {
+		val target = elementRepo.findById(form.getTarget()).get();
 		val likeCount = new LikeCount();
-		likeCount.setTarget(elementRepo.findById(form.getTarget()).get());
-		likeCount.setUser(user);
+		likeCount.setId(new LikeCountId(target, user));
 		return likeCountRepo.save(likeCount);
 	}
 	
 	public void toggleLikeCount(User user, LikeCountData form) {
 		val target = elementRepo.findById(form.getTarget()).get();
-		val like = likeCountRepo.findByTargetAndUser(target, user);
+		val like = likeCountRepo.findById(new LikeCountId(target, user)).orElse(null);
 		if(like == null) {
 			createLikeCount(user, form);
 		} else {
@@ -117,7 +118,7 @@ public class BlogService {
 	}
 	
 	public boolean canLikeCount(Element target, User user) {
-		val like = likeCountRepo.findByTargetAndUser(target, user);
+		val like = likeCountRepo.findById(new LikeCountId(target, user)).orElse(null);
 		return like == null;
 	}
 	
