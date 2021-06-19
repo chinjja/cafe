@@ -17,5 +17,9 @@
 				</ul>
 			</div>
 		</div>
+		<div th:if="${selectedUser == user}">
+			<hr/>
+			<div th:replace="forms/changePassword(${user})"></div>
+		</div>
 	</div>
 </html>

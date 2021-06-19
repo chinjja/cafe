@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.chinjja.issue.domain.User;
+import com.chinjja.issue.security.ChangePasswordForm;
 import com.chinjja.issue.security.RegisterForm;
 
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,10 @@ public class CommonControllerAdvice {
 	@ModelAttribute
 	public RegisterForm registerForm() {
 		return new RegisterForm();
+	}
+	
+	@ModelAttribute
+	public ChangePasswordForm changePasswordForm() {
+		return new ChangePasswordForm();
 	}
 }
