@@ -2,7 +2,7 @@
 	<div class="w-100" th:object="${category}">
 		<div class="d-flex align-items-baseline justify-content-between">
 			<div class="d-flex w-100" th:if="*{data.isBlog}">
-				<a class="btn btn-outline-primary text-start w-100" th:classappend="${activeCategory} and ${activeCategory.id == category.id} ? 'active'" th:text="*{data.name}" th:href="@{/?category=} + *{id}"></a>
+				<a class="btn btn-outline-primary text-start w-100" th:classappend="${activeCategory} and ${activeCategory.id == category.id} ? 'active'" th:text="*{data.name}" th:href="@{/(category=*{id})}"></a>
 			</div>
 			<div th:unless="*{data.isBlog}">
 				<span th:text="*{data.name}"></span>

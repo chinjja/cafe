@@ -27,11 +27,11 @@
 				<td th:text="${blog.category.data.name}" th:unless="${category}"></td>
 				<td th:text="${blog.id}"></td>
 				<td>
-					<a th:href="@{/blogs/} + ${blog.id}" th:text="${blog.data.title}"></a>
+					<a th:href="@{/blogs/{id}(id=${blog.id})}" th:text="${blog.data.title}"></a>
 				</td>
 				<td th:text="${blog.createdAt}"></td>
 				<td>
-					<a th:href="@{/users/} + ${blog.user.id}" th:text="${blog.user.username}"></a>
+					<a th:href="@{/users/{id}(id=${blog.user.id})}" th:text="${blog.user.username}"></a>
 				</td>
 				<td th:text="${blog.viewCount}"></td>
 				<td th:text="${blog.likeCount}"></td>

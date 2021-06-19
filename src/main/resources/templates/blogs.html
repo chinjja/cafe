@@ -19,7 +19,7 @@
 					<td th:text="${blog.data.title}"></td>
 					<td th:text="${blog.createdAt}"></td>
 					<td>
-						<a th:href="@{/users/} + ${blog.user.id}" th:text="${blog.user.username}"></a>
+						<a th:href="@{/users/{id}(id=${blog.user.id})}" th:text="${blog.user.username}"></a>
 					</td>
 					<td th:text="${blog.viewCount}"></td>
 					<td th:text="${blog.likeCount}"></td>
