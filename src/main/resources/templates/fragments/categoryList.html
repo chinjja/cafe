@@ -1,5 +1,5 @@
 <div th:fragment="categoryList(categoryList)">
-	<div class="pe-1" th:each="category : ${categoryList}">
+	<div th:each="category : ${categoryList}">
 		<div th:replace="fragments/category(${category})"></div>
 		<div class="ps-4">
 			<div th:replace="fragments/categoryList(${category.categories})"></div>

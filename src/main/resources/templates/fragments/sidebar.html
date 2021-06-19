@@ -5,9 +5,7 @@
 		</svg>
 		<span class="fs-5 fw-semibold">Blog</span>
 	</a>
-	<div class="overflow-auto">
-		<div th:replace="fragments/categoryList(${categoryList})"></div>
-	</div>
+	<div th:replace="fragments/categoryList(${categoryList})"></div>
 	<div th:if="${user} AND ${user.isAdmin()}">
 		<div th:replace="forms/category(null)"></div>
 	</div>
