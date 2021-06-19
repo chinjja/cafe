@@ -29,7 +29,7 @@
 				<td>
 					<a th:href="@{/blogs/{id}(id=${blog.id})}" th:text="${blog.data.title}"></a>
 				</td>
-				<td th:text="${blog.createdAt}"></td>
+				<td th:text="${#temporals.format(blog.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
 				<td>
 					<a th:href="@{/users/{id}(id=${blog.user.id})}" th:text="${blog.user.username}"></a>
 				</td>

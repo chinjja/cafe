@@ -17,7 +17,7 @@
 				<tr>
 					<td th:text="${blog.id}"></td>
 					<td th:text="${blog.data.title}"></td>
-					<td th:text="${blog.createdAt}"></td>
+					<td th:text="${#temporals.format(blog.createdAt)}"></td>
 					<td>
 						<a th:href="@{/users/{id}(id=${blog.user.id})}" th:text="${blog.user.username}"></a>
 					</td>
