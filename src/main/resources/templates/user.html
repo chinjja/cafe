@@ -10,7 +10,7 @@
 		<div class="input-group">
 			<span class="input-group-text w-25" th:text="#{user.role}"></span>
 			<div class="form-control">
-				<ul class="list-group" th:if="${selectedUser != null}" >
+				<ul class="list-group list-group-flush" th:if="${selectedUser != null}" >
 					<li class="list-group-item" th:each="authority : ${selectedUser.authorities}">
 						<span th:text="${authority}"></span>
 					</li>
