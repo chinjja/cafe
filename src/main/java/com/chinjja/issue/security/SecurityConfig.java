@@ -56,13 +56,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		;
 	}
 	
-	@Profile("dev")
 	@Bean
 	public CommandLineRunner createUser() {
 		return args -> {
 			if(userRepo.count() == 0) {
 				val user = new User();
-				user.setUsername("chinjja");
+				user.setUsername("admin");
 				user.setPassword(encoder().encode("1234"));
 				user.setRoles(new String[] { "ROLE_USER", "ROLE_ADMIN" });
 				userRepo.save(user);
