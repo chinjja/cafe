@@ -2,8 +2,8 @@ package com.chinjja.issue.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.transaction.Transactional;
 
@@ -42,7 +42,7 @@ public class BlogService {
 	private final LikeCountRepository likeCountRepo;
 	private final CategoryRepository categoryRepo;
 	
-	private final Map<HashKey, LocalDateTime> lastVisitedTime = new HashMap<>();
+	private final Map<HashKey, LocalDateTime> lastVisitedTime = new ConcurrentHashMap<>();
 	
 	public Page<Blog> getBlogList(Category category, Pageable pageable) {
 		Page<Blog> blogs;
@@ -122,7 +122,7 @@ public class BlogService {
 		return like == null;
 	}
 	
-	public synchronized void visit(User user, Blog blog) {
+	public void visit(User user, Blog blog) {
 		if(user == null) return;
 		val now = LocalDateTime.now();
 		val key = new HashKey(blog.getId(), user.getId());
@@ -135,7 +135,7 @@ public class BlogService {
 	}
 	
 	@Scheduled(fixedDelay = 5*1000)
-	public synchronized void cleanupTake() {
+	public void cleanupTake() {
 		val bias = LocalDateTime.now().minusMinutes(1);
 		val rem = new ArrayList<>();
 		for(val i : lastVisitedTime.entrySet()) {
