@@ -10,8 +10,8 @@
 			<div th:if="${user != null} AND ${user.isAdmin()} AND *{data.isDirectory()}">
 				<button class="btn text-muted" type="button"
 				data-bs-toggle="collapse"
-				th:data-bs-target="'#collapseExample' + *{id}">
-					추가
+				th:data-bs-target="'#collapseExample' + *{id}"
+				th:text="#{fragments.category.add}">
 				</button>
 			</div>
 		</div>

@@ -8,18 +8,18 @@
 		<hr/>
 	</div>
 	<div class="page-header">
-		<h1>블로그 목록</h1>
+		<h1 th:text="#{fragments.blogs.header}"></h1>
 	</div>
 	<table class="table table-bordered">
 		<thead>
 			<tr>
-				<th th:unless="${category}">분류</th>
-				<th>ID</th>
-				<th>제목</th>
-				<th>작성일</th>
-				<th>작성자</th>
-				<th>조회수</th>
-				<th>좋아요</th>
+				<th th:unless="${category}" th:text="#{fragments.blogs.category}"></th>
+				<th th:text="#{fragments.blogs.id}"></th>
+				<th th:text="#{fragments.blogs.title}"></th>
+				<th th:text="#{fragments.blogs.createdAt}"></th>
+				<th th:text="#{fragments.blogs.author}"></th>
+				<th th:text="#{fragments.blogs.viewCount}"></th>
+				<th th:text="#{fragments.blogs.likeCount}"></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -40,9 +40,9 @@
 	</table>
 	<nav class="d-flex justify-content-center">
 		<ul class="pagination" th:with="category_id=${activeCategory != null} ? ${activeCategory.id} : null">
-			<li class="page-item me-2"><a class="page-link" th:with="p=${blogFirstPage}" th:href="@{/(page=${p.pageNumber},size=${p.pageSize},category=${category_id})}">처음</a></li>
-			<li class="page-item"><a class="page-link" th:with="p=${blogPrevPage}" th:href="@{/(page=${p.pageNumber},size=${p.pageSize},category=${category_id})}">이전</a></li>
-			<li class="page-item"><a class="page-link" th:with="p=${blogNextPage}" th:href="@{/(page=${p.pageNumber},size=${p.pageSize},category=${category_id})}">다음</a></li>
+			<li class="page-item me-2"><a class="page-link" th:with="p=${blogFirstPage}" th:href="@{/(page=${p.pageNumber},size=${p.pageSize},category=${category_id})}" th:text="#{fragments.blogs.firstPage}"></a></li>
+			<li class="page-item"><a class="page-link" th:with="p=${blogPrevPage}" th:href="@{/(page=${p.pageNumber},size=${p.pageSize},category=${category_id})}" th:text="#{fragments.blogs.nextPage}"></a></li>
+			<li class="page-item"><a class="page-link" th:with="p=${blogNextPage}" th:href="@{/(page=${p.pageNumber},size=${p.pageSize},category=${category_id})}" th:text="#{fragments.blogs.prevPage}"></a></li>
 		</ul>
 	</nav>
 </div>

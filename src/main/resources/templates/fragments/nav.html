@@ -1,6 +1,6 @@
 <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light shadow" th:fragment="nav">
 	<div class="container-fluid">
-		<a class="navbar-brand" th:href="@{/}">브랜드</a>
+		<a class="navbar-brand" th:href="@{/}" th:text="#{fragments.nav.brand}"></a>
 		<div class="d-flex flex-row me-auto" th:each="profile : ${activeProfileList}">
 			<div class="badge rounded-pill bg-danger me-2" style="border: solid 1px red;" th:if="${profile != null} != 'prod'" th:text="${profile}"></div>
 		</div>

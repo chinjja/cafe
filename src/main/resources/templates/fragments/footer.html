@@ -1,3 +1,5 @@
 <footer th:fragment="footer">
-	<img class="img-fluid" th:src="@{/images/footer.png}"/>
+	<span th:text="#{lang.change}"></span>:
+	<a th:href="@{~/(lang=en)}" th:text="#{lang.en}">en</a>
+	<a th:href="@{~/(lang=ko)}" th:text="#{lang.ko}">ko</a>
 </footer>

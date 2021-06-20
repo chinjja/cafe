@@ -5,12 +5,12 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-					<th>ID</th>
-					<th>제목</th>
-					<th>작성일</th>
-					<th>작성자</th>
-					<th>조회수</th>
-					<th>좋아요</th>
+					<th th:text="#{blogs.id}"></th>
+					<th th:text="#{blogs.title}"></th>
+					<th th:text="#{blogs.createdAt}"></th>
+					<th th:text="#{blogs.author}"></th>
+					<th th:text="#{blogs.viewCount}"></th>
+					<th th:text="#{blogs.likeCount}"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -33,7 +33,7 @@
 		</form>
 		<hr/>
 		<div class="page-header">
-			<h4>댓글</h4>
+			<h4 th:text="#{blogs.comment}"></h4>
 		</div>
 			<hr/>
 		<div th:replace="fragments/commentList(${blog.comments})"></div>

@@ -3,9 +3,9 @@
 		<input type="hidden" th:value="${target.id}" th:name="target"/>
 		<div class="form-group mb-3">
 			<label for="comment" class="form-label" th:text="${user.username}"></label>
-			<textarea th:field="*{comment}" class="form-control" placeholder="댓글을 남겨보세요." autocomplete="off" rows=4></textarea>
+			<textarea th:field="*{comment}" class="form-control" th:placeholder="#{forms.comment.enterComment}" autocomplete="off" rows=4></textarea>
 			<div th:if="${#fields.hasErrors('comment')}" class="alert alert-danger" th:errors="*{comment}"></div>
 		</div>
-		<input type="submit" class="btn btn-outline-primary"/>
+		<input type="submit" class="btn btn-outline-primary" th:value="#{forms.comment.submit}"/>
 	</form>
 </div>
