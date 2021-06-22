@@ -1,17 +1,16 @@
 <div th:fragment="category(parent_id)" th:if="${user}">
-	<form method="POST" th:action="@{/categories}" th:object="${categoryData}" id="categoryForm" class="row-cols-1 border rounded-3 p-3">
+	<form method="POST" th:action="@{/categories}" th:object="${categoryData}" id="categoryForm" class="row g-3">
 		<input type="hidden" th:value="${parent_id}" th:name="parent"/>
-		<div class="form-group mb-3">
+		<div class="form-group">
 			<label for="type" th:text="#{forms.category.type}"></label>
 			<select class="form-control" name="type" id="type">
 				<option value="DIRECTORY" th:text="#{forms.category.type.directory}"></option>
 				<option value="BLOG" th:text="#{forms.category.type.blog}"></option>
 			</select>
 		</div>
-		<div class="form-group mb-3">
-			<input th:field="*{name}" class="form-control" placeholder="제목을 입력하세요." autocomplete="off"></input>
-			<div th:if="${#fields.hasErrors('name')}" class="alert alert-danger" th:errors="*{name}"></div>
+		<div th:replace="forms/textInput(*{name}, 'name', null, '제목을 입력하세요.')"></div>
+		<div class="form-group">
+			<input type="submit" class="btn btn-outline-primary w-100" th:value="#{forms.category.submit}"/>
 		</div>
-		<input type="submit" class="btn btn-outline-primary" th:value="#{forms.category.submit}"/>
 	</form>
 </div>

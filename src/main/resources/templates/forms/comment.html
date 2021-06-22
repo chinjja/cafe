@@ -1,10 +1,8 @@
 <div th:fragment="commentForm(target)" th:if="${user != null}">
 	<form method="POST" th:action="@{/comments}" th:object="${commentData}" id="commentForm" class="row-cols-1 border rounded-3 p-3">
 		<input type="hidden" th:value="${target.id}" th:name="target"/>
-		<div class="form-group mb-3">
-			<label for="comment" class="form-label" th:text="${user.username}"></label>
-			<textarea th:field="*{comment}" class="form-control" th:placeholder="#{forms.comment.enterComment}" autocomplete="off" rows=4></textarea>
-			<div th:if="${#fields.hasErrors('comment')}" class="alert alert-danger" th:errors="*{comment}"></div>
+		<div class="mb-3">
+			<div th:replace="forms/textAreaInput(*{comment}, 'comment', ${user.username}, #{forms.comment.enterComment})"></div>
 		</div>
 		<input type="submit" class="btn btn-outline-primary" th:value="#{forms.comment.submit}"/>
 	</form>
