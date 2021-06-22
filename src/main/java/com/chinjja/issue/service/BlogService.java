@@ -51,21 +51,12 @@ public class BlogService {
 		} else {
 			blogs = blogRepo.findAllByCategory(category, pageable);
 		}
-		for(Blog blog : blogs) {
-			bind(blog);
-		}
 		return blogs;
 	}
 	
 	public Blog getBlogById(Long id) {
 		val blog = blogRepo.findById(id).get();
-		bind(blog);
 		return blog;
-	}
-	
-	private void bind(Blog blog) {
-		int count = likeCountRepo.countByIdTarget(blog);
-		blog.setLikeCount(count);
 	}
 	
 	public Blog createBlog(User user, BlogData form) {

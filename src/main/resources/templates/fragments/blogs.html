@@ -34,7 +34,7 @@
 					<a th:href="@{/users/{id}(id=${blog.user.id})}" th:text="${blog.user.username}"></a>
 				</td>
 				<td th:text="${blog.viewCount}"></td>
-				<td th:text="${blog.likeCount}"></td>
+				<td th:text="${blog.likes.size()}"></td>
 			</tr>
 		</tbody>
 	</table>
