@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -136,10 +137,11 @@ public class BlogController {
 		return "redirect:" + referer;
 	}
 	
-	@Secured("ROLE_ADMIN")
+	@PreAuthorize("isAuthenticated() and (#cafe.owner.id == #user.id)")
 	@PostMapping("/create-category")
 	public String categoryForm(
 			@AuthenticationPrincipal User user,
+			Cafe cafe,
 			@Valid CategoryData form,
 			HttpServletRequest request) {
 		String referer = request.getHeader("Referer");
