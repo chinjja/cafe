@@ -9,5 +9,6 @@ import com.chinjja.issue.domain.Blog;
 import com.chinjja.issue.domain.Category;
 
 public interface BlogRepository extends PagingAndSortingRepository<Blog, Long> {
-	Page<Blog> findAllByCategory(Category  category, Pageable pageable);
+	Page<Blog> findAllByCategory(Category category, Pageable pageable);
+	Page<Blog> findAllByCategoryIn(Iterable<Category> categories, Pageable pageable);
 }

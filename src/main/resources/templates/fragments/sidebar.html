@@ -5,7 +5,7 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent2">
 			<div class="w-100">
-				<a class="btn btn-outline-primary text-start w-100 mb-2" th:classappend="${activeCategory == null}? 'active'" th:href="@{/}" th:text="#{fragments.sidebar.all}"></a>
+				<a class="btn btn-outline-primary text-start w-100 mb-2" th:classappend="${activeCategory == null}? 'active'" th:href="@{/{cafe}(cafe=${cafe.id})}" th:text="#{fragments.sidebar.all}"></a>
 				<div th:replace="fragments/categoryList(${categoryList})"></div>
 				<hr/>
 				<div th:if="${user != null} AND ${user.isAdmin()}">

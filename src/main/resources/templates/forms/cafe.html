@@ -1,0 +1,13 @@
+<div th:fragment="cafe(owner)">
+	<div class="page-header">
+		<h1 th:text="#{forms.cafe.header}"></h1>
+	</div>
+	<form method="POST" th:action="@{/create-cafe}" th:object="${cafeData}" id="createCafe" class="row g-3">
+		<div th:replace="forms/textInput(*{id}, 'id', #{forms.cafe.id}, '')"></div>
+		<div th:replace="forms/textInput(*{name}, 'name', #{forms.cafe.name}, '')"></div>
+		<div th:replace="forms/textInput(*{description}, 'description', #{forms.cafe.description}, '')"></div>
+		<div class="form-group">
+			<input type="submit" class="btn btn-outline-primary w-100" th:value="#{forms.cafe.submit}"/>
+		</div>
+	</form>
+</div>

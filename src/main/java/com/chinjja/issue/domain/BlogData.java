@@ -21,5 +21,9 @@ public class BlogData {
 	
 	@Transient
 	@NotNull
-	private Long category;
+	private Long categoryId;
+	
+	@Transient
+	@NotNull
+	private String cafeId;
 }

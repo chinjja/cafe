@@ -29,7 +29,10 @@ public class CategoryData {
 	private Type type;
 	
 	@Transient
-	private Long parent;
+	private Long parentId;
+	@Transient
+	@NotNull
+	private String cafeId;
 	
 	public boolean isDirectory() {
 		return type == Type.DIRECTORY;

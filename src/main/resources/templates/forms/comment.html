@@ -1,6 +1,6 @@
 <div th:fragment="commentForm(target)" th:if="${user != null}">
-	<form method="POST" th:action="@{/comments}" th:object="${commentData}" id="commentForm" class="row-cols-1 border rounded-3 p-3">
-		<input type="hidden" th:value="${target.id}" th:name="target"/>
+	<form method="POST" th:action="@{/create-comment}" th:object="${commentData}" id="commentForm" class="row-cols-1 border rounded-3 p-3">
+		<input type="hidden" th:value="${target.id}" th:name="targetId"/>
 		<div class="mb-3">
 			<div th:replace="forms/textAreaInput(*{comment}, 'comment', ${user.username}, #{forms.comment.enterComment})"></div>
 		</div>

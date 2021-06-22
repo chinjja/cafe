@@ -10,8 +10,8 @@
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-				<li class="nav-item">
-					<a class="nav-link" th:href="@{/}">Blogs</a>
+				<li class="nav-item" th:if="${cafe != null}">
+					<a class="nav-link" th:href="@{/{cafe}(cafe=${cafe.id})}" th:text="${cafe.name}"></a>
 				</li>
 				<li class="nav-item">
 				<li class="nav-item dropdown">
@@ -33,10 +33,10 @@
 			</form>
 			<div class="d-flex justify-content-end" th:unless="${user}">
 				<a class="btn btn-outline-primary w-50 me-2" th:href="@{/login}">Login</a>
-				<a class="btn btn-outline-primary w-50" th:href="@{/register}">Register</a>
+				<a class="btn btn-outline-primary w-50" th:href="@{/create-user}">Register</a>
 			</div>
 			<form class="d-flex justify-content-end m-0" method="POST" th:if="${user != null}" th:action="@{/logout}" id="logoutForm">
-				<a class="navbar-text me-2" th:text="${user.username}" th:href="@{/users/{id}(id=${user.id})}"></a>
+				<a class="navbar-text me-2" th:text="${user.username}" th:href="@{/get-user/{id}(id=${user.id})}"></a>
 				<input type="submit" value="Logout" class="btn btn-outline-primary w-100" />
 			</form>
 		</div>

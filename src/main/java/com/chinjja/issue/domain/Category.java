@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
@@ -30,6 +31,10 @@ public class Category {
 	
 	@ManyToOne
 	private Category parent;
+	
+	@ManyToOne
+	@NotNull
+	private Cafe cafe;
 	
 	@OneToMany
 	@JoinColumn(name = "parent_id")

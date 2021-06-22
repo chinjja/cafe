@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.chinjja.issue.domain.Blog;
 import com.chinjja.issue.domain.BlogData;
+import com.chinjja.issue.domain.CafeData;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.CategoryData;
 import com.chinjja.issue.domain.Comment;
@@ -18,11 +19,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BlogControllerAdvice {
 	private final BlogService blogService;
-	
-	@ModelAttribute("categoryList")
-	public Iterable<Category> categoryList() {
-		return blogService.getCategories();
-	}
 	
 	@ModelAttribute
 	public Blog blog() {
@@ -57,5 +53,10 @@ public class BlogControllerAdvice {
 	@ModelAttribute
 	public CategoryData categoryData() {
 		return new CategoryData();
+	}
+	
+	@ModelAttribute
+	public CafeData cafeData() {
+		return new CafeData();
 	}
 }

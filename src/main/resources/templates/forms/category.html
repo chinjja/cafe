@@ -1,6 +1,7 @@
 <div th:fragment="category(parent_id)" th:if="${user}">
-	<form method="POST" th:action="@{/categories}" th:object="${categoryData}" id="categoryForm" class="row g-3">
-		<input type="hidden" th:value="${parent_id}" th:name="parent"/>
+	<form method="POST" th:action="@{/create-category}" th:object="${categoryData}" id="categoryForm" class="row g-3">
+		<input type="hidden" th:value="${cafe.id}" th:name="cafeId"/>
+		<input type="hidden" th:value="${parent_id}" th:name="parentId"/>
 		<div class="form-group">
 			<label for="type" th:text="#{forms.category.type}"></label>
 			<select class="form-control" name="type" id="type">

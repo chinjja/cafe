@@ -3,6 +3,7 @@ package com.chinjja.issue.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -31,12 +32,12 @@ public class UserController {
 	private final UserRepository userRepo;
 	private final PasswordEncoder passwordEncoder;
 	
-	@GetMapping("/register")
+	@GetMapping("/create-user")
 	public String register() {
 		return "register";
 	}
 	
-	@PostMapping("/register")
+	@PostMapping("/create-user")
 	public String registerForm(@Valid RegisterForm form, Errors errors, SessionStatus status) {
 		if(errors.hasErrors()) {
 			return "register";
@@ -51,13 +52,14 @@ public class UserController {
 		return "redirect:/login";
 	}
 	
-	@GetMapping("/users/{id}")
+	@GetMapping("/get-user/{id}")
 	public String users(@PathVariable Long id, Model model) {
 		val user = userRepo.findById(id).get();
 		model.addAttribute("selectedUser", user);
 		return "user";
 	}
 	
+	@Secured("ROLE_USER")
 	@PostMapping("/users-cp")
 	public String changePassword(
 			@AuthenticationPrincipal User user,

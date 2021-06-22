@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class CommentData {
 	@Transient
-	private Long target;
+	private Long targetId;
 	@NotBlank
 	private String comment;
 }

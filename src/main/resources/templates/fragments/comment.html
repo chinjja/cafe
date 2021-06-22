@@ -1,7 +1,7 @@
 <div th:fragment="comment(comment)" class="d-flex border-bottom mb-2">
 	<i class="bi bi-bootstrap me-2" style="font-size: 3rem;"></i>
 	<div class="w-100">
-		<a th:href="@{/users/} + ${comment.user.id}" th:text="${comment.user.username}"></a>
+		<a th:href="@{/get-user/{id}(id=${comment.user.id})}" th:text="${comment.user.username}"></a>
 		<pre class="p mt-2" th:text="${comment.data.comment}"></pre>
 		<div class="d-flex align-items-baseline">
 			<span class="text-muted me-2" th:text="${#temporals.format(comment.createdAt)}"></span>
