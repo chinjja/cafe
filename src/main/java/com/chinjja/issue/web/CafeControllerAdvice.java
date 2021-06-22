@@ -3,31 +3,29 @@ package com.chinjja.issue.web;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-import com.chinjja.issue.domain.Blog;
-import com.chinjja.issue.domain.BlogData;
+import com.chinjja.issue.domain.Post;
+import com.chinjja.issue.domain.PostData;
 import com.chinjja.issue.domain.CafeData;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.CategoryData;
 import com.chinjja.issue.domain.Comment;
 import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.LikeCountData;
-import com.chinjja.issue.service.BlogService;
 
 import lombok.RequiredArgsConstructor;
 
 @ControllerAdvice
 @RequiredArgsConstructor
-public class BlogControllerAdvice {
-	private final BlogService blogService;
+public class CafeControllerAdvice {
 	
 	@ModelAttribute
-	public Blog blog() {
-		return new Blog();
+	public Post post() {
+		return new Post();
 	}
 	
 	@ModelAttribute
-	public BlogData blogData() {
-		return new BlogData();
+	public PostData postData() {
+		return new PostData();
 	}
 	
 	@ModelAttribute

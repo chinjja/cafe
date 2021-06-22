@@ -6,7 +6,7 @@
 			<label for="type" th:text="#{forms.category.type}"></label>
 			<select class="form-control" name="type" id="type">
 				<option value="DIRECTORY" th:text="#{forms.category.type.directory}"></option>
-				<option value="BLOG" th:text="#{forms.category.type.blog}"></option>
+				<option value="POST" th:text="#{forms.category.type.post}"></option>
 			</select>
 		</div>
 		<div th:replace="forms/textInput(*{name}, 'name', null, '제목을 입력하세요.')"></div>

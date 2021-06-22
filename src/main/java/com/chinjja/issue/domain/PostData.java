@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BlogData {
+public class PostData {
 	@NotBlank
 	private String title;
 	@NotBlank

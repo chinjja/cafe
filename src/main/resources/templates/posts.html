@@ -1,0 +1,44 @@
+<html layout:decorate="~{layouts/sidebarLayout}">
+	<div layout:fragment="content">
+		<h1 th:text="${post.category.data.name}"></h1>
+		<hr/>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th th:text="#{posts.id}"></th>
+					<th th:text="#{posts.title}"></th>
+					<th th:text="#{posts.createdAt}"></th>
+					<th th:text="#{posts.author}"></th>
+					<th th:text="#{posts.viewCount}"></th>
+					<th th:text="#{posts.likeCount}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td th:text="${post.id}"></td>
+					<td th:text="${post.data.title}"></td>
+					<td th:text="${#temporals.format(post.createdAt)}"></td>
+					<td>
+						<a th:href="@{/get-user/{id}(id=${post.user.id})}" th:text="${post.user.username}"></a>
+					</td>
+					<td th:text="${post.viewCount}"></td>
+					<td th:text="${post.likes.size()}"></td>
+				</tr>
+			</tbody>
+		</table>
+		<pre class="border rounded-3 p-3" th:text="${post.data.contents}"></pre>
+		<form method="POST" th:action="@{/toggle-like}" th:object="${likeCountData}" th:if="${user != null}" id="likeCountForm">
+			<input type="hidden" th:value="${post.id}" th:name="target"/>
+			<input type="submit" class="btn btn-outline-primary" th:classappend="${#bools.isFalse(canLike)} ? 'active'" th:value="좋아요"/>
+		</form>
+		<hr/>
+		<div class="page-header">
+			<h4 th:text="#{posts.comment}"></h4>
+		</div>
+			<hr/>
+		<div th:replace="fragments/commentList(${post.comments})"></div>
+		<div class="mt-3" th:if="${user != null}">
+			<div th:replace="forms/comment(${post})"></div>
+		</div>
+	</div>
+</html>

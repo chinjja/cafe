@@ -5,10 +5,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.chinjja.issue.domain.Blog;
+import com.chinjja.issue.domain.Post;
 import com.chinjja.issue.domain.Category;
 
-public interface BlogRepository extends PagingAndSortingRepository<Blog, Long> {
-	Page<Blog> findAllByCategory(Category category, Pageable pageable);
-	Page<Blog> findAllByCategoryIn(Iterable<Category> categories, Pageable pageable);
+public interface PostRepository extends PagingAndSortingRepository<Post, Long> {
+	Page<Post> findAllByCategory(Category category, Pageable pageable);
+	Page<Post> findAllByCategoryIn(Iterable<Category> categories, Pageable pageable);
 }

@@ -19,7 +19,8 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.chinjja.issue.data.CafeRepository;
 import com.chinjja.issue.data.CategoryRepository;
-import com.chinjja.issue.domain.BlogData;
+import com.chinjja.issue.data.PostRepository;
+import com.chinjja.issue.domain.PostData;
 import com.chinjja.issue.domain.Cafe;
 import com.chinjja.issue.domain.CafeData;
 import com.chinjja.issue.domain.Category;
@@ -27,7 +28,7 @@ import com.chinjja.issue.domain.CategoryData;
 import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.LikeCountData;
 import com.chinjja.issue.domain.User;
-import com.chinjja.issue.service.BlogService;
+import com.chinjja.issue.service.CafeService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -35,11 +36,12 @@ import lombok.val;
 @Controller
 @RequiredArgsConstructor
 @SessionAttributes({"cafe", "categoryList", "activeCategory"})
-public class BlogController {
-	private final BlogService blogService;
+public class CafeController {
+	private final CafeService cafeService;
 	private final CategoryRepository categoryRepo;
 	
 	private final CafeRepository cafeRepo;
+	private final PostRepository postRepo;
 	
 	@GetMapping("/")
 	public String cafe(Model model, SessionStatus status) {
@@ -65,7 +67,7 @@ public class BlogController {
 	}
 	
 	@GetMapping("/{cafeId}")
-	public String blogs(
+	public String posts(
 			@PathVariable String cafeId,
 			@RequestParam(required = false) Long category,
 			@RequestParam(required = false) Integer page,
@@ -83,36 +85,36 @@ public class BlogController {
 		}
 		val pageable = PageRequest.of(page, size, Direction.DESC, "createdAt");
 		
-		val blogList = blogService.getBlogList(cafe, activeCategory, pageable);
+		val posts = cafeService.getPostList(cafe, activeCategory, pageable);
 		model.addAttribute("cafe", cafe);
 		model.addAttribute("categoryList", categoryList);
-		model.addAttribute("blogList", blogList);
+		model.addAttribute("postList", posts);
 		model.addAttribute("activeCategory", activeCategory);
-		model.addAttribute("blogFirstPage", blogList.getPageable().first());
-		model.addAttribute("blogPrevPage", blogList.previousOrFirstPageable());
-		model.addAttribute("blogNextPage", blogList.nextOrLastPageable());
+		model.addAttribute("postFirstPage", posts.getPageable().first());
+		model.addAttribute("postPrevPage", posts.previousOrFirstPageable());
+		model.addAttribute("postNextPage", posts.nextOrLastPageable());
 		return "index";
 	}
 	
 	@Secured("ROLE_USER")
-	@PostMapping("/create-blog")
-	public String blogForm(@AuthenticationPrincipal User user, @Valid BlogData form) {
-		blogService.createBlog(user, form);
+	@PostMapping("/create-post")
+	public String createPost(@AuthenticationPrincipal User user, @Valid PostData form) {
+		cafeService.createPost(user, form);
 		return "redirect:/" + form.getCafeId() + "?category=" + form.getCategoryId();
 	}
 	
-	@GetMapping("/{cafeId}/blogs/{blogId}")
-	public String blogs(
+	@GetMapping("/{cafeId}/posts/{postId}")
+	public String posts(
 			@AuthenticationPrincipal User user,
 			@PathVariable String cafeId,
-			@PathVariable Long blogId,
+			@PathVariable Long postId,
 			Model model) {
-		val blog = blogService.getBlogById(blogId);
-		model.addAttribute("blog", blog);
-		model.addAttribute("canLike", blogService.canLikeCount(blog, user));
+		val post = postRepo.findById(postId).get();
+		model.addAttribute("post", post);
+		model.addAttribute("canLike", cafeService.canLikeCount(post, user));
 		
-		blogService.visit(user, blog);
-		return "blogs";
+		cafeService.visit(user, post);
+		return "posts";
 	}
 	
 	@Secured("ROLE_USER")
@@ -122,7 +124,7 @@ public class BlogController {
 			@Valid CommentData form,
 			HttpServletRequest request) {
 		String referer = request.getHeader("Referer");
-		blogService.createComment(user, form);
+		cafeService.createComment(user, form);
 		return "redirect:" + referer;
 	}
 	
@@ -133,7 +135,7 @@ public class BlogController {
 			@Valid LikeCountData form,
 			HttpServletRequest request) {
 		String referer = request.getHeader("Referer");
-		blogService.toggleLikeCount(user, form);
+		cafeService.toggleLikeCount(user, form);
 		return "redirect:" + referer;
 	}
 	
@@ -145,7 +147,7 @@ public class BlogController {
 			@Valid CategoryData form,
 			HttpServletRequest request) {
 		String referer = request.getHeader("Referer");
-		blogService.createCategory(user, form);
+		cafeService.createCategory(user, form);
 		return "redirect:" + referer;
 	}
 }

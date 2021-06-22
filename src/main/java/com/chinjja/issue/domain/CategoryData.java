@@ -38,7 +38,7 @@ public class CategoryData {
 		return type == Type.DIRECTORY;
 	}
 	
-	public boolean isBlog() {
-		return type == Type.BLOG;
+	public boolean isPost() {
+		return type == Type.POST;
 	}
 }

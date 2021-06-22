@@ -21,11 +21,11 @@ import lombok.EqualsAndHashCode;
 		})
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Blog extends Element {
+public class Post extends Element {
 	private int viewCount;
 	
 	@Embedded
-	private BlogData data;
+	private PostData data;
 	
 	@OneToMany
 	@JoinColumn(name = "target_id")

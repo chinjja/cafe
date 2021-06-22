@@ -19,7 +19,7 @@ import lombok.Data;
 public class Category {
 	public static enum Type {
 		DIRECTORY,
-		BLOG
+		POST
 	}
 	
 	@Id
@@ -42,5 +42,5 @@ public class Category {
 	
 	@OneToMany
 	@JoinColumn(name = "category_id")
-	private List<Blog> blogs = new ArrayList<>();
+	private List<Post> blogs = new ArrayList<>();
 }
