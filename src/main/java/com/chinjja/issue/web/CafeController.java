@@ -52,7 +52,7 @@ public class CafeController {
 	
 	@GetMapping("/create-cafe")
 	@Secured("ROLE_USER")
-	public String createCafe(@AuthenticationPrincipal User user) {
+	public String createCafe() {
 		return "createCafe";
 	}
 	
@@ -97,8 +97,14 @@ public class CafeController {
 	}
 	
 	@Secured("ROLE_USER")
+	@GetMapping("/create-post")
+	public String createPost() {
+		return "createPost";
+	}
+	
+	@Secured("ROLE_USER")
 	@PostMapping("/create-post")
-	public String createPost(@AuthenticationPrincipal User user, @Valid PostData form) {
+	public String createPostForm(@AuthenticationPrincipal User user, @Valid PostData form) {
 		cafeService.createPost(user, form);
 		return "redirect:/" + form.getCafeId() + "?category=" + form.getCategoryId();
 	}

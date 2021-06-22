@@ -1,10 +1,9 @@
 <div th:fragment="posts(category)">
 	<div class="page-header" th:if="${category != null}">
-		<h1 th:text="${category.data.name}"></h1>
-		<hr/>
-	</div>
-	<div th:if="${user != null} AND ${category != null}">
-		<div th:replace="forms/post(${category})"></div>
+		<div class="d-flex justify-content-between align-items-end">
+			<h1 th:text="${category.data.name}"></h1>
+			<a class="btn btn-primary" role="button" th:href="@{/create-post}">게시글 쓰기</a>
+		</div>
 		<hr/>
 	</div>
 	<div class="page-header">
