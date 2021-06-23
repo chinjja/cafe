@@ -27,7 +27,7 @@ import lombok.val;
 
 @Controller
 @RequiredArgsConstructor
-@SessionAttributes("selectedUser")
+@SessionAttributes("activeUser")
 public class UserController {
 	private final UserRepository userRepo;
 	private final PasswordEncoder passwordEncoder;
@@ -55,7 +55,7 @@ public class UserController {
 	@GetMapping("/get-user/{id}")
 	public String users(@PathVariable Long id, Model model) {
 		val user = userRepo.findById(id).get();
-		model.addAttribute("selectedUser", user);
+		model.addAttribute("activeUser", user);
 		return "user";
 	}
 	
