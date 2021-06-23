@@ -118,6 +118,7 @@ public class CafeController {
 		val post = postRepo.findById(postId).get();
 		model.addAttribute("post", post);
 		model.addAttribute("canLike", cafeService.canLikeCount(post, user));
+		model.addAttribute("activeCategory", post.getCategory());
 		
 		cafeService.visit(user, post);
 		return "posts";
@@ -151,9 +152,12 @@ public class CafeController {
 			@AuthenticationPrincipal User user,
 			Cafe cafe,
 			@Valid CategoryData form,
-			HttpServletRequest request) {
+			HttpServletRequest request,
+			Model model) {
 		String referer = request.getHeader("Referer");
 		cafeService.createCategory(user, form);
+		val categoryList = categoryRepo.findAllByCafeAndParentIsNull(cafe);
+		model.addAttribute("categoryList", categoryList);
 		return "redirect:" + referer;
 	}
 }
