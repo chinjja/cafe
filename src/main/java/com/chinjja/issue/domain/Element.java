@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Formula;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -39,4 +41,7 @@ public class Element {
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	private List<LikeCount> likes = new ArrayList<>();
+	
+	@Formula("(select count(lc.user_id) from like_count lc where lc.target_id = id)")
+	private int likeCount;
 }
