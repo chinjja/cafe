@@ -7,12 +7,13 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -36,11 +37,8 @@ public class Category {
 	@NotNull
 	private Cafe cafe;
 	
-	@OneToMany
-	@JoinColumn(name = "parent_id")
+	@OneToMany(mappedBy = "parent")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	private List<Category> categories = new ArrayList<>();
-	
-	@OneToMany
-	@JoinColumn(name = "category_id")
-	private List<Post> blogs = new ArrayList<>();
 }

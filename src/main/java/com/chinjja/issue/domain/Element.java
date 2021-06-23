@@ -15,6 +15,8 @@ import javax.persistence.PrePersist;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -34,5 +36,7 @@ public class Element {
 	}
 	
 	@OneToMany(mappedBy = "id.target")
-	private List<LikeCount> likes= new ArrayList<>();
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private List<LikeCount> likes = new ArrayList<>();
 }

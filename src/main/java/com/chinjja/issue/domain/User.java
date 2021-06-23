@@ -1,19 +1,22 @@
 package com.chinjja.issue.domain;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -27,6 +30,11 @@ public class User implements UserDetails {
 	private String password;
 	
 	private String[] roles = {"ROLE_USER"};
+	
+	@OneToMany(mappedBy = "owner")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private List<Cafe> cafes = new ArrayList<>();
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
