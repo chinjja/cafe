@@ -113,6 +113,7 @@ public class CafeController {
 	@GetMapping("/{cafeId}/posts/{postId}")
 	public String posts(
 			@AuthenticationPrincipal User user,
+			@ModelAttribute("activeCafe") Cafe cafe,
 			@PathVariable String cafeId,
 			@PathVariable Long postId,
 			Model model) {
@@ -120,6 +121,8 @@ public class CafeController {
 		model.addAttribute("activePost", post);
 		model.addAttribute("canLike", cafeService.canLikeCount(post, user));
 		model.addAttribute("activeCategory", post.getCategory());
+		val categoryList = categoryRepo.findAllByCafeAndParentIsNull(cafe);
+		model.addAttribute("categoryList", categoryList);
 		
 		cafeService.visit(user, post);
 		return "posts";
