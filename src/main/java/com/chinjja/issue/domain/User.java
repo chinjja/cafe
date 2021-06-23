@@ -8,6 +8,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -35,6 +38,15 @@ public class User implements UserDetails {
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	private List<Cafe> cafes = new ArrayList<>();
+	
+	@ManyToMany
+	@JoinTable(
+			name = "cafe_members",
+			joinColumns = @JoinColumn(name = "members_id"),
+			inverseJoinColumns = @JoinColumn(name = "cafe_id"))
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private List<Cafe> joinedCafes = new ArrayList<>();
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

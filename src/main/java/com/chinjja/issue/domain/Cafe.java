@@ -1,14 +1,19 @@
 package com.chinjja.issue.domain;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.Formula;
 
 import lombok.Data;
 
@@ -41,4 +46,10 @@ public class Cafe {
 	private void createdAt() {
 		createdAt = LocalDateTime.now();
 	}
+	
+	@ManyToMany
+	private Set<User> members = new HashSet<>();
+	
+	@Formula("(select count(cm.members_id) from cafe_members cm where cm.cafe_id = id)")
+	private int memberCount;
 }

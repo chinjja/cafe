@@ -21,6 +21,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.chinjja.issue.data.CafeRepository;
 import com.chinjja.issue.data.CategoryRepository;
 import com.chinjja.issue.data.PostRepository;
+import com.chinjja.issue.data.UserRepository;
 import com.chinjja.issue.domain.PostData;
 import com.chinjja.issue.domain.Cafe;
 import com.chinjja.issue.domain.CafeData;
@@ -43,9 +44,14 @@ public class CafeController {
 	
 	private final CafeRepository cafeRepo;
 	private final PostRepository postRepo;
+	private final UserRepository userRepo;
 	
 	@GetMapping("/")
-	public String cafe(Model model, SessionStatus status) {
+	public String cafe(@AuthenticationPrincipal User user, Model model, SessionStatus status) {
+		if(user != null) {
+			user = userRepo.findById(user.getId()).get();
+			model.addAttribute("user", user);
+		}
 		model.addAttribute("cafeList", cafeRepo.findAll());
 		model.addAttribute("activeCafe", null);
 		return "cafe";
@@ -65,6 +71,19 @@ public class CafeController {
 		cafe.setOwner(user);
 		cafeRepo.save(cafe);
 		return "redirect:/";
+	}
+	
+	@GetMapping("/join-cafe")
+	@Secured("ROLE_USER")
+	public String joinCafeForm(
+			@AuthenticationPrincipal User user,
+			@ModelAttribute("activeCafe") Cafe cafe) {
+		if(!cafe.getOwner().getId().equals(user.getId())) {
+			if(cafe.getMembers().add(user)) {
+				cafeRepo.save(cafe);
+			}
+		}
+		return "redirect:/"+cafe.getId();
 	}
 	
 	@GetMapping("/{cafeId:[a-z0-9]+}")
