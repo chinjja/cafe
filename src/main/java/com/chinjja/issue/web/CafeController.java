@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +36,7 @@ import lombok.val;
 
 @Controller
 @RequiredArgsConstructor
-@SessionAttributes({"cafe", "categoryList", "activeCategory"})
+@SessionAttributes({"activeCafe", "categoryList", "activeCategory"})
 public class CafeController {
 	private final CafeService cafeService;
 	private final CategoryRepository categoryRepo;
@@ -46,7 +47,7 @@ public class CafeController {
 	@GetMapping("/")
 	public String cafe(Model model, SessionStatus status) {
 		model.addAttribute("cafeList", cafeRepo.findAll());
-		model.addAttribute("cafe", null);
+		model.addAttribute("activeCafe", null);
 		return "cafe";
 	}
 	
@@ -86,7 +87,7 @@ public class CafeController {
 		val pageable = PageRequest.of(page, size, Direction.DESC, "createdAt");
 		
 		val posts = cafeService.getPostList(cafe, activeCategory, pageable);
-		model.addAttribute("cafe", cafe);
+		model.addAttribute("activeCafe", cafe);
 		model.addAttribute("categoryList", categoryList);
 		model.addAttribute("postList", posts);
 		model.addAttribute("activeCategory", activeCategory);
@@ -150,7 +151,7 @@ public class CafeController {
 	@PostMapping("/create-category")
 	public String categoryForm(
 			@AuthenticationPrincipal User user,
-			Cafe cafe,
+			@ModelAttribute("activeCafe") Cafe cafe,
 			@Valid CategoryData form,
 			HttpServletRequest request,
 			Model model) {

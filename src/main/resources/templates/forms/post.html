@@ -3,7 +3,7 @@
 		<h1 th:text="#{forms.post.header}"></h1>
 	</div>
 	<form method="POST" th:action="@{/create-post}" th:object="${postData}" id="createpost" class="row g-3">
-		<input type="hidden" th:value="${cafe.id}" th:name="cafeId"/>
+		<input type="hidden" th:value="${activeCafe.id}" th:name="cafeId"/>
 		<input type="hidden" th:value="${category.id}" th:name="categoryId"/>
 		<div th:replace="forms/textInput(*{title}, 'title', #{forms.post.title}, '')"></div>
 		<div th:replace="forms/textAreaInput(*{contents}, 'contents', #{forms.post.contents}, '')"></div>
