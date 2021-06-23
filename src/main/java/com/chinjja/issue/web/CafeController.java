@@ -36,7 +36,7 @@ import lombok.val;
 
 @Controller
 @RequiredArgsConstructor
-@SessionAttributes({"activeCafe", "categoryList", "activeCategory"})
+@SessionAttributes({"activeCafe", "activePost", "categoryList", "activeCategory"})
 public class CafeController {
 	private final CafeService cafeService;
 	private final CategoryRepository categoryRepo;
@@ -117,7 +117,7 @@ public class CafeController {
 			@PathVariable Long postId,
 			Model model) {
 		val post = postRepo.findById(postId).get();
-		model.addAttribute("post", post);
+		model.addAttribute("activePost", post);
 		model.addAttribute("canLike", cafeService.canLikeCount(post, user));
 		model.addAttribute("activeCategory", post.getCategory());
 		
