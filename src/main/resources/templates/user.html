@@ -17,7 +17,7 @@
 				</ul>
 			</div>
 		</div>
-		<div th:if="${activeUser == user}">
+		<div th:if="${user != null} AND ${activeUser != null} AND ${user.id == activeUser.id}">
 			<hr/>
 			<div th:replace="forms/changePassword(${activeUser})"></div>
 		</div>
