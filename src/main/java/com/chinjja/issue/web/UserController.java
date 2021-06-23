@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -59,7 +60,7 @@ public class UserController {
 		return "user";
 	}
 	
-	@Secured("ROLE_USER")
+	@PreAuthorize("isAuthenticated() and (#form.userId == #user.id)")
 	@PostMapping("/users-cp")
 	public String changePassword(
 			@AuthenticationPrincipal User user,
@@ -68,9 +69,6 @@ public class UserController {
 			SessionStatus status,
 			HttpServletRequest request) {
 
-		if(!form.getUserId().equals(user.getId())) {
-			throw new IllegalArgumentException("not match user id: " + form.getUserId());
-		}
 		if(!passwordEncoder.matches(form.getPassword(), user.getPassword())) {
 			errors.addError(new FieldError("changePasswordForm", "password", "암호가 일치하지 않습니다."));
 		}
