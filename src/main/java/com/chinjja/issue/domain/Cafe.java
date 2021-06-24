@@ -25,9 +25,7 @@ import lombok.ToString;
 public class Cafe {
 	@Id
 	@Size(min = 4, max = 20)
-	@NotBlank
 	private String id;
-	@NotNull
 	@NotBlank
 	private String name;
 	@NotNull
