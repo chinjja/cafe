@@ -3,9 +3,9 @@
 		<div class="card-body">
 			<div class="row">
 				<a class="stretched-link h3" th:href="@{/cafe/{cafeId}(cafeId=${cafe.id})}" th:text="${cafe.name}"></a>
-				<span class="text-muted" th:text="'개설일: ' + ${#temporals.format(cafe.createdAt)}"></span>
-				<span class="text-muted" th:text="'운영자: ' + ${cafe.owner.username}"></span>
-				<span class="text-muted" th:text="'회원수: ' + ${cafe.memberCount}"></span>
+				<span class="text-muted" th:text="#{fragments.cafe.createdAt} + ': ' + ${#temporals.format(cafe.createdAt)}"></span>
+				<span class="text-muted" th:text="#{fragments.cafe.owner} + ': ' + ${cafe.owner.username}"></span>
+				<span class="text-muted" th:text="#{fragments.cafe.memberCount} + ': ' + ${cafe.memberCount}"></span>
 			</div>
 		</div>
 	</div>

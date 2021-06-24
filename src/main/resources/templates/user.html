@@ -18,7 +18,7 @@
 			</div>
 		</div>
 		<div class="input-group">
-			<span class="input-group-text w-25">운영중인 카페</span>
+			<span class="input-group-text w-25" th:text="#{user.ownerCafes}"></span>
 			<div class="form-control">
 				<ul class="list-group list-group-flush" th:if="${activeUser != null}" >
 					<li class="list-group-item" th:each="cafe : ${activeUser.cafes}">
@@ -28,7 +28,7 @@
 			</div>
 		</div>
 		<div class="input-group">
-			<span class="input-group-text w-25">가입한 카페</span>
+			<span class="input-group-text w-25" th:text="#{user.memberCafes}"></span>
 			<div class="form-control">
 				<ul class="list-group list-group-flush" th:if="${activeUser != null}" >
 					<li class="list-group-item" th:each="cafe : ${activeUser.joinedCafes}">

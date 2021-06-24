@@ -9,7 +9,7 @@
 			</div>
 			<div th:if="${user != null} AND ${activeCafe.owner.id == user.id} AND *{data.isDirectory()}">
 				<div class="d-flex justify-content-end align-items-baseline">
-					<a class="btn text-muted" th:href="@{/delete-category(categoryId=${category.id})}">제거</a>
+					<a class="btn text-muted" th:href="@{/delete-category(categoryId=${category.id})}" th:text=#{delete}></a>
 					<button class="btn text-muted" type="button"
 					data-bs-toggle="collapse"
 					th:data-bs-target="'#collapseExample' + *{id}"
