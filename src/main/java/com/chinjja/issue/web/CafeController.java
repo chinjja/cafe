@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
 
 import com.chinjja.issue.data.CafeRepository;
 import com.chinjja.issue.data.CategoryRepository;
@@ -47,7 +46,7 @@ public class CafeController {
 	private final UserRepository userRepo;
 	
 	@GetMapping("/")
-	public String cafe(@AuthenticationPrincipal User user, Model model, SessionStatus status) {
+	public String cafe(@AuthenticationPrincipal User user, Model model) {
 		if(user != null) {
 			user = userRepo.findById(user.getId()).get();
 			model.addAttribute("user", user);
