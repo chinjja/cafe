@@ -26,7 +26,7 @@
 				<td th:text="${post.category.data.name}" th:unless="${category}"></td>
 				<td th:text="${post.id}"></td>
 				<td>
-					<a th:href="@{/{cafe}/posts/{id}(cafe=${activeCafe.id},id=${post.id})}" th:text="${post.data.title}"></a>
+					<a th:href="@{/cafe/{cafe}/posts/{id}(cafe=${activeCafe.id},id=${post.id})}" th:text="${post.data.title}"></a>
 				</td>
 				<td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
 				<td>
@@ -39,9 +39,9 @@
 	</table>
 	<nav class="d-flex justify-content-center">
 		<ul class="pagination" th:with="category_id=${activeCategory != null} ? ${activeCategory.id} : null">
-			<li class="page-item me-2"><a class="page-link" th:with="p=${postFirstPage}" th:href="@{/{cafe}(cafe=${activeCafe.id},page=${p.pageNumber},size=${p.pageSize},category=${category_id})}" th:text="#{fragments.posts.firstPage}"></a></li>
-			<li class="page-item"><a class="page-link" th:with="p=${postPrevPage}" th:href="@{/{cafe}(cafe=${activeCafe.id},page=${p.pageNumber},size=${p.pageSize},category=${category_id})}" th:text="#{fragments.posts.nextPage}"></a></li>
-			<li class="page-item"><a class="page-link" th:with="p=${postNextPage}" th:href="@{/{cafe}(cafe=${activeCafe.id},page=${p.pageNumber},size=${p.pageSize},category=${category_id})}" th:text="#{fragments.posts.prevPage}"></a></li>
+			<li class="page-item me-2"><a class="page-link" th:with="p=${postFirstPage}" th:href="@{/cafe/{cafe}(cafe=${activeCafe.id},page=${p.pageNumber},size=${p.pageSize},category=${category_id})}" th:text="#{fragments.posts.firstPage}"></a></li>
+			<li class="page-item"><a class="page-link" th:with="p=${postPrevPage}" th:href="@{/cafe/{cafe}(cafe=${activeCafe.id},page=${p.pageNumber},size=${p.pageSize},category=${category_id})}" th:text="#{fragments.posts.nextPage}"></a></li>
+			<li class="page-item"><a class="page-link" th:with="p=${postNextPage}" th:href="@{/cafe/{cafe}(cafe=${activeCafe.id},page=${p.pageNumber},size=${p.pageSize},category=${category_id})}" th:text="#{fragments.posts.prevPage}"></a></li>
 		</ul>
 	</nav>
 </div>

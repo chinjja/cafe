@@ -77,15 +77,16 @@ public class CafeController {
 	public String joinCafeForm(
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe) {
+		cafe = cafeRepo.findById(cafe.getId()).get();
 		if(!cafe.getOwner().getId().equals(user.getId())) {
 			if(cafe.getMembers().add(user)) {
 				cafeRepo.save(cafe);
 			}
 		}
-		return "redirect:/"+cafe.getId();
+		return "redirect:/cafe/"+cafe.getId();
 	}
 	
-	@GetMapping("/{cafeId:[a-z0-9]+}")
+	@GetMapping("/cafe/{cafeId:[a-z0-9]+}")
 	public String posts(
 			@PathVariable String cafeId,
 			@RequestParam(required = false) Long category,
@@ -125,10 +126,10 @@ public class CafeController {
 	@PostMapping("/create-post")
 	public String createPostForm(@AuthenticationPrincipal User user, @Valid PostData form) {
 		cafeService.createPost(user, form);
-		return "redirect:/" + form.getCafeId() + "?category=" + form.getCategoryId();
+		return "redirect:/cafe/" + form.getCafeId() + "?category=" + form.getCategoryId();
 	}
 	
-	@GetMapping("/{cafeId}/posts/{postId}")
+	@GetMapping("/cafe/{cafeId}/posts/{postId}")
 	public String posts(
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe,

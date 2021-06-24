@@ -2,7 +2,7 @@
 	<div class="card pb-3">
 		<div class="card-body">
 			<div class="row">
-				<a class="stretched-link h3" th:href="@{/{cafeId}(cafeId=${cafe.id})}" th:text="${cafe.name}"></a>
+				<a class="stretched-link h3" th:href="@{/cafe/{cafeId}(cafeId=${cafe.id})}" th:text="${cafe.name}"></a>
 				<span class="text-muted" th:text="'개설일: ' + ${#temporals.format(cafe.createdAt)}"></span>
 				<span class="text-muted" th:text="'운영자: ' + ${cafe.owner.username}"></span>
 				<span class="text-muted" th:text="'회원수: ' + ${cafe.memberCount}"></span>
