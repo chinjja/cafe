@@ -3,11 +3,16 @@
 	<div class="w-100">
 		<a th:href="@{/get-user/{id}(id=${comment.user.id})}" th:text="${comment.user.username}"></a>
 		<pre class="p mt-2" th:text="${comment.data.comment}"></pre>
-		<div class="d-flex align-items-baseline">
-			<span class="text-muted me-2" th:text="${#temporals.format(comment.createdAt)}"></span>
-			<button class="btn text-muted" th:if="${user != null}" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseExample' + ${comment.id}"
-					th:text="#{fragments.comment.addComment}">
-			</button>
+		<div class="d-flex justify-content-between">
+			<div class="d-flex align-items-baseline">
+				<span class="text-muted me-2" th:text="${#temporals.format(comment.createdAt)}"></span>
+				<button class="btn text-muted" th:if="${user != null}" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseExample' + ${comment.id}"
+						th:text="#{fragments.comment.addComment}">
+				</button>
+			</div>
+			<div th:if="${user != null}">
+				<a class="btn text-muted" th:if="${comment.user.id == user.id}" th:href="@{/delete-comment(commentId=${comment.id})}">삭제</a>
+			</div>
 		</div>
 		<div class="collapse" th:id="'collapseExample' + ${comment.id}">
 		<div th:replace="forms/comment :: commentForm(${comment})"></div>

@@ -1,5 +1,8 @@
 <div th:fragment="sidebar" class="bg-white">
-	<a class="h3" th:href="@{/join-cafe}" th:text="JOIN"></a>
+	<div class="d-flex justify-content-between">
+		<a class="h3" th:href="@{/join-cafe}" th:text="JOIN"></a>
+		<a class="btn btn-muted" th:href="@{/delete-cafe}" th:text="삭제"></a>
+	</div>
 	<nav class="navbar navbar-expand-md">
 		<button class="navbar-toggler w-100 text-start mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent2">
 			<i class="bi bi-list" style="font-size: 2rem;" th:text="#{fragments.sidebar.toggle}"></i>

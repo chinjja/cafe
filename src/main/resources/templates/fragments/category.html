@@ -8,11 +8,14 @@
 				<span th:text="*{data.name}"></span>
 			</div>
 			<div th:if="${user != null} AND ${activeCafe.owner.id == user.id} AND *{data.isDirectory()}">
-				<button class="btn text-muted" type="button"
-				data-bs-toggle="collapse"
-				th:data-bs-target="'#collapseExample' + *{id}"
-				th:text="#{fragments.category.add}">
-				</button>
+				<div class="d-flex justify-content-end align-items-baseline">
+					<a class="btn text-muted" th:href="@{/delete-category(categoryId=${category.id})}">제거</a>
+					<button class="btn text-muted" type="button"
+					data-bs-toggle="collapse"
+					th:data-bs-target="'#collapseExample' + *{id}"
+					th:text="#{fragments.category.add}">
+					</button>
+				</div>
 			</div>
 		</div>
 		<div class="collapse" th:id="'collapseExample' + *{id}">

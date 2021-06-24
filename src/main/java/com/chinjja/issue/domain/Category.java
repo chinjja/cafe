@@ -41,4 +41,9 @@ public class Category {
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	private List<Category> categories = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "category")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private List<Post> posts = new ArrayList<>();
 }

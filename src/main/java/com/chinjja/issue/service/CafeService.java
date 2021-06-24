@@ -67,6 +67,50 @@ public class CafeService {
 		return postRepo.save(post);
 	}
 	
+	@Transactional
+	public void deletePost(Post post) {
+		for(val comment : post.getComments()) {
+			deleteComment(comment);
+		}
+		postRepo.delete(post);
+	}
+	
+	@Transactional
+	public void deleteComment(Comment comment) {
+		for(val child : comment.getComments()) {
+			deleteComment(child);
+		}
+		commentRepo.delete(comment);
+	}
+	
+	@Transactional
+	public void deleteCategory(Category category) {
+		for(val child : category.getCategories()) {
+			deleteCategory(child);
+		}
+		switch(category.getData().getType()) {
+		case POST:
+			for(val post : category.getPosts()) {
+				deletePost(post);
+			}
+		case DIRECTORY:
+			categoryRepo.delete(category);
+			break;
+		}
+	}
+	
+	@Transactional
+	public void deleteCafe(Cafe cafe) {
+		for(val category : categoryRepo.findAllByCafeAndParentIsNull(cafe)) {
+			deleteCategory(category);
+		}
+		cafe = cafeRepo.findById(cafe.getId()).get();
+		for(val member : cafe.getMembers()) {
+			cafeMemberRepo.delete(member);
+		}
+		cafeRepo.delete(cafe);
+	}
+	
 	public Comment createComment(User user, @Valid CommentData form) {
 		val comment = new Comment();
 		comment.setData(form);

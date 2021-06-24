@@ -27,10 +27,15 @@
 			</tbody>
 		</table>
 		<pre class="border rounded-3 p-3" th:text="${activePost.data.contents}"></pre>
-		<form method="POST" th:action="@{/toggle-like}" th:object="${likeCountData}" th:if="${user != null}" id="likeCountForm">
-			<input type="hidden" th:value="${activePost.id}" th:name="target"/>
-			<input type="submit" class="btn btn-outline-primary" th:classappend="${#bools.isFalse(canLike)} ? 'active'" th:value="좋아요"/>
-		</form>
+		<div class="d-flex justify-content-between align-items-start">
+			<form method="POST" th:action="@{/toggle-like}" th:object="${likeCountData}" th:if="${user != null}" id="likeCountForm">
+				<input type="hidden" th:value="${activePost.id}" th:name="target"/>
+				<input type="submit" class="btn btn-outline-primary" th:classappend="${#bools.isFalse(canLike)} ? 'active'" th:value="좋아요"/>
+			</form>
+			<div th:if="${user != null}">
+				<a class="btn btn-muted" th:if="${activePost.user.id == user.id}" th:href="@{/delete-post(postId=${activePost.id})}">삭제</a>
+			</div>
+		</div>
 		<hr/>
 		<div class="page-header">
 			<h4 th:text="#{posts.comment}"></h4>
