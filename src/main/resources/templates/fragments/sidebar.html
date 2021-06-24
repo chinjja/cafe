@@ -1,7 +1,13 @@
 <div th:fragment="sidebar" class="bg-white">
 	<div class="d-flex justify-content-between">
-		<a class="h3" th:href="@{/join-cafe}" th:text="JOIN"></a>
-		<a class="btn btn-muted" th:href="@{/delete-cafe}" th:text="삭제"></a>
+		<span class="h3">소유자</span>
+		<a class="h3" th:href="@{/get-user/{id}(id=${activeCafe.owner.id})}" th:text="${activeCafe.owner.username}"></a>
+	</div>
+	<hr/>
+	<div class="d-flex justify-content-between">
+		<a class="h3" th:unless="${isJoined}" th:href="@{/join-cafe}" th:text="JOIN"></a>
+		<span class="h3" th:if="${isJoined}" th:text="WELCOME"></span>
+		<a class="btn btn-muted" th:if="${isOwner}" th:href="@{/delete-cafe}" th:text="카페삭제"></a>
 	</div>
 	<nav class="navbar navbar-expand-md">
 		<button class="navbar-toggler w-100 text-start mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent2">

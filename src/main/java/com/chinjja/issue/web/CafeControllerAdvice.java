@@ -57,4 +57,9 @@ public class CafeControllerAdvice {
 	public CafeData cafeData() {
 		return new CafeData();
 	}
+	
+	@ModelAttribute
+	public JoinCafeForm joinCafeForm() {
+		return new JoinCafeForm();
+	}
 }

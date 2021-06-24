@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.chinjja.issue.data.PostRepository;
+import com.chinjja.issue.data.CafeMemberRepository;
 import com.chinjja.issue.data.CafeRepository;
 import com.chinjja.issue.data.CategoryRepository;
 import com.chinjja.issue.data.CommentRepository;
@@ -22,6 +23,7 @@ import com.chinjja.issue.data.LikeCountRepository;
 import com.chinjja.issue.domain.Post;
 import com.chinjja.issue.domain.PostData;
 import com.chinjja.issue.domain.Cafe;
+import com.chinjja.issue.domain.CafeMemberId;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.CategoryData;
 import com.chinjja.issue.domain.Comment;
@@ -45,6 +47,7 @@ public class CafeService {
 	private final LikeCountRepository likeCountRepo;
 	private final CategoryRepository categoryRepo;
 	private final CafeRepository cafeRepo;
+	private final CafeMemberRepository cafeMemberRepo;
 	
 	private final Map<HashKey, LocalDateTime> lastVisitedTime = new ConcurrentHashMap<>();
 	
@@ -97,6 +100,22 @@ public class CafeService {
 			categoryRepo.delete(category);
 			break;
 		}
+	}
+	
+	public boolean isOwner(Cafe cafe, User user) {
+		return cafe.getOwner().getId().equals(user.getId());
+	}
+	
+	public boolean isMember(Cafe cafe, User user) {
+		return cafeMemberRepo.existsById(new CafeMemberId(cafe, user));
+	}
+	
+	public boolean isJoined(Cafe cafe, User user) {
+		return isOwner(cafe, user) || isMember(cafe, user);
+	}
+	
+	public boolean isAuthor(Element target, User user) {
+		return target.getUser().getId().equals(user.getId());
 	}
 	
 	@Transactional

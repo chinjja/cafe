@@ -39,14 +39,10 @@ public class User implements UserDetails {
 	@ToString.Exclude
 	private List<Cafe> cafes = new ArrayList<>();
 	
-	@ManyToMany
-	@JoinTable(
-			name = "cafe_members",
-			joinColumns = @JoinColumn(name = "members_id"),
-			inverseJoinColumns = @JoinColumn(name = "cafe_id"))
+	@OneToMany(mappedBy = "id.member")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	private List<Cafe> joinedCafes = new ArrayList<>();
+	private List<CafeMember> joinedCafes = new ArrayList<>();
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

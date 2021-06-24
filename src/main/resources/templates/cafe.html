@@ -16,7 +16,7 @@
 			<h1>가입한 카페</h1>
 			<div class="row g-3" th:if="${user != null}">
 				<div class="col-12 col-md-6" th:each="cafe : ${user.joinedCafes}">
-					<div th:replace="fragments/cafe(${cafe})"></div>
+					<div th:replace="fragments/cafe(${cafe.id.cafe})"></div>
 				</div>
 			</div>
 		</div>

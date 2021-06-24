@@ -5,7 +5,6 @@ import javax.validation.Valid;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.chinjja.issue.data.CafeMemberRepository;
 import com.chinjja.issue.data.CafeRepository;
 import com.chinjja.issue.data.CategoryRepository;
 import com.chinjja.issue.data.CommentRepository;
@@ -26,6 +26,8 @@ import com.chinjja.issue.data.UserRepository;
 import com.chinjja.issue.domain.PostData;
 import com.chinjja.issue.domain.Cafe;
 import com.chinjja.issue.domain.CafeData;
+import com.chinjja.issue.domain.CafeMember;
+import com.chinjja.issue.domain.CafeMemberId;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.CategoryData;
 import com.chinjja.issue.domain.CommentData;
@@ -44,6 +46,7 @@ public class CafeController {
 	private final CategoryRepository categoryRepo;
 	
 	private final CafeRepository cafeRepo;
+	private final CafeMemberRepository cafeMemberRepo;
 	private final PostRepository postRepo;
 	private final UserRepository userRepo;
 	private final CommentRepository commentRepo;
@@ -60,13 +63,13 @@ public class CafeController {
 	}
 	
 	@GetMapping("/create-cafe")
-	@Secured("ROLE_USER")
+	@PreAuthorize("isAuthenticated()")
 	public String createCafe() {
 		return "createCafe";
 	}
 	
 	@PostMapping("/create-cafe")
-	@Secured("ROLE_USER")
+	@PreAuthorize("isAuthenticated()")
 	public String createCafeForm(@AuthenticationPrincipal User user, CafeData form) {
 		val cafe = new Cafe();
 		cafe.setData(form);
@@ -76,7 +79,7 @@ public class CafeController {
 	}
 	
 	@GetMapping("/delete-cafe")
-	@PreAuthorize("isAuthenticated() and (#cafe.owner.id == #user.id)")
+	@PreAuthorize("isAuthenticated() and @cafeService.isOwner(#cafe, #user)")
 	public String deleteCafe(
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe) {
@@ -85,21 +88,34 @@ public class CafeController {
 	}
 	
 	@GetMapping("/join-cafe")
-	@Secured("ROLE_USER")
-	public String joinCafeForm(
+	@PreAuthorize("isAuthenticated()")
+	public String joinCafe(
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe) {
-		cafe = cafeRepo.findById(cafe.getId()).get();
-		if(!cafe.getOwner().getId().equals(user.getId())) {
-			if(cafe.getMembers().add(user)) {
-				cafeRepo.save(cafe);
-			}
+		if(cafeService.isJoined(cafe, user)) {
+			return "redirect:/cafe/"+cafe.getId();
+		}
+		return "joinCafe";
+	}
+	
+	@PostMapping("/join-cafe")
+	@PreAuthorize("isAuthenticated()")
+	public String joinCafeForm(
+			@AuthenticationPrincipal User user,
+			@ModelAttribute("activeCafe") Cafe cafe,
+			JoinCafeForm form) {
+		if(!cafeService.isJoined(cafe, user)) {
+			val cm = new CafeMember();
+			cm.setId(new CafeMemberId(cafe, user));
+			cm.setGreeting(form.getGreeting());
+			cafeMemberRepo.save(cm);
 		}
 		return "redirect:/cafe/"+cafe.getId();
 	}
 	
 	@GetMapping("/cafe/{cafeId:[a-z0-9]+}")
 	public String posts(
+			@AuthenticationPrincipal User user,
 			@PathVariable String cafeId,
 			@RequestParam(required = false) Long category,
 			@RequestParam(required = false) Integer page,
@@ -118,6 +134,10 @@ public class CafeController {
 		val pageable = PageRequest.of(page, size, Direction.DESC, "createdAt");
 		
 		val posts = cafeService.getPostList(cafe, activeCategory, pageable);
+		if(user != null) {
+			model.addAttribute("isOwner", cafeService.isOwner(cafe, user));
+			model.addAttribute("isJoined", cafeService.isJoined(cafe, user));
+		}
 		model.addAttribute("activeCafe", cafe);
 		model.addAttribute("categoryList", categoryList);
 		model.addAttribute("postList", posts);
@@ -130,20 +150,25 @@ public class CafeController {
 		return "index";
 	}
 	
-	@Secured("ROLE_USER")
+	@PreAuthorize("isAuthenticated() and @cafeService.isJoined(#cafe, #user)")
 	@GetMapping("/create-post")
-	public String createPost() {
+	public String createPost(
+			@AuthenticationPrincipal User user,
+			@ModelAttribute("activeCafe") Cafe cafe) {
 		return "createPost";
 	}
 	
-	@Secured("ROLE_USER")
+	@PreAuthorize("isAuthenticated() and @cafeService.isJoined(#cafe, #user)")
 	@PostMapping("/create-post")
-	public String createPostForm(@AuthenticationPrincipal User user, @Valid PostData form) {
+	public String createPostForm(
+			@AuthenticationPrincipal User user,
+			@ModelAttribute("activeCafe") Cafe cafe,
+			@Valid PostData form) {
 		cafeService.createPost(user, form);
 		return "redirect:/cafe/" + form.getCafeId() + "?category=" + form.getCategoryId();
 	}
 	
-	@Secured("ROLE_USER")
+	@PreAuthorize("isAuthenticated() and @cafeService.isAuthor(@elementRepository.findById(#postId).get(), #user)")
 	@GetMapping("/delete-post")
 	public String deletePostForm(
 			@AuthenticationPrincipal User user,
@@ -153,9 +178,6 @@ public class CafeController {
 			@ModelAttribute("postPageSize") Integer size,
 			@RequestParam("postId") Long postId) {
 		val post = postRepo.findById(postId).get();
-		if(!post.getUser().getId().equals(user.getId())) {
-			throw new IllegalArgumentException("only author can remove this post");
-		}
 		cafeService.deletePost(post);
 		
 		val url = UriComponentsBuilder.newInstance()
@@ -188,10 +210,11 @@ public class CafeController {
 		return "posts";
 	}
 	
-	@Secured("ROLE_USER")
+	@PreAuthorize("isAuthenticated() and @cafeService.isJoined(#cafe, #user)")
 	@PostMapping("/create-comment")
-	public String commentForm(
+	public String createCommentForm(
 			@AuthenticationPrincipal User user,
+			@ModelAttribute("activeCafe") Cafe cafe,
 			@Valid CommentData form,
 			HttpServletRequest request) {
 		String referer = request.getHeader("Referer");
@@ -199,25 +222,23 @@ public class CafeController {
 		return "redirect:" + referer;
 	}
 	
-	@Secured("ROLE_USER")
+	@PreAuthorize("isAuthenticated() and @cafeService.isAuthor(@elementRepository.findById(#commentId).get(), #user)")
 	@GetMapping("/delete-comment")
 	public String deleteCommentForm(
 			@AuthenticationPrincipal User user,
 			@RequestParam("commentId") Long commentId,
 			HttpServletRequest request) {
 		val comment = commentRepo.findById(commentId).get();
-		if(!comment.getUser().getId().equals(user.getId())) {
-			throw new IllegalArgumentException("only author can remove comment");
-		}
 		cafeService.deleteComment(comment);
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
 	
-	@Secured("ROLE_USER")
+	@PreAuthorize("isAuthenticated() and @cafeService.isJoined(#cafe, #user)")
 	@PostMapping("/toggle-like")
 	public String toggleLike(
 			@AuthenticationPrincipal User user,
+			@ModelAttribute("activeCafe") Cafe cafe,
 			@Valid LikeCountData form,
 			HttpServletRequest request) {
 		String referer = request.getHeader("Referer");
@@ -225,7 +246,7 @@ public class CafeController {
 		return "redirect:" + referer;
 	}
 	
-	@PreAuthorize("isAuthenticated() and (#cafe.owner.id == #user.id)")
+	@PreAuthorize("isAuthenticated() and @cafeService.isOwner(#cafe, #user)")
 	@PostMapping("/create-category")
 	public String categoryForm(
 			@AuthenticationPrincipal User user,
@@ -240,7 +261,7 @@ public class CafeController {
 		return "redirect:" + referer;
 	}
 	
-	@PreAuthorize("isAuthenticated() and (#cafe.owner.id == #user.id)")
+	@PreAuthorize("isAuthenticated() and @cafeService.isOwner(#cafe, #user)")
 	@GetMapping("/delete-category")
 	public String deleteCategory(
 			@AuthenticationPrincipal User user,
