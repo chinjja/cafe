@@ -22,8 +22,4 @@ public class PostData {
 	@Transient
 	@NotNull
 	private Long categoryId;
-	
-	@Transient
-	@NotNull
-	private String cafeId;
 }

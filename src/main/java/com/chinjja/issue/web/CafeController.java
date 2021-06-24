@@ -165,7 +165,7 @@ public class CafeController {
 			@ModelAttribute("activeCafe") Cafe cafe,
 			@Valid PostData form) {
 		cafeService.createPost(user, form);
-		return "redirect:/cafe/" + form.getCafeId() + "?category=" + form.getCategoryId();
+		return "redirect:/cafe/" + cafe.getId() + "?category=" + form.getCategoryId();
 	}
 	
 	@PreAuthorize("isAuthenticated() and @cafeService.isAuthor(@elementRepository.findById(#postId).get(), #user)")
