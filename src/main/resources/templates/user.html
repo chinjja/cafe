@@ -1,9 +1,9 @@
 <html layout:decorate="~{layouts/navLayout}">
-	<div layout:fragment="content">
+	<div layout:fragment="content" class="row g-2">
 		<div class="page-header">
 			<h1 th:text="#{user.header}"></h1>
 		</div>
-		<div class="input-group mb-2">
+		<div class="input-group">
 			<span class="input-group-text w-25" th:text="#{user.username}"></span>
 			<input type="datetime" class="form-control" th:if="${activeUser != null}" th:value="${activeUser.username}"/>
 		</div>
@@ -13,6 +13,26 @@
 				<ul class="list-group list-group-flush" th:if="${activeUser != null}" >
 					<li class="list-group-item" th:each="authority : ${activeUser.authorities}">
 						<span th:text="${authority}"></span>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="input-group">
+			<span class="input-group-text w-25">운영중인 카페</span>
+			<div class="form-control">
+				<ul class="list-group list-group-flush" th:if="${activeUser != null}" >
+					<li class="list-group-item" th:each="cafe : ${activeUser.cafes}">
+						<a th:href="@{/{cafeId}(cafeId=${cafe.id})}" th:text="${cafe.name}"></a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="input-group">
+			<span class="input-group-text w-25">가입한 카페</span>
+			<div class="form-control">
+				<ul class="list-group list-group-flush" th:if="${activeUser != null}" >
+					<li class="list-group-item" th:each="cafe : ${activeUser.joinedCafes}">
+						<a th:href="@{/{cafeId}(cafeId=${cafe.id})}" th:text="${cafe.name}"></a>
 					</li>
 				</ul>
 			</div>
