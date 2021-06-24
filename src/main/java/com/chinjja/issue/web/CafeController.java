@@ -67,7 +67,7 @@ public class CafeController {
 		return "redirect:/";
 	}
 	
-	@GetMapping("/{cafeId}")
+	@GetMapping("/{cafeId:[a-z0-9]+}")
 	public String posts(
 			@PathVariable String cafeId,
 			@RequestParam(required = false) Long category,
