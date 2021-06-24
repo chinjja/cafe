@@ -1,5 +1,5 @@
 <div class="form-group" th:fragment="textInput(data, id, text, placeholder)">
 	<label th:for="${id}" class="form-label" th:text="${text}"></label>
-	<input type="text" th:name="${id}" th:id="${id}" th:value=${data} th:placeholder="${placeholder == null} ? ${text} : ${placeholder}" class="form-control"/>
+	<input type="text" th:name="${id}" th:id="${id}" th:value=${data} th:placeholder="${placeholder == null} ? ${text} : ${placeholder}" class="form-control" autocomplete="off"/>
 	<div th:if="${#fields.hasErrors(id)}" class="alert alert-danger" th:errors="${data}"></div>
 </div>
