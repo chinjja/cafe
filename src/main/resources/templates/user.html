@@ -22,7 +22,7 @@
 			<div class="form-control">
 				<ul class="list-group list-group-flush" th:if="${activeUser != null}" >
 					<li class="list-group-item" th:each="cafe : ${activeUser.cafes}">
-						<a th:href="@{/{cafeId}(cafeId=${cafe.id})}" th:text="${cafe.name}"></a>
+						<a th:href="@{/cafe/{cafeId}(cafeId=${cafe.id})}" th:text="${cafe.name}"></a>
 					</li>
 				</ul>
 			</div>
@@ -32,7 +32,7 @@
 			<div class="form-control">
 				<ul class="list-group list-group-flush" th:if="${activeUser != null}" >
 					<li class="list-group-item" th:each="cafe : ${activeUser.joinedCafes}">
-						<a th:href="@{/{cafeId}(cafeId=${cafe.id})}" th:text="${cafe.name}"></a>
+						<a th:href="@{/cafe/{cafeId}(cafeId=${cafe.id.cafe.id})}" th:text="${cafe.id.cafe.name}"></a>
 					</li>
 				</ul>
 			</div>
