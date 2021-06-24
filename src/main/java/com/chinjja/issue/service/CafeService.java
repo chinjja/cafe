@@ -156,7 +156,7 @@ public class CafeService {
 		}
 	}
 	
-	public Category createCategory(User user, CategoryData form) {
+	public Category createCategory(Cafe cafe, User user, CategoryData form) {
 		Category parent = null;
 		if(form.getParentId() != null) {
 			parent = categoryRepo.findById(form.getParentId()).get();
@@ -164,7 +164,7 @@ public class CafeService {
 		val category = new Category();
 		category.setData(form);
 		category.setParent(parent);
-		category.setCafe(cafeRepo.findById(form.getCafeId()).get());
+		category.setCafe(cafe);
 		return categoryRepo.save(category);
 	}
 	

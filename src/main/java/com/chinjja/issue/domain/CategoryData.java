@@ -30,9 +30,6 @@ public class CategoryData {
 	
 	@Transient
 	private Long parentId;
-	@Transient
-	@NotNull
-	private String cafeId;
 	
 	public boolean isDirectory() {
 		return type == Type.DIRECTORY;

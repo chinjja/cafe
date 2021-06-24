@@ -255,7 +255,7 @@ public class CafeController {
 			HttpServletRequest request,
 			Model model) {
 		String referer = request.getHeader("Referer");
-		cafeService.createCategory(user, form);
+		cafeService.createCategory(cafe, user, form);
 		val categoryList = categoryRepo.findAllByCafeAndParentIsNull(cafe);
 		model.addAttribute("categoryList", categoryList);
 		return "redirect:" + referer;
