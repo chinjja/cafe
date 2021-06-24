@@ -9,3 +9,8 @@ spring.datasource.password: admin
 
 spring.jackson.parser.allow-non-numeric-numbers: true
 spring.messages.basename: messages/messages
+
+spring:
+  data:
+    rest:
+      base-path: /api
