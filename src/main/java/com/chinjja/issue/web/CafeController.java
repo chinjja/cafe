@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,7 +71,10 @@ public class CafeController {
 	
 	@PostMapping("/create-cafe")
 	@PreAuthorize("isAuthenticated()")
-	public String createCafeForm(@AuthenticationPrincipal User user, CafeData form) {
+	public String createCafeForm(@AuthenticationPrincipal User user, @Valid CafeData form, BindingResult errors) {
+		if(errors.hasErrors()) {
+			return "createCafe";
+		}
 		val cafe = new Cafe();
 		cafe.setData(form);
 		cafe.setOwner(user);
@@ -103,7 +107,11 @@ public class CafeController {
 	public String joinCafeForm(
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe,
-			JoinCafeForm form) {
+			@Valid JoinCafeForm form,
+			BindingResult errors) {
+		if(errors.hasErrors()) {
+			return "joinCafe";
+		}
 		if(!cafeService.isJoined(cafe, user)) {
 			val cm = new CafeMember();
 			cm.setId(new CafeMemberId(cafe, user));
@@ -163,7 +171,11 @@ public class CafeController {
 	public String createPostForm(
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe,
-			@Valid PostData form) {
+			@Valid PostData form,
+			BindingResult errors) {
+		if(errors.hasErrors()) {
+			return "createPost";
+		}
 		cafeService.createPost(user, form);
 		return "redirect:/cafe/" + cafe.getId() + "?category=" + form.getCategoryId();
 	}
