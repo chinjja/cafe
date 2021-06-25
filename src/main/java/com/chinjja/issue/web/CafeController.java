@@ -60,7 +60,7 @@ public class CafeController {
 		}
 		model.addAttribute("cafeList", cafeRepo.findAll());
 		model.addAttribute("activeCafe", null);
-		return "cafe";
+		return "cafes";
 	}
 	
 	@GetMapping("/my-cafe")
@@ -79,7 +79,7 @@ public class CafeController {
 			Model model) {
 		model.addAttribute("cafeList", cafeRepo.findAll());
 		model.addAttribute("activeCafe", null);
-		return "cafe";
+		return "cafes";
 	}
 	
 	@GetMapping("/create-cafe")
@@ -192,7 +192,7 @@ public class CafeController {
 		model.addAttribute("postNextPage", posts.nextOrLastPageable());
 		model.addAttribute("postPage", page);
 		model.addAttribute("postPageSize", size);
-		return "index";
+		return "cafe";
 	}
 	
 	@PreAuthorize("isAuthenticated() and @cafeService.isJoined(#cafe, #user)")

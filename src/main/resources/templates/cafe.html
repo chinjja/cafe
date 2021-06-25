@@ -1,12 +1,5 @@
-<html layout:decorate="~{layouts/navLayout}">
+<html layout:decorate="~{layouts/sidebarLayout}">
 	<div layout:fragment="content">
-		<div>
-			<h1 th:text="#{cafe.allCafe}"></h1>
-			<div class="row g-3">
-				<div class="col-12 col-md-6" th:each="cafe : ${cafeList}">
-					<div th:replace="fragments/cafe(${cafe})"></div>
-				</div>
-			</div>
-		</div>
+		<div th:replace="fragments/posts(${activeCategory})"></div>
 	</div>
 </html>
