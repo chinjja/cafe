@@ -37,6 +37,7 @@ public class User implements UserDetails {
 	private Long id;
 	
 	@Column(unique = true)
+	@NotBlank
 	@Pattern(regexp = "[a-z0-9]{4,20}")
 	@NonNull
 	private String username;

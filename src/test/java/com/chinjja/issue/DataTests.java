@@ -35,8 +35,6 @@ class DataTests {
 		assertThrows(Exception.class, () -> em.persistAndFlush(user));
 		
 		user.setUsername("owner");
-		assertThrows(Exception.class, () -> em.persistAndFlush(user));
-		
 		user.setPassword("1234");
 		em.persistAndFlush(user);
 		
@@ -50,12 +48,19 @@ class DataTests {
 	@Test
 	public void category() {
 		val owner = em.persist(new User("owner"));
-		val cafe = em.persist(new Cafe("cafe", "The cafe", owner));
+		val cafe = em.persist(new Cafe("cafe", "The cafe", owner, false));
 		val category = em.persist(new Category(cafe, new CategoryData("dir1", Type.DIRECTORY)));
 		val post = em.persist(new Post(owner, category, new PostData("post1", "post1's contents")));
 		val comment = em.persist(new Comment(owner, post, new CommentData("comment1")));
 		em.flush();
 		
 		assertEquals(owner, cafe.getOwner());
+	}
+	
+	@Test
+	void overlap_cafe() {
+		val owner = em.persist(new User("owner"));
+		em.persist(new Cafe("cafe", "The cafe", owner, false));
+		assertThrows(Exception.class, () -> em.persistAndFlush(new Cafe("cafe", "The cafe", owner, false)));
 	}
 }

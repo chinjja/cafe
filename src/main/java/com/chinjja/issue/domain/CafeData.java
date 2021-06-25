@@ -12,4 +12,5 @@ public class CafeData {
 	@NotBlank
 	private String name;
 	private String description;
+	private boolean needApproval;
 }

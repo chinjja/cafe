@@ -42,7 +42,7 @@ import lombok.val;
 
 @Controller
 @RequiredArgsConstructor
-@SessionAttributes({"activeCafe", "activePost", "categoryList", "activeCategory", "postPage", "postPageSize", "isJoined", "canLike"})
+@SessionAttributes({"activeCafe", "activePost", "categoryList", "activeCategory", "postPage", "postPageSize", "isJoined", "isApproving", "canLike"})
 public class CafeController {
 	private final CafeService cafeService;
 	private final CategoryRepository categoryRepo;
@@ -69,6 +69,7 @@ public class CafeController {
 		user = userRepo.findById(user.getId()).get();
 		model.addAttribute("user", user);
 		model.addAttribute("activeCafe", null);
+		model.addAttribute("notApprovedMemberList", cafeService.getNotApprovedMembers(user));
 		return "myCafe";
 	}
 	
@@ -145,8 +146,20 @@ public class CafeController {
 		return "redirect:/cafe/"+cafe.getId();
 	}
 	
+	@GetMapping("/approve-member")
+	@PreAuthorize("isAuthenticated() and @cafeService.isOwner(@cafeRepository.findById(#cafeId).get(), #user)")
+	public String approveMember(
+			@AuthenticationPrincipal User user,
+			@RequestParam String cafeId,
+			@RequestParam Long memberId) {
+		val cafe = cafeRepo.findById(cafeId).get();
+		val member = userRepo.findById(memberId).get();
+		cafeService.approveMember(cafe, member);
+		return "redirect:/my-cafe";
+	}
+	
 	@GetMapping("/cafe/{cafeId:[a-z0-9]+}")
-	public String posts(
+	public String cafe(
 			@AuthenticationPrincipal User user,
 			@PathVariable String cafeId,
 			@RequestParam(required = false) Long category,
@@ -168,6 +181,7 @@ public class CafeController {
 		val posts = cafeService.getPostList(cafe, activeCategory, pageable);
 		if(user != null) {
 			model.addAttribute("isJoined", cafeService.isJoined(cafe, user));
+			model.addAttribute("isApproving", cafeService.isApproving(cafe, user));
 		}
 		model.addAttribute("activeCafe", cafe);
 		model.addAttribute("categoryList", categoryList);

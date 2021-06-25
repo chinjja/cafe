@@ -12,6 +12,33 @@
 			</div>
 		</div>
 		<div class="col-12 col-md-6">
+			<h1>가입 신청중</h1>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>카페이름</th>
+						<th>유저이름</th>
+						<th>인사말</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="member : ${notApprovedMemberList}">
+						<td>
+							<a th:href="@{/cafe/{cafe}(cafe=${member.id.cafe.id})}" th:text="${member.id.cafe.name}"></a>
+						</td>
+						<td>
+							<a th:href="@{/get-user/{id}(id=${member.id.member.id})}" th:text="${member.id.member.username}"></a>
+						</td>
+						<td th:text="${member.greeting}"></td>
+						<td class="p-0">
+							<a class="btn btn-primary w-100" th:href="@{/approve-member(cafeId=${member.id.cafe.id},memberId=${member.id.member.id})}">승인</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="col-12 col-md-6">
 			<h1 th:text="#{cafe.memberCafe}"></h1>
 			<div class="row g-2" th:if="${user != null}">
 				<div class="col-12 col-xl-6" th:each="cafe : ${user.joinedCafes}">

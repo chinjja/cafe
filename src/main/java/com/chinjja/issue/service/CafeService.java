@@ -110,17 +110,32 @@ public class CafeService {
 	}
 	
 	public boolean isMember(Cafe cafe, User user) {
-		return cafeMemberRepo.existsById(new CafeMemberId(cafe, user));
+		val cm = cafeMemberRepo.findById(new CafeMemberId(cafe, user)).orElse(null);
+		if(cm == null) return false;
+		return cm.isApproved();
 	}
 	
 	public boolean isJoined(Cafe cafe, User user) {
 		return isOwner(cafe, user) || isMember(cafe, user);
 	}
 	
+	public boolean isApproving(Cafe cafe, User user) {
+		val cm = cafeMemberRepo.findById(new CafeMemberId(cafe, user)).orElse(null);
+		if(cm == null) return false;
+		return !cm.isApproved();
+	}
+	
+	public void approveMember(Cafe cafe, User member) {
+		val cm = cafeMemberRepo.findById(new CafeMemberId(cafe, member)).get();
+		cm.setApproved(true);
+		cafeMemberRepo.save(cm);
+	}
+	
 	public void joinCafe(Cafe cafe, User user, JoinCafeForm form) {
 		val cm = new CafeMember();
 		cm.setId(new CafeMemberId(cafe, user));
 		cm.setGreeting(form.getGreeting());
+		cm.setApproved(!cafe.getNeedApproval());
 		cafeMemberRepo.save(cm);
 	}
 	
@@ -192,6 +207,14 @@ public class CafeService {
 		category.setParent(parent);
 		category.setCafe(cafe);
 		return categoryRepo.save(category);
+	}
+	
+	public Iterable<CafeMember> getNotApprovedMembers(User owner) {
+		val list = new ArrayList<CafeMember>();
+		for(val cafe : owner.getCafes()) {
+			list.addAll(cafeMemberRepo.findByIdCafeAndApproved(cafe, false));
+		}
+		return list;
 	}
 	
 	public boolean canLikeCount(Likable target, User user) {

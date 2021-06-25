@@ -44,11 +44,14 @@ public class Cafe {
 	@NotNull
 	@NonNull
 	private User owner;
+	@NonNull
+	private Boolean needApproval;
 	
 	public void setData(CafeData data) {
 		setId(data.getId());
 		setName(data.getName());
 		setDescription(data.getDescription());
+		setNeedApproval(data.isNeedApproval());
 	}
 	
 	@PrePersist
@@ -61,6 +64,6 @@ public class Cafe {
 	@ToString.Exclude
 	private Set<CafeMember> members = new HashSet<>();
 	
-	@Formula("(select count(cm.member_id) from cafe_member cm where cm.cafe_id = id)")
+	@Formula("(select count(cm.member_id) from cafe_member cm where cm.cafe_id = id and cm.approved = true)")
 	private int memberCount;
 }

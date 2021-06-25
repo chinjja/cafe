@@ -24,4 +24,6 @@ public class CafeMember {
 	@NotBlank
 	@NonNull
 	private String greeting;
+	
+	private boolean approved;
 }
