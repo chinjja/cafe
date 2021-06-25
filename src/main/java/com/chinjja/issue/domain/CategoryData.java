@@ -1,6 +1,5 @@
 package com.chinjja.issue.domain;
 
-import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Transient;
@@ -13,19 +12,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@RequiredArgsConstructor
 public class CategoryData {
 	@NotBlank
+	@NonNull
 	private String name;
-	@Column(name = "odr")
-	private int order;
 	
 	@Enumerated(EnumType.STRING)
 	@NotNull
+	@NonNull
 	private Type type;
 	
 	@Transient

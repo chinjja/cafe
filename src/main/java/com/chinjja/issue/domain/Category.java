@@ -13,10 +13,15 @@ import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 @Entity
 @Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class Category {
 	public static enum Type {
 		DIRECTORY,
@@ -27,15 +32,17 @@ public class Category {
 	@GeneratedValue
 	private Long id;
 	
-	@Embedded
-	private CategoryData data;
+	@ManyToOne
+	@NotNull
+	@NonNull
+	private Cafe cafe;
 	
 	@ManyToOne
 	private Category parent;
 	
-	@ManyToOne
-	@NotNull
-	private Cafe cafe;
+	@Embedded
+	@NonNull
+	private CategoryData data;
 	
 	@OneToMany(mappedBy = "parent")
 	@EqualsAndHashCode.Exclude

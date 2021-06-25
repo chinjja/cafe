@@ -8,15 +8,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@RequiredArgsConstructor
 public class PostData {
 	@NotBlank
+	@NonNull
 	private String title;
 	@NotBlank
+	@NonNull
 	private String contents;
 	
 	@Transient

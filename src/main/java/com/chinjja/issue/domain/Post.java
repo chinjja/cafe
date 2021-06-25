@@ -13,6 +13,9 @@ import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 @Entity
@@ -20,19 +23,26 @@ import lombok.ToString;
 		@Index(columnList = "title"),
 		})
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class Post extends Element {
-	private int viewCount;
-	
-	@Embedded
-	private PostData data;
-	
-	@OneToMany(mappedBy = "target")
-	@EqualsAndHashCode.Exclude
-	@ToString.Exclude
-	private List<Comment> comments = new ArrayList<>();
+public class Post extends Likable {
+	public Post(User user, Category category, PostData data) {
+		super(user);
+		setCategory(category);
+		setData(data);
+	}
 	
 	@ManyToOne
 	@NotNull
 	private Category category;
+	
+	@Embedded
+	private PostData data;
+	
+	private int viewCount;
+	
+	@OneToMany(mappedBy = "likable")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private List<Comment> comments = new ArrayList<>();
 }

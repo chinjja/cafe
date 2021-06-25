@@ -18,18 +18,24 @@ import org.hibernate.annotations.Formula;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 @Entity
 @Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Element {
+public class Likable {
 	@Id
 	@GeneratedValue
 	private Long id;
 	private LocalDateTime createdAt;
 	@ManyToOne
 	@NotNull
+	@NonNull
 	private User user;
 	
 	@PrePersist
@@ -37,11 +43,11 @@ public class Element {
 		createdAt = LocalDateTime.now();
 	}
 	
-	@OneToMany(mappedBy = "id.target")
+	@OneToMany(mappedBy = "id.likable")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	private List<LikeCount> likes = new ArrayList<>();
 	
-	@Formula("(select count(lc.user_id) from like_count lc where lc.target_id = id)")
+	@Formula("(select count(lc.user_id) from like_count lc where lc.likable_id = id)")
 	private int likeCount;
 }

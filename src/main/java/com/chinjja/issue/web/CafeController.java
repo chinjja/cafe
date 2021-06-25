@@ -168,7 +168,7 @@ public class CafeController {
 		return "redirect:/cafe/" + cafe.getId() + "?category=" + form.getCategoryId();
 	}
 	
-	@PreAuthorize("isAuthenticated() and @cafeService.isAuthor(@elementRepository.findById(#postId).get(), #user)")
+	@PreAuthorize("isAuthenticated() and @cafeService.isAuthor(@likableRepository.findById(#postId).get(), #user)")
 	@GetMapping("/delete-post")
 	public String deletePostForm(
 			@AuthenticationPrincipal User user,
@@ -220,7 +220,7 @@ public class CafeController {
 		return "redirect:" + referer;
 	}
 	
-	@PreAuthorize("isAuthenticated() and @cafeService.isAuthor(@elementRepository.findById(#commentId).get(), #user)")
+	@PreAuthorize("isAuthenticated() and @cafeService.isAuthor(@likableRepository.findById(#commentId).get(), #user)")
 	@GetMapping("/delete-comment")
 	public String deleteCommentForm(
 			@AuthenticationPrincipal User user,

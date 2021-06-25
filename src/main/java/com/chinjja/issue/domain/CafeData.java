@@ -1,19 +1,15 @@
 package com.chinjja.issue.domain;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
 
 import lombok.Data;
 
 @Data
 public class CafeData {
-	@Size(min = 4, max = 20)
-	@NotBlank
+	@Pattern(regexp = "[a-z0-9]{1,20}")
 	private String id;
-	@NotNull
 	@NotBlank
 	private String name;
-	@NotNull
 	private String description;
 }

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LikeCountId implements Serializable {
 	@ManyToOne
-	private Element target;
+	private Likable likable;
 	
 	@ManyToOne
 	private User user;

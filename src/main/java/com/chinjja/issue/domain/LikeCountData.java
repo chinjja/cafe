@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LikeCountData {
 	@Transient
-	private Long target;
+	private Long likableId;
 }

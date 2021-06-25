@@ -12,29 +12,37 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Formula;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 @Entity
 @Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class Cafe {
 	@Id
-	@Size(min = 4, max = 20)
+	@Pattern(regexp = "[a-z0-9]{1,20}")
+	@NonNull
 	private String id;
 	@NotBlank
+	@NonNull
 	private String name;
-	@NotNull
 	private String description;
 	
 	private LocalDateTime createdAt;
 	
 	@ManyToOne
 	@NotNull
+	@NonNull
 	private User owner;
 	
 	public void setData(CafeData data) {

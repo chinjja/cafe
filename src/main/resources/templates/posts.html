@@ -29,7 +29,7 @@
 		<pre class="border rounded-3 p-3" th:text="${activePost.data.contents}"></pre>
 		<div class="d-flex justify-content-between align-items-start">
 			<form method="POST" th:action="@{/toggle-like}" th:object="${likeCountData}" th:if="${user != null}" id="likeCountForm">
-				<input type="hidden" th:value="${activePost.id}" th:name="target"/>
+				<input type="hidden" th:value="${activePost.id}" th:name="likableId"/>
 				<input type="submit" class="btn btn-outline-primary" th:classappend="${#bools.isFalse(canLike)} ? 'active'" th:value="#{posts.like}"/>
 			</form>
 			<div th:if="${user != null}">

@@ -4,8 +4,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.chinjja.issue.domain.Comment;
-import com.chinjja.issue.domain.Element;
+import com.chinjja.issue.domain.Likable;
 
 public interface CommentRepository extends PagingAndSortingRepository<Comment, Long> {
-	Iterable<Comment> findAllByTarget(Element target, Sort sort);
+	Iterable<Comment> findAllByLikable(Likable likable, Sort sort);
 }
