@@ -1,6 +1,5 @@
 package com.chinjja.issue.web;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +32,7 @@ import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.CategoryData;
 import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.LikeCountData;
+import com.chinjja.issue.domain.Post;
 import com.chinjja.issue.domain.User;
 import com.chinjja.issue.service.CafeService;
 
@@ -41,7 +41,7 @@ import lombok.val;
 
 @Controller
 @RequiredArgsConstructor
-@SessionAttributes({"activeCafe", "activePost", "categoryList", "activeCategory", "postPage", "postPageSize", "isJoined"})
+@SessionAttributes({"activeCafe", "activePost", "categoryList", "activeCategory", "postPage", "postPageSize", "isJoined", "canLike"})
 public class CafeController {
 	private final CafeService cafeService;
 	private final CategoryRepository categoryRepo;
@@ -196,17 +196,7 @@ public class CafeController {
 			@RequestParam("postId") Long postId) {
 		val post = postRepo.findById(postId).get();
 		cafeService.deletePost(post);
-		
-		val url = UriComponentsBuilder.newInstance()
-				.path("/cafe/{cafeId}")
-				.queryParam("category", category.getId())
-				.queryParam("page", page)
-				.queryParam("size", size)
-				.build()
-				.expand(cafe.getId())
-				.encode().toString();
-		
-		return "redirect:" + url;
+		return "redirect:" + toPostsUrl(cafe, category, page, size);
 	}
 	
 	@GetMapping("/cafe/{cafeId}/posts/{postId}")
@@ -230,23 +220,26 @@ public class CafeController {
 	public String createCommentForm(
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe,
+			@ModelAttribute("activePost") Post post,
 			@Valid CommentData form,
-			HttpServletRequest request) {
-		String referer = request.getHeader("Referer");
+			BindingResult errors) {
+		if(errors.hasErrors()) {
+			return "posts";
+		}
 		cafeService.createComment(user, form);
-		return "redirect:" + referer;
+		return "redirect:" + toPostUrl(cafe, post);
 	}
 	
 	@PreAuthorize("isAuthenticated() and @cafeService.isAuthor(@likableRepository.findById(#commentId).get(), #user)")
 	@GetMapping("/delete-comment")
 	public String deleteCommentForm(
 			@AuthenticationPrincipal User user,
-			@RequestParam("commentId") Long commentId,
-			HttpServletRequest request) {
+			@ModelAttribute("activeCafe") Cafe cafe,
+			@ModelAttribute("activePost") Post post,
+			@RequestParam("commentId") Long commentId) {
 		val comment = commentRepo.findById(commentId).get();
 		cafeService.deleteComment(comment);
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
+		return "redirect:" + toPostUrl(cafe, post);
 	}
 	
 	@PreAuthorize("isAuthenticated() and @cafeService.isJoined(#cafe, #user)")
@@ -254,11 +247,17 @@ public class CafeController {
 	public String toggleLike(
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe,
-			@Valid LikeCountData form,
-			HttpServletRequest request) {
-		String referer = request.getHeader("Referer");
+			@ModelAttribute("activePost") Post post,
+			@Valid LikeCountData form) {
 		cafeService.toggleLikeCount(user, form);
-		return "redirect:" + referer;
+		return "redirect:" + toPostUrl(cafe, post);
+	}
+	
+	private String toPostUrl(Cafe cafe, Post post) {
+		return UriComponentsBuilder.newInstance()
+				.path("/cafe/{cafeId}/posts/{postId}")
+				.buildAndExpand(cafe.getId(), post.getId())
+				.encode().toUriString();
 	}
 	
 	@PreAuthorize("isAuthenticated() and @cafeService.isOwner(#cafe, #user)")
@@ -267,13 +266,11 @@ public class CafeController {
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe,
 			@Valid CategoryData form,
-			HttpServletRequest request,
 			Model model) {
-		String referer = request.getHeader("Referer");
 		cafeService.createCategory(cafe, user, form);
 		val categoryList = categoryRepo.findAllByCafeAndParentIsNull(cafe);
 		model.addAttribute("categoryList", categoryList);
-		return "redirect:" + referer;
+		return "redirect:" + toPostsUrl(cafe, null, null, null);
 	}
 	
 	@PreAuthorize("isAuthenticated() and @cafeService.isOwner(#cafe, #user)")
@@ -282,12 +279,21 @@ public class CafeController {
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe,
 			@RequestParam("categoryId") Long categoryId,
-			HttpServletRequest request,
 			Model model) {
 		val category = categoryRepo.findById(categoryId).get();
 		cafeService.deleteCategory(category);
 		val categoryList = categoryRepo.findAllByCafeAndParentIsNull(cafe);
 		model.addAttribute("categoryList", categoryList);
-		return "redirect:/cafe/" + cafe.getId();
+		return "redirect:" + toPostsUrl(cafe, null, null, null);
+	}
+	
+	private String toPostsUrl(Cafe cafe, Category category, Integer page, Integer size) {
+		return UriComponentsBuilder.newInstance()
+				.path("/cafe/{cafeId}")
+				.queryParam("category", category == null ? null : category.getId())
+				.queryParam("page", page)
+				.queryParam("size", size)
+				.buildAndExpand(cafe.getId())
+				.encode().toUriString();
 	}
 }
