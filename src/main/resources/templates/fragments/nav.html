@@ -29,7 +29,7 @@
 			<span class="navbar-text me-2">Navbar text</span>
 			<form class="d-flex me me-lg-2 mb-2 mb-lg-0">
 				<input class="form-control me-2" type="search" placeholder="Search" />
-				<button class="btn btn-outline-success" type="submit">Search</button>
+				<a class="btn btn-outline-success" th:href="@{/search-cafe}">Search</a>
 			</form>
 			<div class="d-flex justify-content-end" th:unless="${user}">
 				<a class="btn btn-outline-primary w-50 me-2" th:href="@{/login}">Login</a>

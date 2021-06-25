@@ -56,9 +56,26 @@ public class CafeController {
 	@GetMapping("/")
 	public String cafe(@AuthenticationPrincipal User user, Model model) {
 		if(user != null) {
-			user = userRepo.findById(user.getId()).get();
-			model.addAttribute("user", user);
+			return "redirect:/my-cafe";
 		}
+		model.addAttribute("cafeList", cafeRepo.findAll());
+		model.addAttribute("activeCafe", null);
+		return "cafe";
+	}
+	
+	@GetMapping("/my-cafe")
+	@PreAuthorize("isAuthenticated()")
+	public String myCafe(@AuthenticationPrincipal User user, Model model) {
+		user = userRepo.findById(user.getId()).get();
+		model.addAttribute("user", user);
+		model.addAttribute("activeCafe", null);
+		return "myCafe";
+	}
+	
+	@GetMapping("/search-cafe")
+	public String searchCafe(
+			@RequestParam(required = false) String search,
+			Model model) {
 		model.addAttribute("cafeList", cafeRepo.findAll());
 		model.addAttribute("activeCafe", null);
 		return "cafe";
