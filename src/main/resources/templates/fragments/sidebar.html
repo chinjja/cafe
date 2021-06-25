@@ -7,7 +7,7 @@
 	<div class="d-flex justify-content-between">
 		<a class="h3" th:unless="${isJoined}" th:href="@{/join-cafe}" th:text="#{joinCafe}"></a>
 		<span class="h3" th:if="${isJoined}" th:text="WELCOME"></span>
-		<a class="btn btn-muted" th:if="${isOwner}" th:href="@{/delete-cafe}" th:text="#{deleteCafe}"></a>
+		<a class="btn btn-danger" th:if="${isOwner}" th:href="@{/delete-cafe}" th:text="#{deleteCafe}"></a>
 	</div>
 	<nav class="navbar navbar-expand-md">
 		<button class="navbar-toggler w-100 text-start mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent2">
@@ -17,7 +17,6 @@
 			<div class="w-100">
 				<a class="btn btn-outline-primary text-start w-100 mb-2" th:classappend="${activeCategory == null}? 'active'" th:href="@{/cafe/{cafe}(cafe=${activeCafe.id})}" th:text="#{fragments.sidebar.all}"></a>
 				<div th:replace="fragments/categoryList(${categoryList})"></div>
-				<hr/>
 				<div th:if="${user != null} AND ${activeCafe.owner.id == user.id}">
 					<div th:replace="forms/category(null)"></div>
 				</div>

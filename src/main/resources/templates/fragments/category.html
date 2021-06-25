@@ -4,7 +4,7 @@
 			<div class="d-flex w-100" th:if="*{data.isPost()}">
 				<a class="btn btn-outline-primary text-start w-100" th:classappend="${activeCategory} and ${activeCategory.id == category.id} ? 'active'" th:text="*{data.name}" th:href="@{/cafe/{cafe}(cafe=${activeCafe.id},category=*{id})}"></a>
 			</div>
-			<div th:unless="*{data.isPost()}">
+			<div class="py-2" th:unless="*{data.isPost()}">
 				<span th:text="*{data.name}"></span>
 			</div>
 			<div th:if="${user != null} AND ${activeCafe.owner.id == user.id} AND *{data.isDirectory()}">

@@ -4,9 +4,15 @@
 	</div>
 	<form method="POST" th:action="@{/create-post}" th:object="${postData}" id="createpost" class="row g-3">
 		<input type="hidden" th:value="${category.id}" th:name="categoryId"/>
-		<div th:replace="forms/textInput(*{title}, 'title', #{forms.post.title}, '')"></div>
-		<div th:replace="forms/textAreaInput(*{contents}, 'contents', #{forms.post.contents}, '')"></div>
 		<div class="form-group">
+			<input class="form-control" th:field="*{title}" th:placeholder="#{forms.post.title}"/>
+			<div class="alert alert-danger" th:errors="*{title}"></div>
+		</div>
+		<div class="form-group">
+			<textarea class="form-control" th:field="*{contents}" th:placeholder="#{forms.post.contents}" rows="20"></textarea>
+			<div class="alert alert-danger" th:errors="*{contents}"></div>
+		</div>
+		<div class="form-group mt-3">
 			<input type="submit" class="btn btn-outline-primary w-100" th:value="#{forms.post.submit}"/>
 		</div>
 	</form>

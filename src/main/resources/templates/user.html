@@ -5,7 +5,7 @@
 		</div>
 		<div class="input-group">
 			<span class="input-group-text w-25" th:text="#{user.username}"></span>
-			<input type="datetime" class="form-control" th:if="${activeUser != null}" th:value="${activeUser.username}"/>
+			<input class="form-control" th:if="${activeUser != null}" th:value="${activeUser.username}"/>
 		</div>
 		<div class="input-group">
 			<span class="input-group-text w-25" th:text="#{user.role}"></span>
