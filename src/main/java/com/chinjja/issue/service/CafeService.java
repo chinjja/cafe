@@ -23,6 +23,7 @@ import com.chinjja.issue.data.LikeCountRepository;
 import com.chinjja.issue.domain.Post;
 import com.chinjja.issue.domain.PostData;
 import com.chinjja.issue.domain.Cafe;
+import com.chinjja.issue.domain.CafeMember;
 import com.chinjja.issue.domain.CafeMemberId;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.CategoryData;
@@ -33,6 +34,7 @@ import com.chinjja.issue.domain.LikeCount;
 import com.chinjja.issue.domain.LikeCountData;
 import com.chinjja.issue.domain.LikeCountId;
 import com.chinjja.issue.domain.User;
+import com.chinjja.issue.web.JoinCafeForm;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -112,6 +114,17 @@ public class CafeService {
 	
 	public boolean isJoined(Cafe cafe, User user) {
 		return isOwner(cafe, user) || isMember(cafe, user);
+	}
+	
+	public void joinCafe(Cafe cafe, User user, JoinCafeForm form) {
+		val cm = new CafeMember();
+		cm.setId(new CafeMemberId(cafe, user));
+		cm.setGreeting(form.getGreeting());
+		cafeMemberRepo.save(cm);
+	}
+	
+	public void leaveCafe(Cafe cafe, User user) {
+		cafeMemberRepo.deleteById(new CafeMemberId(cafe, user));
 	}
 	
 	public boolean isAuthor(Likable target, User user) {

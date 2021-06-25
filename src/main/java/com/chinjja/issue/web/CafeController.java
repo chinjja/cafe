@@ -41,7 +41,7 @@ import lombok.val;
 
 @Controller
 @RequiredArgsConstructor
-@SessionAttributes({"activeCafe", "activePost", "categoryList", "activeCategory", "postPage", "postPageSize", "isOnwer", "isJoined"})
+@SessionAttributes({"activeCafe", "activePost", "categoryList", "activeCategory", "postPage", "postPageSize", "isJoined"})
 public class CafeController {
 	private final CafeService cafeService;
 	private final CategoryRepository categoryRepo;
@@ -113,11 +113,17 @@ public class CafeController {
 			return "joinCafe";
 		}
 		if(!cafeService.isJoined(cafe, user)) {
-			val cm = new CafeMember();
-			cm.setId(new CafeMemberId(cafe, user));
-			cm.setGreeting(form.getGreeting());
-			cafeMemberRepo.save(cm);
+			cafeService.joinCafe(cafe, user, form);
 		}
+		return "redirect:/cafe/"+cafe.getId();
+	}
+	
+	@GetMapping("/leave-cafe")
+	@PreAuthorize("isAuthenticated()")
+	public String leaveCafe(
+			@AuthenticationPrincipal User user,
+			@ModelAttribute("activeCafe") Cafe cafe) {
+		cafeService.leaveCafe(cafe, user);
 		return "redirect:/cafe/"+cafe.getId();
 	}
 	
@@ -143,7 +149,6 @@ public class CafeController {
 		
 		val posts = cafeService.getPostList(cafe, activeCategory, pageable);
 		if(user != null) {
-			model.addAttribute("isOwner", cafeService.isOwner(cafe, user));
 			model.addAttribute("isJoined", cafeService.isJoined(cafe, user));
 		}
 		model.addAttribute("activeCafe", cafe);

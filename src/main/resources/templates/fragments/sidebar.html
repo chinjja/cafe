@@ -4,10 +4,16 @@
 		<a class="h3" th:href="@{/get-user/{id}(id=${activeCafe.owner.id})}" th:text="${activeCafe.owner.username}"></a>
 	</div>
 	<hr/>
-	<div class="d-flex justify-content-between">
-		<a class="h3" th:unless="${isJoined}" th:href="@{/join-cafe}" th:text="#{joinCafe}"></a>
-		<span class="h3" th:if="${isJoined}" th:text="WELCOME"></span>
-		<a class="btn btn-danger" th:if="${isOwner}" th:href="@{/delete-cafe}" th:text="#{deleteCafe}"></a>
+	<div th:if="${user != null}">
+		<div class="d-flex justify-content-between">
+			<a class="h3" th:unless="${isJoined}" th:href="@{/join-cafe}" th:text="#{joinCafe}"></a>
+			<div th:if="${isJoined}">
+				<a class="h3" th:unless="${activeCafe.owner.id == user.id}" th:href="@{/leave-cafe}" th:text="#{leaveCafe}"></a>
+				<span class="h3" th:if="${activeCafe.owner.id == user.id}">Onwer</span>
+			</div>
+			<a class="btn btn-danger" th:if="${activeCafe.owner.id == user.id}" th:href="@{/delete-cafe}" th:text="#{deleteCafe}"></a>
+		</div>
+	<hr/>
 	</div>
 	<nav class="navbar navbar-expand-md">
 		<button class="navbar-toggler w-100 text-start mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent2">
