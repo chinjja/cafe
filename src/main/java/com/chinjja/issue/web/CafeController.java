@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -72,13 +73,13 @@ public class CafeController {
 	@PostMapping("/create-cafe")
 	@PreAuthorize("isAuthenticated()")
 	public String createCafeForm(@AuthenticationPrincipal User user, @Valid CafeData form, BindingResult errors) {
+		if(cafeService.hasCafe(form.getId())) {
+			errors.addError(new FieldError("cafeData", "id", form.getId() + " already exists"));
+		}
 		if(errors.hasErrors()) {
 			return "createCafe";
 		}
-		val cafe = new Cafe();
-		cafe.setData(form);
-		cafe.setOwner(user);
-		cafeRepo.save(cafe);
+		cafeService.createCafe(user, form);
 		return "redirect:/";
 	}
 	

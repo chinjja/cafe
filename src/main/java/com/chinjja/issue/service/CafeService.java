@@ -23,6 +23,7 @@ import com.chinjja.issue.data.LikeCountRepository;
 import com.chinjja.issue.domain.Post;
 import com.chinjja.issue.domain.PostData;
 import com.chinjja.issue.domain.Cafe;
+import com.chinjja.issue.domain.CafeData;
 import com.chinjja.issue.domain.CafeMember;
 import com.chinjja.issue.domain.CafeMemberId;
 import com.chinjja.issue.domain.Category;
@@ -129,6 +130,18 @@ public class CafeService {
 	
 	public boolean isAuthor(Likable target, User user) {
 		return target.getUser().getId().equals(user.getId());
+	}
+	
+	public boolean hasCafe(String id) {
+		return cafeRepo.existsById(id);
+	}
+	
+	public void createCafe(User user, CafeData form) {
+		if(hasCafe(form.getId())) throw new IllegalArgumentException(form.getId() +" already exists");
+		val cafe = new Cafe();
+		cafe.setData(form);
+		cafe.setOwner(user);
+		cafeRepo.save(cafe);
 	}
 	
 	@Transactional
