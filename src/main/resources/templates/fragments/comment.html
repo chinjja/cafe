@@ -6,7 +6,7 @@
 		<div class="d-flex justify-content-between">
 			<div class="d-flex align-items-baseline">
 				<span class="text-muted me-2" th:text="${#temporals.format(comment.createdAt)}"></span>
-				<button class="btn text-muted" th:if="${user != null}" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseExample' + ${comment.id}"
+				<button class="btn text-muted" th:if="${user != null} AND ${isJoined}" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseExample' + ${comment.id}"
 						th:text="#{fragments.comment.addComment}">
 				</button>
 			</div>
