@@ -13,7 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.chinjja.issue.data.UserRepository;
+import com.chinjja.issue.data.UserRoleRepository;
 import com.chinjja.issue.domain.User;
+import com.chinjja.issue.domain.UserRole;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -24,6 +26,7 @@ import lombok.val;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final UserDetailsService userDetailsService;
 	private final UserRepository userRepo;
+	private final UserRoleRepository userRoleRepo;
 	
 	@Bean
 	public PasswordEncoder encoder() {
@@ -60,11 +63,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public CommandLineRunner createUser() {
 		return args -> {
 			if(userRepo.count() == 0) {
-				val user = new User();
-				user.setUsername("admin");
-				user.setPassword(encoder().encode("1234"));
-				user.setRoles(new String[] { "ROLE_USER", "ROLE_ADMIN" });
+				val user = User.builder()
+						.username("admin")
+						.password(encoder().encode("1234"))
+						.build();
 				userRepo.save(user);
+				userRoleRepo.save(UserRole.create(user, "ROLE_ADMIN"));
 			}
 		};
 	}

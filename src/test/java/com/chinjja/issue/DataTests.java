@@ -1,7 +1,10 @@
 package com.chinjja.issue;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +21,10 @@ import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.Post;
 import com.chinjja.issue.domain.PostData;
 import com.chinjja.issue.domain.User;
+import com.chinjja.issue.domain.UserRole;
 
 import lombok.val;
+import lombok.var;
 
 @DataJpaTest(properties = {
 		"spring.jpa.properties.hibernate.show_sql=false",
@@ -31,23 +36,37 @@ class DataTests {
 	
 	@Test
 	public void user() {
-		val user = new User();
-		assertThrows(Exception.class, () -> em.persistAndFlush(user));
+		val user1 = User.builder()
+				.username("owner")
+				.build();
+		assertThrows(Exception.class, () -> em.persistAndFlush(user1));
+		em.clear();
 		
-		user.setUsername("owner");
-		user.setPassword("1234");
-		em.persistAndFlush(user);
+		var user2 = User.builder()
+				.username("owner")
+				.password("1234")
+				.build();
+		user2 = em.persist(user2);
+		val cpy = user2.toBuilder().build();
+		assertEquals(user2, cpy);
+		assertFalse(user2.isAdmin());
 		
-		val loadUser = em.find(User.class, user.getId());
-		assertEquals(user, loadUser);
+		em.persist(UserRole.create(user2, "ROLE_ADMIN"));
+		em.flush();
+		em.clear();
+		user2 = em.find(User.class, user2.getId());
+		assertTrue(user2.isAdmin());
 		
-		val user2 = new User("owner");
-		assertThrows(Exception.class, () -> em.persistAndFlush(user2));
+		val loadUser = em.find(User.class, user2.getId());
+		assertEquals(user2, loadUser);
 	}
 	
 	@Test
 	public void category() {
-		val owner = em.persist(new User("owner"));
+		val owner = em.persist(User.builder()
+				.username("owner")
+				.password("1234")
+				.build());
 		val cafe = em.persist(new Cafe("cafe", "The cafe", owner, false));
 		val category = em.persist(new Category(cafe, new CategoryData("dir1", Type.DIRECTORY)));
 		val post = em.persist(new Post(owner, category, new PostData("post1", "post1's contents")));
@@ -59,7 +78,10 @@ class DataTests {
 	
 	@Test
 	void overlap_cafe() {
-		val owner = em.persist(new User("owner"));
+		val owner = em.persist(User.builder()
+				.username("owner")
+				.password("1234")
+				.build());
 		em.persist(new Cafe("cafe", "The cafe", owner, false));
 		assertThrows(Exception.class, () -> em.persistAndFlush(new Cafe("cafe", "The cafe", owner, false)));
 	}

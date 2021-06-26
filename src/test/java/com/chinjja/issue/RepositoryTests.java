@@ -45,15 +45,24 @@ class RepositoryTests {
 	
 	@Test
 	public void findByIdCafeInAndApprovedIsFalse() {
-		val user1 = userRepo.save(new User("user1"));
+		val user1 = userRepo.save(User.builder()
+				.username("user1")
+				.password("1234")
+				.build());
 		val cafe11 = cafeRepo.save(new Cafe("cafe11", "cafe1", user1, true));
 		val cafe12 = cafeRepo.save(new Cafe("cafe12", "cafe2", user1, true));
 		val cafe13 = cafeRepo.save(new Cafe("cafe13", "cafe3", user1, true));
 		
-		val user2 = userRepo.save(new User("user2"));
+		val user2 = userRepo.save(User.builder()
+				.username("user2")
+				.password("1234")
+				.build());
 		val cafe21 = cafeRepo.save(new Cafe("cafe21", "cafe21", user2, true));
 
-		val user3 = userRepo.save(new User("user3"));
+		val user3 = userRepo.save(User.builder()
+				.username("user3")
+				.password("1234")
+				.build());
 		
 		cafeMemberRepo.save(new CafeMember(new CafeMemberId(cafe11, user2), "hi1"));
 		cafeMemberRepo.save(new CafeMember(new CafeMemberId(cafe12, user2), "hi2"));

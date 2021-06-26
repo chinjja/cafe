@@ -11,8 +11,8 @@
 			<span class="input-group-text w-25" th:text="#{user.role}"></span>
 			<div class="form-control">
 				<ul class="list-group list-group-flush" th:if="${activeUser != null}" >
-					<li class="list-group-item" th:each="authority : ${activeUser.authorities}">
-						<span th:text="${authority}"></span>
+					<li class="list-group-item" th:each="role : ${activeUser.roles}">
+						<span th:text="${role.id.role}"></span>
 					</li>
 				</ul>
 			</div>
