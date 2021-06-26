@@ -25,7 +25,7 @@
 				<tbody>
 					<tr th:each="member : ${notApprovedMemberList}">
 						<td>
-							<a th:href="@{/cafe/{cafe}(cafe=${member.id.cafe.id})}" th:text="${member.id.cafe.name}"></a>
+							<div th:replace="links/cafe(${member.id.cafe}, null)"></div>
 						</td>
 						<td>
 							<div th:replace="links/user(${member.id.member}, null)"></div>

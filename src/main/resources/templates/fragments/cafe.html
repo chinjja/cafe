@@ -2,7 +2,7 @@
 	<div class="card pb-3">
 		<div class="card-body">
 			<div class="row">
-				<a class="stretched-link h3" th:href="@{/cafe/{cafeId}(cafeId=${cafe.id})}" th:text="${cafe.name}"></a>
+				<div th:replace="links/cafe(${cafe}, 'stretched-link h3')"></div>
 				<span class="text-muted" th:text="#{fragments.cafe.createdAt} + ': ' + ${#temporals.format(cafe.createdAt)}"></span>
 				<span class="text-muted" th:text="#{fragments.cafe.owner} + ': ' + ${cafe.owner.username}"></span>
 				<div class="d-flex justify-content-between">
