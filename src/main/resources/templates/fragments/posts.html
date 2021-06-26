@@ -26,7 +26,7 @@
 				<td th:text="${post.category.data.name}" th:unless="${category}"></td>
 				<td th:text="${post.id}"></td>
 				<td>
-					<a th:href="@{/cafe/{cafe}/posts/{id}(cafe=${activeCafe.id},id=${post.id})}" th:text="${post.data.title}"></a>
+					<div th:replace="links/post(${post}, null)"></div>
 				</td>
 				<td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
 				<td>

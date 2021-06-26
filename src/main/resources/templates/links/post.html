@@ -1,0 +1,1 @@
+<a th:fragment="post(post, class)" th:class="${class}" th:href="@{/cafe/{cafe}/posts/{id}(cafe=${post.category.cafe.id},id=${post.id})}" th:text="${post.data.title}"></a>
