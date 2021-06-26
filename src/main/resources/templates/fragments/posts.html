@@ -1,7 +1,7 @@
 <div th:fragment="posts(category)">
 	<div class="page-header" th:if="${category != null}">
 		<div class="d-flex justify-content-between align-items-end">
-			<h1 th:text="${category.data.name}"></h1>
+			<h1 th:text="${category.name}"></h1>
 			<a class="btn btn-primary" role="button" th:if="${isJoined}" th:href="@{/create-post}" th:text="#{fragments.posts.newPost}"></a>
 		</div>
 		<hr/>
@@ -23,7 +23,7 @@
 		</thead>
 		<tbody>
 			<tr th:each="post : ${postList}">
-				<td th:text="${post.category.data.name}" th:unless="${category}"></td>
+				<td th:text="${post.category.name}" th:unless="${category}"></td>
 				<td th:text="${post.id}"></td>
 				<td>
 					<div th:replace="links/post(${post}, null)"></div>

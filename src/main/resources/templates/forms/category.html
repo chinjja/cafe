@@ -1,6 +1,6 @@
 <div th:fragment="category(parent)" th:if="${user}" class="border rounded-3 p-3">
-	<form method="POST" th:action="@{/create-category}" th:object="${categoryData}" id="categoryForm" class="row g-2 mb-0">
-		<input type="hidden" th:value="${parent != null} ? ${parent.id}" th:name="parentId"/>
+	<form method="POST" th:action="@{/create-category}" th:object="${categoryForm}" id="categoryForm" class="row g-2 mb-0">
+		<input type="hidden" th:value="${parent != null} ? ${parent.id}" th:name="parentCategoryId"/>
 		<div class="form-floating">
 			<select class="form-select" name="type" id="type">
 				<option value="DIRECTORY" th:text="#{forms.category.type.directory}"></option>

@@ -21,7 +21,7 @@ import com.chinjja.issue.domain.Cafe;
 import com.chinjja.issue.domain.CafeMember;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.Category.Type;
-import com.chinjja.issue.domain.CategoryData;
+import com.chinjja.issue.form.CategoryForm;
 import com.chinjja.issue.domain.Comment;
 import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.Post;

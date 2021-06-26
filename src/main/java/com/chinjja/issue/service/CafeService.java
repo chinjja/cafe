@@ -23,7 +23,6 @@ import com.chinjja.issue.data.PostRepository;
 import com.chinjja.issue.domain.Cafe;
 import com.chinjja.issue.domain.CafeMember;
 import com.chinjja.issue.domain.Category;
-import com.chinjja.issue.domain.CategoryData;
 import com.chinjja.issue.domain.Comment;
 import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.Likable;
@@ -34,6 +33,7 @@ import com.chinjja.issue.domain.Post;
 import com.chinjja.issue.domain.PostData;
 import com.chinjja.issue.domain.User;
 import com.chinjja.issue.form.CafeForm;
+import com.chinjja.issue.form.CategoryForm;
 import com.chinjja.issue.form.JoinCafeForm;
 
 import lombok.Data;
@@ -93,7 +93,7 @@ public class CafeService {
 		for(val child : category.getCategories()) {
 			deleteCategory(child);
 		}
-		switch(category.getData().getType()) {
+		switch(category.getType()) {
 		case POST:
 			for(val post : category.getPosts()) {
 				deletePost(post);
@@ -201,15 +201,17 @@ public class CafeService {
 		}
 	}
 	
-	public Category createCategory(Cafe cafe, User user, CategoryData form) {
+	public Category createCategory(Cafe cafe, User user, CategoryForm form) {
 		Category parent = null;
-		if(form.getParentId() != null) {
-			parent = categoryRepo.findById(form.getParentId()).get();
+		if(form.getParentCategoryId() != null) {
+			parent = categoryRepo.findById(form.getParentCategoryId()).get();
 		}
-		val category = new Category();
-		category.setData(form);
-		category.setParent(parent);
-		category.setCafe(cafe);
+		val category = Category.builder()
+				.cafe(cafe)
+				.parent(parent)
+				.name(form.getName())
+				.type(form.getType())
+				.build();
 		return categoryRepo.save(category);
 	}
 	

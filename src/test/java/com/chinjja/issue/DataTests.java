@@ -15,7 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import com.chinjja.issue.domain.Cafe;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.Category.Type;
-import com.chinjja.issue.domain.CategoryData;
+import com.chinjja.issue.form.CategoryForm;
 import com.chinjja.issue.domain.Comment;
 import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.Post;
@@ -72,7 +72,11 @@ class DataTests {
 				.name("The cafe")
 				.owner(owner)
 				.build());
-		val category = em.persist(new Category(cafe, new CategoryData("dir1", Type.DIRECTORY)));
+		val category = em.persist(Category.builder()
+				.cafe(cafe)
+				.type(Type.DIRECTORY)
+				.name("dir1")
+				.build());
 		val post = em.persist(new Post(owner, category, new PostData("post1", "post1's contents")));
 		val comment = em.persist(new Comment(owner, post, new CommentData("comment1")));
 		em.flush();

@@ -1,13 +1,13 @@
 <div th:fragment="category(category)" class="d-flex border-bottom mb-2">
 	<div class="w-100" th:object="${category}">
 		<div class="d-flex align-items-baseline justify-content-between">
-			<div class="d-flex w-100" th:if="*{data.isPost()}">
-				<a class="btn btn-outline-primary text-start w-100" th:classappend="${activeCategory} and ${activeCategory.id == category.id} ? 'active'" th:text="*{data.name}" th:href="@{/cafe/{cafe}(cafe=${activeCafe.id},category=*{id})}"></a>
+			<div class="d-flex w-100" th:if="*{isPost()}">
+				<a class="btn btn-outline-primary text-start w-100" th:classappend="${activeCategory} and ${activeCategory.id == category.id} ? 'active'" th:text="*{name}" th:href="@{/cafe/{cafe}(cafe=${activeCafe.id},category=*{id})}"></a>
 			</div>
-			<div class="py-2" th:unless="*{data.isPost()}">
-				<span th:text="*{data.name}"></span>
+			<div class="py-2" th:unless="*{isPost()}">
+				<span th:text="*{name}"></span>
 			</div>
-			<div th:if="${user != null} AND ${activeCafe.owner.id == user.id} AND *{data.isDirectory()}">
+			<div th:if="${user != null} AND ${activeCafe.owner.id == user.id} AND *{isDirectory()}">
 				<div class="d-flex justify-content-end align-items-baseline">
 					<a class="btn text-muted" th:href="@{/delete-category(categoryId=${category.id})}" th:text=#{delete}></a>
 					<button class="btn text-muted" type="button"

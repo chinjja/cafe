@@ -28,13 +28,13 @@ import com.chinjja.issue.data.PostRepository;
 import com.chinjja.issue.data.UserRepository;
 import com.chinjja.issue.domain.Cafe;
 import com.chinjja.issue.domain.Category;
-import com.chinjja.issue.domain.CategoryData;
 import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.LikeCountData;
 import com.chinjja.issue.domain.Post;
 import com.chinjja.issue.domain.PostData;
 import com.chinjja.issue.domain.User;
 import com.chinjja.issue.form.CafeForm;
+import com.chinjja.issue.form.CategoryForm;
 import com.chinjja.issue.form.JoinCafeForm;
 import com.chinjja.issue.service.CafeService;
 
@@ -301,7 +301,7 @@ public class CafeController {
 	public String categoryForm(
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe,
-			@Valid CategoryData form,
+			@Valid CategoryForm form,
 			Model model) {
 		cafeService.createCategory(cafe, user, form);
 		val categoryList = categoryRepo.findAllByCafeAndParentIsNull(cafe);
