@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.SmartValidator;
+import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,17 +26,16 @@ import com.chinjja.issue.data.CategoryRepository;
 import com.chinjja.issue.data.CommentRepository;
 import com.chinjja.issue.data.PostRepository;
 import com.chinjja.issue.data.UserRepository;
-import com.chinjja.issue.domain.PostData;
 import com.chinjja.issue.domain.Cafe;
-import com.chinjja.issue.domain.CafeData;
-import com.chinjja.issue.domain.CafeMember;
-import com.chinjja.issue.domain.CafeMemberId;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.CategoryData;
 import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.LikeCountData;
 import com.chinjja.issue.domain.Post;
+import com.chinjja.issue.domain.PostData;
 import com.chinjja.issue.domain.User;
+import com.chinjja.issue.form.CafeForm;
+import com.chinjja.issue.form.JoinCafeForm;
 import com.chinjja.issue.service.CafeService;
 
 import lombok.RequiredArgsConstructor;
@@ -90,14 +91,17 @@ public class CafeController {
 	
 	@PostMapping("/create-cafe")
 	@PreAuthorize("isAuthenticated()")
-	public String createCafeForm(@AuthenticationPrincipal User user, @Valid CafeData form, BindingResult errors) {
+	public String createCafeForm(
+			@AuthenticationPrincipal User user,
+			@ModelAttribute("cafeForm") @Valid CafeForm form, BindingResult errors) {
 		if(cafeService.hasCafe(form.getId())) {
 			errors.addError(new FieldError("cafeData", "id", form.getId() + " already exists"));
 		}
+		
 		if(errors.hasErrors()) {
 			return "createCafe";
 		}
-		cafeService.createCafe(user, form);
+		cafeService.createCafe(form, user);
 		return "redirect:/";
 	}
 	

@@ -67,7 +67,11 @@ class DataTests {
 				.username("owner")
 				.password("1234")
 				.build());
-		val cafe = em.persist(new Cafe("cafe", "The cafe", owner, false));
+		val cafe = em.persist(Cafe.builder()
+				.id("cafe")
+				.name("The cafe")
+				.owner(owner)
+				.build());
 		val category = em.persist(new Category(cafe, new CategoryData("dir1", Type.DIRECTORY)));
 		val post = em.persist(new Post(owner, category, new PostData("post1", "post1's contents")));
 		val comment = em.persist(new Comment(owner, post, new CommentData("comment1")));
@@ -77,12 +81,17 @@ class DataTests {
 	}
 	
 	@Test
-	void overlap_cafe() {
+	public void shouldFailWithNullId() {
 		val owner = em.persist(User.builder()
 				.username("owner")
 				.password("1234")
 				.build());
-		em.persist(new Cafe("cafe", "The cafe", owner, false));
-		assertThrows(Exception.class, () -> em.persistAndFlush(new Cafe("cafe", "The cafe", owner, false)));
+		
+		assertThrows(Exception.class, () -> {
+			em.persist(Cafe.builder()
+					.name("The cafe")
+					.owner(owner)
+					.build());
+		});
 	}
 }

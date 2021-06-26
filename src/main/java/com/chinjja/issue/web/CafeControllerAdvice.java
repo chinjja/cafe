@@ -3,14 +3,15 @@ package com.chinjja.issue.web;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-import com.chinjja.issue.domain.Post;
-import com.chinjja.issue.domain.PostData;
-import com.chinjja.issue.domain.CafeData;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.CategoryData;
 import com.chinjja.issue.domain.Comment;
 import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.LikeCountData;
+import com.chinjja.issue.domain.Post;
+import com.chinjja.issue.domain.PostData;
+import com.chinjja.issue.form.CafeForm;
+import com.chinjja.issue.form.JoinCafeForm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -54,8 +55,8 @@ public class CafeControllerAdvice {
 	}
 	
 	@ModelAttribute
-	public CafeData cafeData() {
-		return new CafeData();
+	public CafeForm cafeForm() {
+		return new CafeForm();
 	}
 	
 	@ModelAttribute

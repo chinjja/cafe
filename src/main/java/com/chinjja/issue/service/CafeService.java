@@ -13,19 +13,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.chinjja.issue.data.PostRepository;
 import com.chinjja.issue.data.CafeMemberRepository;
 import com.chinjja.issue.data.CafeRepository;
 import com.chinjja.issue.data.CategoryRepository;
 import com.chinjja.issue.data.CommentRepository;
 import com.chinjja.issue.data.LikableRepository;
 import com.chinjja.issue.data.LikeCountRepository;
-import com.chinjja.issue.domain.Post;
-import com.chinjja.issue.domain.PostData;
+import com.chinjja.issue.data.PostRepository;
 import com.chinjja.issue.domain.Cafe;
-import com.chinjja.issue.domain.CafeData;
 import com.chinjja.issue.domain.CafeMember;
-import com.chinjja.issue.domain.CafeMemberId;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.CategoryData;
 import com.chinjja.issue.domain.Comment;
@@ -34,8 +30,11 @@ import com.chinjja.issue.domain.Likable;
 import com.chinjja.issue.domain.LikeCount;
 import com.chinjja.issue.domain.LikeCountData;
 import com.chinjja.issue.domain.LikeCountId;
+import com.chinjja.issue.domain.Post;
+import com.chinjja.issue.domain.PostData;
 import com.chinjja.issue.domain.User;
-import com.chinjja.issue.web.JoinCafeForm;
+import com.chinjja.issue.form.CafeForm;
+import com.chinjja.issue.form.JoinCafeForm;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -110,7 +109,7 @@ public class CafeService {
 	}
 	
 	public boolean isMember(Cafe cafe, User user) {
-		val cm = cafeMemberRepo.findById(new CafeMemberId(cafe, user)).orElse(null);
+		val cm = cafeMemberRepo.findById(new CafeMember.Id(cafe, user)).orElse(null);
 		if(cm == null) return false;
 		return cm.isApproved();
 	}
@@ -120,27 +119,28 @@ public class CafeService {
 	}
 	
 	public boolean isApproving(Cafe cafe, User user) {
-		val cm = cafeMemberRepo.findById(new CafeMemberId(cafe, user)).orElse(null);
+		val cm = cafeMemberRepo.findById(new CafeMember.Id(cafe, user)).orElse(null);
 		if(cm == null) return false;
 		return !cm.isApproved();
 	}
 	
 	public void approveMember(Cafe cafe, User member) {
-		val cm = cafeMemberRepo.findById(new CafeMemberId(cafe, member)).get();
+		val cm = cafeMemberRepo.findById(new CafeMember.Id(cafe, member)).get();
 		cm.setApproved(true);
 		cafeMemberRepo.save(cm);
 	}
 	
 	public void joinCafe(Cafe cafe, User user, JoinCafeForm form) {
-		val cm = new CafeMember();
-		cm.setId(new CafeMemberId(cafe, user));
-		cm.setGreeting(form.getGreeting());
-		cm.setApproved(!cafe.getNeedApproval());
+		val cm = CafeMember.builder()
+				.id(new CafeMember.Id(cafe, user))
+				.greeting(form.getGreeting())
+				.approved(!cafe.isNeedApproval())
+				.build();
 		cafeMemberRepo.save(cm);
 	}
 	
 	public void leaveCafe(Cafe cafe, User user) {
-		cafeMemberRepo.deleteById(new CafeMemberId(cafe, user));
+		cafeMemberRepo.deleteById(new CafeMember.Id(cafe, user));
 	}
 	
 	public boolean isAuthor(Likable target, User user) {
@@ -151,11 +151,15 @@ public class CafeService {
 		return cafeRepo.existsById(id);
 	}
 	
-	public void createCafe(User user, CafeData form) {
+	public void createCafe(CafeForm form, User user) {
 		if(hasCafe(form.getId())) throw new IllegalArgumentException(form.getId() +" already exists");
-		val cafe = new Cafe();
-		cafe.setData(form);
-		cafe.setOwner(user);
+		val cafe = Cafe.builder()
+				.id(form.getId())
+				.name(form.getName())
+				.description(form.getDescription())
+				.needApproval(form.isNeedApproval())
+				.owner(user)
+				.build();
 		cafeRepo.save(cafe);
 	}
 	

@@ -6,64 +6,64 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Formula;
 
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
 public class Cafe {
+	@Builder(toBuilder = true)
+	public Cafe(String id, String name, String description, boolean needApproval, LocalDateTime createdAt, User owner) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.needApproval = needApproval;
+		this.createdAt = createdAt;
+		this.owner = owner;
+	}
+	
 	@Id
 	@Pattern(regexp = "[a-z0-9]{1,20}")
-	@NonNull
 	private String id;
 	@NotBlank
-	@NonNull
 	private String name;
 	private String description;
-	
+	private boolean needApproval;
 	private LocalDateTime createdAt;
-	
-	@ManyToOne
-	@NotNull
-	@NonNull
-	private User owner;
-	@NonNull
-	private Boolean needApproval;
-	
-	public void setData(CafeData data) {
-		setId(data.getId());
-		setName(data.getName());
-		setDescription(data.getDescription());
-		setNeedApproval(data.isNeedApproval());
-	}
 	
 	@PrePersist
 	private void createdAt() {
 		createdAt = LocalDateTime.now();
 	}
 	
+	@ManyToOne
+	@NotNull
+	private User owner;
+	
 	@OneToMany(mappedBy = "id.cafe")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
+	@Setter(AccessLevel.NONE)
 	private Set<CafeMember> members = new HashSet<>();
 	
 	@Formula("(select count(cm.member_id) from cafe_member cm where cm.cafe_id = id and cm.approved = true)")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	@Setter(AccessLevel.NONE)
 	private int memberCount;
 }

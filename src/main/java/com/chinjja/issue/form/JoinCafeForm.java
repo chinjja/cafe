@@ -1,4 +1,4 @@
-package com.chinjja.issue.web;
+package com.chinjja.issue.form;
 
 import javax.validation.constraints.NotBlank;
 

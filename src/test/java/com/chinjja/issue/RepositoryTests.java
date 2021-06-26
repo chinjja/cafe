@@ -19,7 +19,6 @@ import com.chinjja.issue.data.PostRepository;
 import com.chinjja.issue.data.UserRepository;
 import com.chinjja.issue.domain.Cafe;
 import com.chinjja.issue.domain.CafeMember;
-import com.chinjja.issue.domain.CafeMemberId;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.Category.Type;
 import com.chinjja.issue.domain.CategoryData;
@@ -49,26 +48,52 @@ class RepositoryTests {
 				.username("user1")
 				.password("1234")
 				.build());
-		val cafe11 = cafeRepo.save(new Cafe("cafe11", "cafe1", user1, true));
-		val cafe12 = cafeRepo.save(new Cafe("cafe12", "cafe2", user1, true));
-		val cafe13 = cafeRepo.save(new Cafe("cafe13", "cafe3", user1, true));
+		
+		val cafe1 = Cafe.builder()
+				.name("user1")
+				.owner(user1)
+				.needApproval(true)
+				;
+		val cafe11 = cafeRepo.save(cafe1.id("cafe11").build());
+		val cafe12 = cafeRepo.save(cafe1.id("cafe12").build());
+		val cafe13 = cafeRepo.save(cafe1.id("cafe13").build());
 		
 		val user2 = userRepo.save(User.builder()
 				.username("user2")
 				.password("1234")
 				.build());
-		val cafe21 = cafeRepo.save(new Cafe("cafe21", "cafe21", user2, true));
+		val cafe2 = Cafe.builder()
+				.name("user2")
+				.owner(user2)
+				.needApproval(true)
+				;
+		val cafe21 = cafeRepo.save(cafe2.id("cafe21").build());
 
 		val user3 = userRepo.save(User.builder()
 				.username("user3")
 				.password("1234")
 				.build());
 		
-		cafeMemberRepo.save(new CafeMember(new CafeMemberId(cafe11, user2), "hi1"));
-		cafeMemberRepo.save(new CafeMember(new CafeMemberId(cafe12, user2), "hi2"));
-		cafeMemberRepo.save(new CafeMember(new CafeMemberId(cafe13, user2), "hi3"));
-		cafeMemberRepo.save(new CafeMember(new CafeMemberId(cafe21, user1), "hi4"));
-		cafeMemberRepo.save(new CafeMember(new CafeMemberId(cafe11, user3), "hi4"));
+		cafeMemberRepo.save(CafeMember.builder()
+				.id(new CafeMember.Id(cafe11, user2))
+				.greeting("hi1")
+				.build());
+		cafeMemberRepo.save(CafeMember.builder()
+				.id(new CafeMember.Id(cafe12, user2))
+				.greeting("hi1")
+				.build());
+		cafeMemberRepo.save(CafeMember.builder()
+				.id(new CafeMember.Id(cafe13, user2))
+				.greeting("hi1")
+				.build());
+		cafeMemberRepo.save(CafeMember.builder()
+				.id(new CafeMember.Id(cafe21, user1))
+				.greeting("hi1")
+				.build());
+		cafeMemberRepo.save(CafeMember.builder()
+				.id(new CafeMember.Id(cafe11, user3))
+				.greeting("hi1")
+				.build());
 		em.flush();
 		em.clear();
 		
