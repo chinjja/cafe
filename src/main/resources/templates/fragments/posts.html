@@ -30,7 +30,7 @@
 				</td>
 				<td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
 				<td>
-					<a th:href="@{/get-user/{id}(id=${post.user.id})}" th:text="${post.user.username}"></a>
+					<div th:replace="links/user(${post.user}, null)"></div>
 				</td>
 				<td th:text="${post.viewCount}"></td>
 				<td th:text="${post.likeCount}"></td>

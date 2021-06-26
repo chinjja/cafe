@@ -28,7 +28,7 @@
 							<a th:href="@{/cafe/{cafe}(cafe=${member.id.cafe.id})}" th:text="${member.id.cafe.name}"></a>
 						</td>
 						<td>
-							<a th:href="@{/get-user/{id}(id=${member.id.member.id})}" th:text="${member.id.member.username}"></a>
+							<div th:replace="links/user(${member.id.member}, null)"></div>
 						</td>
 						<td th:text="${member.greeting}"></td>
 						<td class="p-0">

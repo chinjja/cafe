@@ -36,7 +36,7 @@
 				<a class="btn btn-outline-primary w-50" th:href="@{/create-user}">Register</a>
 			</div>
 			<form class="d-flex justify-content-end m-0" method="POST" th:if="${user != null}" th:action="@{/logout}" id="logoutForm">
-				<a class="navbar-text me-2" th:text="${user.username}" th:href="@{/get-user/{id}(id=${user.id})}"></a>
+				<div th:replace="links/user(${user}, 'navbar-text me-2')"></div>
 				<input type="submit" value="Logout" class="btn btn-outline-primary w-100" />
 			</form>
 		</div>

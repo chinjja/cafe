@@ -19,7 +19,7 @@
 					<td th:text="${activePost.data.title}"></td>
 					<td th:text="${#temporals.format(activePost.createdAt)}"></td>
 					<td>
-						<a th:href="@{/get-user/{id}(id=${activePost.user.id})}" th:text="${activePost.user.username}"></a>
+						<div th:replace="links/user(${activePost.user}, null)"></div>
 					</td>
 					<td th:text="${activePost.viewCount}"></td>
 					<td th:text="${activePost.likeCount}"></td>

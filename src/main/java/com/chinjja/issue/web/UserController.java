@@ -43,9 +43,9 @@ public class UserController {
 		return "redirect:/login";
 	}
 	
-	@GetMapping("/get-user/{id}")
-	public String users(@PathVariable Long id, Model model) {
-		val user = userService.byId(id);
+	@GetMapping("/get-user/{username}")
+	public String getUser(@PathVariable String username, Model model) {
+		val user = userService.byUsername(username);
 		model.addAttribute("activeUser", user);
 		return "user";
 	}
@@ -65,6 +65,6 @@ public class UserController {
 			return "user";
 		}
 		userService.changePassword(user, form.getNewPassword());
-		return "redirect:/get-user/" + user.getId();
+		return "redirect:/get-user/" + user.getUsername();
 	}
 }

@@ -1,7 +1,7 @@
 <div th:fragment="sidebar" class="bg-white">
 	<div class="d-flex justify-content-between">
 		<span class="h3" th:text="${activeCafe.name}"></span>
-		<a class="h4" th:href="@{/get-user/{id}(id=${activeCafe.owner.id})}" th:text="${activeCafe.owner.username}"></a>
+		<div th:replace="links/user(${activeCafe.owner}, 'h4')"></div>
 	</div>
 	<hr/>
 	<div th:if="${user != null}">
