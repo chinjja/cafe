@@ -14,8 +14,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ChangePasswordForm {
-	@NotNull
-	private Long userId;
 	@NotBlank
 	private String password;
 	@Size(min = 8, max = 100)
