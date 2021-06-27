@@ -16,7 +16,7 @@
 			<tbody>
 				<tr>
 					<td th:text="${activePost.id}"></td>
-					<td th:text="${activePost.data.title}"></td>
+					<td th:text="${activePost.title}"></td>
 					<td th:text="${#temporals.format(activePost.createdAt)}"></td>
 					<td>
 						<div th:replace="links/user(${activePost.user}, null)"></div>
@@ -26,7 +26,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<pre class="border rounded-3 p-3" th:text="${activePost.data.contents}"></pre>
+		<pre class="border rounded-3 p-3" th:text="${activePost.contents}"></pre>
 		<div class="d-flex justify-content-between align-items-start">
 			<form method="POST" th:action="@{/toggle-like}" th:object="${likeCountData}" th:if="${user != null} AND ${isJoined}" id="likeCountForm">
 				<input type="hidden" th:value="${activePost.id}" th:name="likableId"/>

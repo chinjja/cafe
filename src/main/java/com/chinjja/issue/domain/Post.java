@@ -1,22 +1,18 @@
 package com.chinjja.issue.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(indexes = {
@@ -24,25 +20,20 @@ import lombok.ToString;
 		})
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class Post extends Likable {
-	public Post(User user, Category category, PostData data) {
-		super(user);
-		setCategory(category);
-		setData(data);
-	}
-	
 	@ManyToOne
 	@NotNull
 	private Category category;
 	
-	@Embedded
-	private PostData data;
+	@NotBlank
+	private String title;
+	
+	@NotBlank
+	private String contents;
 	
 	private int viewCount;
-	
-	@OneToMany(mappedBy = "likable")
-	@EqualsAndHashCode.Exclude
-	@ToString.Exclude
-	private List<Comment> comments = new ArrayList<>();
 }

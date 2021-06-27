@@ -2,7 +2,7 @@
 	<i class="bi bi-bootstrap me-2" style="font-size: 3rem;"></i>
 	<div class="w-100">
 		<div th:replace="links/user(${comment.user}, null)"></div>
-		<pre class="p mt-2" th:text="${comment.data.comment}"></pre>
+		<pre class="p mt-2" th:text="${comment.comment}"></pre>
 		<div class="d-flex justify-content-between">
 			<div class="d-flex align-items-baseline">
 				<span class="text-muted me-2" th:text="${#temporals.format(comment.createdAt)}"></span>

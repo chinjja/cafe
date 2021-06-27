@@ -22,10 +22,10 @@ import com.chinjja.issue.domain.CafeMember;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.Category.Type;
 import com.chinjja.issue.form.CategoryForm;
+import com.chinjja.issue.form.CommentForm;
+import com.chinjja.issue.form.PostForm;
 import com.chinjja.issue.domain.Comment;
-import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.Post;
-import com.chinjja.issue.domain.PostData;
 import com.chinjja.issue.domain.User;
 
 import lombok.val;

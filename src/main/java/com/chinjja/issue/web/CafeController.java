@@ -28,14 +28,14 @@ import com.chinjja.issue.data.PostRepository;
 import com.chinjja.issue.data.UserRepository;
 import com.chinjja.issue.domain.Cafe;
 import com.chinjja.issue.domain.Category;
-import com.chinjja.issue.domain.CommentData;
-import com.chinjja.issue.domain.LikeCountData;
 import com.chinjja.issue.domain.Post;
-import com.chinjja.issue.domain.PostData;
 import com.chinjja.issue.domain.User;
 import com.chinjja.issue.form.CafeForm;
 import com.chinjja.issue.form.CategoryForm;
+import com.chinjja.issue.form.CommentForm;
 import com.chinjja.issue.form.JoinCafeForm;
+import com.chinjja.issue.form.LikeCountForm;
+import com.chinjja.issue.form.PostForm;
 import com.chinjja.issue.service.CafeService;
 
 import lombok.RequiredArgsConstructor;
@@ -212,7 +212,7 @@ public class CafeController {
 	public String createPostForm(
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe,
-			@Valid PostData form,
+			@Valid PostForm form,
 			BindingResult errors) {
 		if(errors.hasErrors()) {
 			return "createPost";
@@ -257,7 +257,7 @@ public class CafeController {
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe,
 			@ModelAttribute("activePost") Post post,
-			@Valid CommentData form,
+			@Valid CommentForm form,
 			BindingResult errors) {
 		if(errors.hasErrors()) {
 			return "posts";
@@ -284,7 +284,7 @@ public class CafeController {
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe,
 			@ModelAttribute("activePost") Post post,
-			@Valid LikeCountData form) {
+			@Valid LikeCountForm form) {
 		cafeService.toggleLikeCount(user, form);
 		return "redirect:" + toPostUrl(cafe, post);
 	}

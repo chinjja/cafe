@@ -16,10 +16,10 @@ import com.chinjja.issue.domain.Cafe;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.Category.Type;
 import com.chinjja.issue.form.CategoryForm;
+import com.chinjja.issue.form.CommentForm;
+import com.chinjja.issue.form.PostForm;
 import com.chinjja.issue.domain.Comment;
-import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.Post;
-import com.chinjja.issue.domain.PostData;
 import com.chinjja.issue.domain.User;
 import com.chinjja.issue.domain.UserRole;
 
@@ -77,8 +77,17 @@ class DataTests {
 				.type(Type.DIRECTORY)
 				.name("dir1")
 				.build());
-		val post = em.persist(new Post(owner, category, new PostData("post1", "post1's contents")));
-		val comment = em.persist(new Comment(owner, post, new CommentData("comment1")));
+		Post post = em.persist(Post.builder()
+				.user(owner)
+				.category(category)
+				.title("post1")
+				.contents("post1's content")
+				.build());
+		val comment = em.persist(Comment.builder()
+				.user(owner)
+				.likable(post)
+				.comment("comment1")
+				.build());
 		em.flush();
 		
 		assertEquals(owner, cafe.getOwner());

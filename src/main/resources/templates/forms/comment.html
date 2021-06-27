@@ -1,5 +1,5 @@
 <div th:fragment="commentForm(likable)" th:if="${user != null}" class="border rounded-3 p-3">
-	<form class="row g-2 mb-0" method="POST" th:action="@{/create-comment}" th:object="${commentData}" id="commentForm">
+	<form class="row g-2 mb-0" method="POST" th:action="@{/create-comment}" th:object="${commentForm}" id="commentForm">
 		<div class="form-group">
 			<span class="h5" th:text="${user.username}"></span>
 		</div>

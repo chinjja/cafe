@@ -24,17 +24,16 @@ import com.chinjja.issue.domain.Cafe;
 import com.chinjja.issue.domain.CafeMember;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.Comment;
-import com.chinjja.issue.domain.CommentData;
 import com.chinjja.issue.domain.Likable;
 import com.chinjja.issue.domain.LikeCount;
-import com.chinjja.issue.domain.LikeCountData;
-import com.chinjja.issue.domain.LikeCountId;
 import com.chinjja.issue.domain.Post;
-import com.chinjja.issue.domain.PostData;
 import com.chinjja.issue.domain.User;
 import com.chinjja.issue.form.CafeForm;
 import com.chinjja.issue.form.CategoryForm;
+import com.chinjja.issue.form.CommentForm;
 import com.chinjja.issue.form.JoinCafeForm;
+import com.chinjja.issue.form.LikeCountForm;
+import com.chinjja.issue.form.PostForm;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -64,11 +63,13 @@ public class CafeService {
 		return posts;
 	}
 	
-	public Post createPost(User user, PostData form) {
-		val post = new Post();
-		post.setData(form);
-		post.setUser(user);
-		post.setCategory(categoryRepo.findById(form.getCategoryId()).get());
+	public Post createPost(User user, PostForm form) {
+		Post post = Post.builder()
+				.user(user)
+				.category(categoryRepo.findById(form.getCategoryId()).get())
+				.title(form.getTitle())
+				.contents(form.getContents())
+				.build();
 		return postRepo.save(post);
 	}
 	
@@ -175,25 +176,25 @@ public class CafeService {
 		cafeRepo.delete(cafe);
 	}
 	
-	public Comment createComment(User user, @Valid CommentData form) {
-		val comment = new Comment();
-		comment.setData(form);
-		comment.setUser(user);
-		comment.setLikable(likableRepo.findById(form.getLikableId()).get());
+	public Comment createComment(User user, @Valid CommentForm form) {
+		Comment comment = Comment.builder()
+				.user(user)
+				.likable(likableRepo.findById(form.getLikableId()).get())
+				.comment(form.getComment())
+				.build();
 		return commentRepo.save(comment);
 	}
 	
 	@Transactional
-	public LikeCount createLikeCount(User user, LikeCountData form) {
+	public LikeCount createLikeCount(User user, LikeCountForm form) {
 		val target = likableRepo.findById(form.getLikableId()).get();
-		val likeCount = new LikeCount();
-		likeCount.setId(new LikeCountId(target, user));
+		val likeCount = LikeCount.create(target, user);
 		return likeCountRepo.save(likeCount);
 	}
 	
-	public void toggleLikeCount(User user, LikeCountData form) {
+	public void toggleLikeCount(User user, LikeCountForm form) {
 		val target = likableRepo.findById(form.getLikableId()).get();
-		val like = likeCountRepo.findById(new LikeCountId(target, user)).orElse(null);
+		val like = likeCountRepo.findById(new LikeCount.Id(target, user)).orElse(null);
 		if(like == null) {
 			createLikeCount(user, form);
 		} else {
@@ -224,7 +225,7 @@ public class CafeService {
 	}
 	
 	public boolean canLikeCount(Likable target, User user) {
-		val like = likeCountRepo.findById(new LikeCountId(target, user)).orElse(null);
+		val like = likeCountRepo.findById(new LikeCount.Id(target, user)).orElse(null);
 		return like == null;
 	}
 	

@@ -5,13 +5,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.Comment;
-import com.chinjja.issue.domain.CommentData;
-import com.chinjja.issue.domain.LikeCountData;
 import com.chinjja.issue.domain.Post;
-import com.chinjja.issue.domain.PostData;
 import com.chinjja.issue.form.CafeForm;
 import com.chinjja.issue.form.CategoryForm;
+import com.chinjja.issue.form.CommentForm;
 import com.chinjja.issue.form.JoinCafeForm;
+import com.chinjja.issue.form.LikeCountForm;
+import com.chinjja.issue.form.PostForm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,28 +20,18 @@ import lombok.RequiredArgsConstructor;
 public class CafeControllerAdvice {
 	
 	@ModelAttribute
-	public Post post() {
-		return new Post();
+	public PostForm postData() {
+		return new PostForm();
 	}
 	
 	@ModelAttribute
-	public PostData postData() {
-		return new PostData();
+	public CommentForm commentData() {
+		return new CommentForm();
 	}
 	
 	@ModelAttribute
-	public Comment comment() {
-		return new Comment();
-	}
-	
-	@ModelAttribute
-	public CommentData commentData() {
-		return new CommentData();
-	}
-	
-	@ModelAttribute
-	public LikeCountData likeCountData() {
-		return new LikeCountData();
+	public LikeCountForm likeCountData() {
+		return new LikeCountForm();
 	}
 	
 	@ModelAttribute

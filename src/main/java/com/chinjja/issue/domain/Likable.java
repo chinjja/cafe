@@ -16,17 +16,20 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Formula;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
+@SuperBuilder(builderMethodName = "likable", toBuilder = true)
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Likable {
 	@Id
@@ -35,7 +38,6 @@ public class Likable {
 	private LocalDateTime createdAt;
 	@ManyToOne
 	@NotNull
-	@NonNull
 	private User user;
 	
 	@PrePersist
@@ -46,8 +48,16 @@ public class Likable {
 	@OneToMany(mappedBy = "id.likable")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	private List<LikeCount> likes = new ArrayList<>();
+	private final List<LikeCount> likes = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "likable")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private final List<Comment> comments = new ArrayList<>();
 	
 	@Formula("(select count(lc.user_id) from like_count lc where lc.likable_id = id)")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	@Setter(AccessLevel.NONE)
 	private int likeCount;
 }
