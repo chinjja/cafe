@@ -52,21 +52,26 @@ public class UserService {
 	public User create(User user, String...roles) {
 		user.setId(null);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		userRepo.save(user);
+		user = userRepo.save(user);
 		
 		if(roles != null) {
 			for(String role : roles) {
 				userRoleRepo.save(UserRole.create(user, role));
 			}
 		}
-		return byId(user.getId());
+		return user;
 	}
 	
 	@Transactional
 	public User register(RegisterForm form) {
+		String password1 = form.getPassword();
+		String password2 = form.getConfirm();
+		if(password1 == null || !password1.equals(password2)) {
+			throw new IllegalArgumentException("invalid password");
+		}
 		val user = User.builder()
 				.username(form.getUsername())
-				.password(form.getPassword())
+				.password(password1)
 				.build();
 		return create(user);
 	}
