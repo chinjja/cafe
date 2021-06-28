@@ -1,5 +1,6 @@
 package com.chinjja.issue.service;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +22,19 @@ public class UserService {
 	private final UserRoleRepository userRoleRepo;
 	private final PasswordEncoder passwordEncoder;
 	
+	@PostConstruct
+	@Transactional
+	public void onCreate() {
+		if(userRepo.findByUsername("admin") == null) {
+			val user = User.builder()
+					.username("admin")
+					.password(passwordEncoder.encode("1234"))
+					.build();
+			create(user);
+			addRole(user, "ROLE_ADMIN");
+		}
+	}
+	
 	@Transactional
 	public void addRole(User user, String role) {
 		userRoleRepo.save(UserRole.create(user, role));
@@ -36,8 +50,8 @@ public class UserService {
 	}
 	
 	@Transactional
-	public void create(User user) {
-		userRepo.save(user);
+	public User create(User user) {
+		return userRepo.save(user);
 	}
 	
 	@Transactional
@@ -46,7 +60,7 @@ public class UserService {
 				.username(form.getUsername())
 				.password(passwordEncoder.encode(form.getPassword()))
 				.build();
-		return userRepo.save(user);
+		return create(user);
 	}
 	
 	@Transactional
