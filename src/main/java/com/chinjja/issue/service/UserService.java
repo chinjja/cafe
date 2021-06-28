@@ -30,8 +30,7 @@ public class UserService {
 					.username("admin")
 					.password("1234")
 					.build();
-			create(user);
-			addRole(user, "ROLE_ADMIN");
+			create(user, "ROLE_ADMIN");
 		}
 	}
 	
@@ -50,10 +49,17 @@ public class UserService {
 	}
 	
 	@Transactional
-	public User create(User user) {
+	public User create(User user, String...roles) {
 		user.setId(null);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		return userRepo.save(user);
+		userRepo.save(user);
+		
+		if(roles != null) {
+			for(String role : roles) {
+				userRoleRepo.save(UserRole.create(user, role));
+			}
+		}
+		return byId(user.getId());
 	}
 	
 	@Transactional
