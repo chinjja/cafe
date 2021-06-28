@@ -51,6 +51,7 @@ public class UserService {
 	
 	@Transactional
 	public User create(User user) {
+		user.setId(null);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return userRepo.save(user);
 	}
