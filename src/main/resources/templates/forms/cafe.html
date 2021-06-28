@@ -4,12 +4,12 @@
 	</div>
 	<form method="POST" th:action="@{/create-cafe}" th:object="${cafeForm}" id="createCafe" class="row g-3">
 		<div class="form-floating">
-			<input class="form-control" th:field="*{id}" th:placeholder="#{forms.cafe.id}"/>
+			<input class="form-control" th:field="*{id}" th:placeholder="#{forms.cafe.id}" autocomplete="off"/>
 			<label for="id" th:text="#{forms.cafe.id}"></label>
 			<div class="alert alert-danger" th:errors="*{id}"></div>
 		</div>
 		<div class="form-floating">
-			<input class="form-control" th:field="*{name}" th:placeholder="#{forms.cafe.name}"/>
+			<input class="form-control" th:field="*{name}" th:placeholder="#{forms.cafe.name}" autocomplete="off"/>
 			<label for="name" th:text="#{forms.cafe.name}"></label>
 			<div class="alert alert-danger" th:errors="*{name}"></div>
 		</div>

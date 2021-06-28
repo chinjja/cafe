@@ -5,7 +5,7 @@
 	<form method="POST" th:action="@{/create-post}" th:object="${postForm}" id="createpost" class="row g-3">
 		<input type="hidden" th:value="${category.id}" th:name="categoryId"/>
 		<div class="form-group">
-			<input class="form-control" th:field="*{title}" th:placeholder="#{forms.post.title}"/>
+			<input class="form-control" th:field="*{title}" th:placeholder="#{forms.post.title}" autocomplete="off"/>
 			<div class="alert alert-danger" th:errors="*{title}"></div>
 		</div>
 		<div class="form-group">
