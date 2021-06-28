@@ -28,7 +28,7 @@ public class UserService {
 		if(userRepo.findByUsername("admin") == null) {
 			val user = User.builder()
 					.username("admin")
-					.password(passwordEncoder.encode("1234"))
+					.password("1234")
 					.build();
 			create(user);
 			addRole(user, "ROLE_ADMIN");
@@ -51,6 +51,7 @@ public class UserService {
 	
 	@Transactional
 	public User create(User user) {
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return userRepo.save(user);
 	}
 	
@@ -58,7 +59,7 @@ public class UserService {
 	public User register(RegisterForm form) {
 		val user = User.builder()
 				.username(form.getUsername())
-				.password(passwordEncoder.encode(form.getPassword()))
+				.password(form.getPassword())
 				.build();
 		return create(user);
 	}
