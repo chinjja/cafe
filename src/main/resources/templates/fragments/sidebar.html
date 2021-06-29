@@ -1,28 +1,27 @@
 <div th:fragment="sidebar" class="bg-white">
-	<div class="d-flex justify-content-between">
-		<span class="h3" th:text="${activeCafe.name}"></span>
-		<div th:replace="links/user(${activeCafe.owner}, 'h4')"></div>
-	</div>
-	<hr/>
-	<div th:if="${user != null}">
-		<div class="d-flex justify-content-between">
-			<a class="h4" th:if="${isJoined == false} AND ${isApproving == false}" th:href="@{/join-cafe}" th:text="#{joinCafe}"></a>
-			<div th:if="${isJoined}">
-				<a class="h4" th:unless="${activeCafe.owner.id == user.id}" th:href="@{/leave-cafe}" th:text="#{leaveCafe}"></a>
-				<span class="h4" th:if="${activeCafe.owner.id == user.id}">Onwer</span>
-			</div>
-			<div class="d-flex justify-content-between w-100" th:if="${isApproving}">
-				<span class="h4">승인대기 중</span>
-				<a class="h4" th:href="@{/leave-cafe}">취소</a>
-			</div>
-			<a class="btn btn-danger" th:if="${activeCafe.owner.id == user.id}" th:href="@{/delete-cafe}" th:text="#{deleteCafe}"></a>
+	<div class="d-flex d-md-block align-items-center">
+		<div class="d-inline d-md-none me-2">
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent2">
+					<i class="bi bi-list" style="font-size: 2rem;"></i>
+			</button>
 		</div>
-	<hr/>
+		<div th:replace="links/user(${activeCafe.owner}, 'h5 me-2')"></div>
+		<div class="d-flex w-100 justify-content-between align-items-center">
+			<div>
+				<span class="h4" th:text="${activeCafe.name}"></span>
+			</div>
+			<div th:if="${user != null}">
+				<a class="btn btn-danger" th:if="${activeCafe.owner.id == user.id}" th:href="@{/delete-cafe}" th:text="#{deleteCafe}"></a>
+				<div class="d-flex" th:if="${activeCafe.owner.id != user.id}">
+					<a class="btn btn-warning" th:if="${isApproving}" th:href="@{/leave-cafe}">요청취소</a>
+					<a class="btn btn-primary" th:if="${isJoined == false} AND ${isApproving == false}" th:href="@{/join-cafe}" th:text="#{joinCafe}"></a>
+					<a class="btn btn-warning" th:if="${isJoined}" th:href="@{/leave-cafe}" th:text="#{leaveCafe}"></a>
+				</div>
+			</div>
+			<a class="btn btn-primary" th:if="${user == null}" th:href="@{/join-cafe}" th:text="#{joinCafe}"></a>
+		</div>
 	</div>
 	<nav class="navbar navbar-expand-md">
-		<button class="navbar-toggler w-100 text-start mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent2">
-			<i class="bi bi-list" style="font-size: 2rem;" th:text="#{fragments.sidebar.toggle}"></i>
-		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent2">
 			<div class="w-100">
 				<a class="btn btn-outline-primary text-start w-100 mb-2" th:classappend="${activeCategory == null}? 'active'" th:href="@{/cafe/{cafe}(cafe=${activeCafe.id})}" th:text="#{fragments.sidebar.all}"></a>
