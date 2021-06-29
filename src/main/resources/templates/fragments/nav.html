@@ -1,4 +1,4 @@
-<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light shadow" th:fragment="nav">
+<nav class="navbar sticky-top navbar-expand-md navbar-light bg-light shadow" th:fragment="nav">
 	<div class="container-fluid">
 		<a class="navbar-brand" th:href="@{/}" th:text="#{fragments.nav.brand}"></a>
 		<div class="d-flex flex-row me-auto" th:each="profile : ${activeProfileList}">
@@ -9,7 +9,7 @@
 		</button>
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+			<ul class="navbar-nav me-auto mb-2 mb-md-0">
 				<li class="nav-item" th:if="${activeCafe != null}">
 					<div th:replace="links/cafe(${activeCafe}, 'nav-link')"></div>
 				</li>
@@ -26,8 +26,7 @@
 					</ul>
 				</li>
 			</ul>
-			<span class="navbar-text me-2">Navbar text</span>
-			<form class="d-flex me me-lg-2 mb-2 mb-lg-0">
+			<form class="d-flex me me-md-2 mb-2 mb-md-0">
 				<input class="form-control me-2" type="search" placeholder="Search" />
 				<a class="btn btn-outline-success" th:href="@{/search-cafe}">Search</a>
 			</form>
