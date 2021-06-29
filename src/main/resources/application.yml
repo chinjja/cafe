@@ -1,16 +1,18 @@
-spring.jpa.database-platform: org.sqlite.hibernate.dialect.SQLiteDialect
-spring.jpa.hibernate.ddl-auto: update
-
-spring.datasource.url: jdbc:sqlite:data/sqlite.db
-spring.datasource.driver-class-name: org.sqlite.JDBC
-
-spring.datasource.username: admin
-spring.datasource.password: admin
-
 spring.jackson.parser.allow-non-numeric-numbers: true
-spring.messages.basename: messages/messages
 
 spring:
   data:
     rest:
       base-path: /api
+  datasource:
+    url: jdbc:mariadb://localhost:3306/dev
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: a12345678
+  messages:
+    basename: messages/messages
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+    
