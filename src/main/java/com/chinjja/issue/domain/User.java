@@ -10,8 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.PostPersist;
-import javax.persistence.PostUpdate;
+import javax.persistence.PostLoad;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -84,8 +83,7 @@ public class User implements UserDetails {
 	@Getter
 	private boolean admin;
 	
-	@PostPersist
-	@PostUpdate
+	@PostLoad
 	private void onUpdate() {
 		authorities.clear();
 		for(val role : getRoles()) {
