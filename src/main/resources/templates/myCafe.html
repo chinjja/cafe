@@ -1,49 +1,53 @@
 <html layout:decorate="~{layouts/navLayout}">
-	<div layout:fragment="content" class="row g-4">
-		<div class="col-12 col-md-6">
-			<div class="d-flex justify-content-between align-items-start">
-				<h1 th:text="#{cafe.myCafe}"></h1>
-				<a class="btn btn-primary btn-lg" role="button" th:href="@{/create-cafe}" th:text="#{cafe.newCafe}"></a>
+	<div layout:fragment="content">
+		<nav>
+			<div class="nav nav-tabs" id="nav-tab" role="tablist">
+				<button class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-owner" type="button" role="tab" th:text="|#{cafe.myCafe} ${user.cafes.size()}|"></button>
+				<button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-member" type="button" role="tab" th:text="|#{cafe.memberCafe} ${user.joinedCafes.size()}|"></button>
+				<button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-request" type="button" role="tab" th:text="|#{cafe.requestToJoin} ${notApprovedMemberList.size()}|"></button>
 			</div>
-			<div class="row g-2" th:if="${user != null}">
-				<div class="col-12 col-xl-6" th:each="cafe : ${user.cafes}">
-					<div th:replace="fragments/cafe(${cafe})"></div>
+		</nav>
+		<div class="tab-content py-2" id="nav-tabContent">
+			<div class="tab-pane fade show active" id="nav-owner" role="tabpanel">
+				<a class="btn btn-primary mb-2" role="button" th:href="@{/create-cafe}" th:text="#{cafe.newCafe}"></a>
+				<div class="row g-2" th:if="${user != null}">
+					<div class="col-12 col-xl-6" th:each="cafe : ${user.cafes}">
+						<div th:replace="fragments/cafe(${cafe})"></div>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col-12 col-md-6">
-			<h1>가입 신청중</h1>
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th>카페이름</th>
-						<th>유저이름</th>
-						<th>인사말</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="member : ${notApprovedMemberList}">
-						<td>
-							<div th:replace="links/cafe(${member.id.cafe}, null)"></div>
-						</td>
-						<td>
-							<div th:replace="links/user(${member.id.member}, null)"></div>
-						</td>
-						<td th:text="${member.greeting}"></td>
-						<td class="p-0">
-							<a class="btn btn-primary w-100" th:href="@{/approve-member(cafeId=${member.id.cafe.id},memberId=${member.id.member.id})}">승인</a>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div class="col-12 col-md-6">
-			<h1 th:text="#{cafe.memberCafe}"></h1>
-			<div class="row g-2" th:if="${user != null}">
-				<div class="col-12 col-xl-6" th:each="cafe : ${user.joinedCafes}">
-					<div th:replace="fragments/cafe(${cafe.id.cafe})"></div>
+			<div class="tab-pane fade" id="nav-member" role="tabpanel">
+				<div class="row g-2" th:if="${user != null}">
+					<div class="col-12 col-xl-6" th:each="cafe : ${user.joinedCafes}">
+						<div th:replace="fragments/cafe(${cafe.id.cafe})"></div>
+					</div>
 				</div>
+			</div>
+			<div class="tab-pane fade" id="nav-request" role="tabpanel">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>카페이름</th>
+							<th>유저이름</th>
+							<th>인사말</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="member : ${notApprovedMemberList}">
+							<td>
+								<div th:replace="links/cafe(${member.id.cafe}, null)"></div>
+							</td>
+							<td>
+								<div th:replace="links/user(${member.id.member}, null)"></div>
+							</td>
+							<td th:text="${member.greeting}"></td>
+							<td class="p-0">
+								<a class="btn btn-primary w-100" th:href="@{/approve-member(cafeId=${member.id.cafe.id},memberId=${member.id.member.id})}">승인</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
