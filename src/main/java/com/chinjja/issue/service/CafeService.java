@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -176,7 +175,7 @@ public class CafeService {
 		cafeRepo.delete(cafe);
 	}
 	
-	public Comment createComment(User user, @Valid CommentForm form) {
+	public Comment createComment(User user, CommentForm form) {
 		Comment comment = Comment.builder()
 				.user(user)
 				.likable(likableRepo.findById(form.getLikableId()).get())
