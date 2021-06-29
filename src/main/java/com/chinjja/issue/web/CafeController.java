@@ -55,7 +55,7 @@ public class CafeController {
 	private final CommentRepository commentRepo;
 	
 	@GetMapping("/")
-	public String cafe(@AuthenticationPrincipal User user, Model model) {
+	public String home(@AuthenticationPrincipal User user, Model model) {
 		if(user != null) {
 			return "redirect:/my-cafe";
 		}
@@ -232,17 +232,16 @@ public class CafeController {
 			@RequestParam("postId") Long postId) {
 		val post = postRepo.findById(postId).get();
 		cafeService.deletePost(post);
-		return "redirect:" + toPostsUrl(cafe, category, page, size);
+		return "redirect:" + toCafeUrl(cafe, category, page, size);
 	}
 	
-	@GetMapping("/cafe/{cafeId}/posts/{postId}")
+	@GetMapping("/post/{postId}")
 	public String posts(
 			@AuthenticationPrincipal User user,
-			@PathVariable String cafeId,
 			@PathVariable Long postId,
 			Model model) {
 		val post = postRepo.findById(postId).get();
-		model.addAttribute("activeCafe", cafeRepo.findById(cafeId).get());
+		model.addAttribute("activeCafe", post.getCategory().getCafe());
 		model.addAttribute("activePost", post);
 		model.addAttribute("canLike", cafeService.canLikeCount(post, user));
 		model.addAttribute("activeCategory", post.getCategory());
@@ -263,19 +262,18 @@ public class CafeController {
 			return "posts";
 		}
 		cafeService.createComment(user, form);
-		return "redirect:" + toPostUrl(cafe, post);
+		return "redirect:" + toPostUrl(post);
 	}
 	
 	@PreAuthorize("isAuthenticated() and @cafeService.isAuthor(@likableRepository.findById(#commentId).get(), #user)")
 	@GetMapping("/delete-comment")
 	public String deleteCommentForm(
 			@AuthenticationPrincipal User user,
-			@ModelAttribute("activeCafe") Cafe cafe,
 			@ModelAttribute("activePost") Post post,
 			@RequestParam("commentId") Long commentId) {
 		val comment = commentRepo.findById(commentId).get();
 		cafeService.deleteComment(comment);
-		return "redirect:" + toPostUrl(cafe, post);
+		return "redirect:" + toPostUrl(post);
 	}
 	
 	@PreAuthorize("isAuthenticated() and @cafeService.isJoined(#cafe, #user)")
@@ -286,19 +284,19 @@ public class CafeController {
 			@ModelAttribute("activePost") Post post,
 			@Valid LikeCountForm form) {
 		cafeService.toggleLikeCount(user, form);
-		return "redirect:" + toPostUrl(cafe, post);
+		return "redirect:" + toPostUrl(post);
 	}
 	
-	private String toPostUrl(Cafe cafe, Post post) {
+	private String toPostUrl(Post post) {
 		return UriComponentsBuilder.newInstance()
-				.path("/cafe/{cafeId}/posts/{postId}")
-				.buildAndExpand(cafe.getId(), post.getId())
+				.path("/post/{postId}")
+				.buildAndExpand(post.getId())
 				.encode().toUriString();
 	}
 	
 	@PreAuthorize("isAuthenticated() and @cafeService.isOwner(#cafe, #user)")
 	@PostMapping("/create-category")
-	public String categoryForm(
+	public String createCategoryForm(
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe,
 			@Valid CategoryForm form,
@@ -306,7 +304,7 @@ public class CafeController {
 		cafeService.createCategory(cafe, user, form);
 		val categoryList = categoryRepo.findAllByCafeAndParentIsNull(cafe);
 		model.addAttribute("categoryList", categoryList);
-		return "redirect:" + toPostsUrl(cafe, null, null, null);
+		return "redirect:" + toCafeUrl(cafe, null, null, null);
 	}
 	
 	@PreAuthorize("isAuthenticated() and @cafeService.isOwner(#cafe, #user)")
@@ -320,10 +318,10 @@ public class CafeController {
 		cafeService.deleteCategory(category);
 		val categoryList = categoryRepo.findAllByCafeAndParentIsNull(cafe);
 		model.addAttribute("categoryList", categoryList);
-		return "redirect:" + toPostsUrl(cafe, null, null, null);
+		return "redirect:" + toCafeUrl(cafe, null, null, null);
 	}
 	
-	private String toPostsUrl(Cafe cafe, Category category, Integer page, Integer size) {
+	private String toCafeUrl(Cafe cafe, Category category, Integer page, Integer size) {
 		return UriComponentsBuilder.newInstance()
 				.path("/cafe/{cafeId}")
 				.queryParam("category", category == null ? null : category.getId())
