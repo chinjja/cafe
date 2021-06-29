@@ -50,6 +50,7 @@ public class User implements UserDetails {
 	private Long id;
 	
 	@Column(unique = true)
+	@NotNull
 	@Pattern(regexp = "[a-z0-9]{4,20}")
 	@EqualsAndHashCode.Include
 	@ToString.Include
