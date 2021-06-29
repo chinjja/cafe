@@ -2,12 +2,12 @@
 	<div layout:fragment="content">
 		<h1 th:text="${activePost.category.name}"></h1>
 		<hr/>
+		<span class="text-muted" th:text="${#temporals.format(activePost.createdAt)}"></span>
 		<table class="table table-bordered">
 			<thead>
 				<tr>
 					<th th:text="#{posts.id}"></th>
 					<th th:text="#{posts.title}"></th>
-					<th th:text="#{posts.createdAt}"></th>
 					<th th:text="#{posts.author}"></th>
 					<th th:text="#{posts.viewCount}"></th>
 					<th th:text="#{posts.likeCount}"></th>
@@ -17,7 +17,6 @@
 				<tr>
 					<td th:text="${activePost.id}"></td>
 					<td th:text="${activePost.title}"></td>
-					<td th:text="${#temporals.format(activePost.createdAt)}"></td>
 					<td>
 						<div th:replace="links/user(${activePost.user}, null)"></div>
 					</td>
