@@ -301,7 +301,7 @@ public class CafeController {
 			@ModelAttribute("activeCafe") Cafe cafe,
 			@Valid CategoryForm form,
 			Model model) {
-		cafeService.createCategory(cafe, user, form);
+		cafeService.createCategory(cafe, form);
 		val categoryList = categoryRepo.findAllByCafeAndParentIsNull(cafe);
 		model.addAttribute("categoryList", categoryList);
 		return "redirect:" + toCafeUrl(cafe, null, null, null);

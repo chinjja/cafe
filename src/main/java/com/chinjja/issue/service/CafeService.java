@@ -62,6 +62,7 @@ public class CafeService {
 		return posts;
 	}
 	
+	@Transactional
 	public Post createPost(User user, PostForm form) {
 		Post post = Post.builder()
 				.user(user)
@@ -124,12 +125,14 @@ public class CafeService {
 		return !cm.isApproved();
 	}
 	
+	@Transactional
 	public void approveMember(Cafe cafe, User member) {
 		val cm = cafeMemberRepo.findById(new CafeMember.Id(cafe, member)).get();
 		cm.setApproved(true);
 		cafeMemberRepo.save(cm);
 	}
 	
+	@Transactional
 	public void joinCafe(Cafe cafe, User user, JoinCafeForm form) {
 		val cm = CafeMember.builder()
 				.id(new CafeMember.Id(cafe, user))
@@ -139,6 +142,7 @@ public class CafeService {
 		cafeMemberRepo.save(cm);
 	}
 	
+	@Transactional
 	public void leaveCafe(Cafe cafe, User user) {
 		cafeMemberRepo.deleteById(new CafeMember.Id(cafe, user));
 	}
@@ -151,6 +155,7 @@ public class CafeService {
 		return cafeRepo.existsById(id);
 	}
 	
+	@Transactional
 	public void createCafe(CafeForm form, User user) {
 		if(hasCafe(form.getId())) throw new IllegalArgumentException(form.getId() +" already exists");
 		val cafe = Cafe.builder()
@@ -175,6 +180,7 @@ public class CafeService {
 		cafeRepo.delete(cafe);
 	}
 	
+	@Transactional
 	public Comment createComment(User user, CommentForm form) {
 		Comment comment = Comment.builder()
 				.user(user)
@@ -191,6 +197,7 @@ public class CafeService {
 		return likeCountRepo.save(likeCount);
 	}
 	
+	@Transactional
 	public void toggleLikeCount(User user, LikeCountForm form) {
 		val target = likableRepo.findById(form.getLikableId()).get();
 		val like = likeCountRepo.findById(new LikeCount.Id(target, user)).orElse(null);
@@ -201,7 +208,8 @@ public class CafeService {
 		}
 	}
 	
-	public Category createCategory(Cafe cafe, User user, CategoryForm form) {
+	@Transactional
+	public Category createCategory(Cafe cafe, CategoryForm form) {
 		Category parent = null;
 		if(form.getParentCategoryId() != null) {
 			parent = categoryRepo.findById(form.getParentCategoryId()).get();
