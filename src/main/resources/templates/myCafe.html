@@ -11,14 +11,14 @@
 			<div class="tab-pane fade show active" id="nav-owner" role="tabpanel">
 				<a class="btn btn-primary mb-2" role="button" th:href="@{/create-cafe}" th:text="#{cafe.newCafe}"></a>
 				<div class="row g-2" th:if="${user != null}">
-					<div class="col-12 col-xl-6" th:each="cafe : ${user.cafes}">
+					<div class="col-12 col-md-6" th:each="cafe : ${user.cafes}">
 						<div th:replace="fragments/cafe(${cafe})"></div>
 					</div>
 				</div>
 			</div>
 			<div class="tab-pane fade" id="nav-member" role="tabpanel">
 				<div class="row g-2" th:if="${user != null}">
-					<div class="col-12 col-xl-6" th:each="cafe : ${user.joinedCafes}">
+					<div class="col-12 col-md-6" th:each="cafe : ${user.joinedCafes}">
 						<div th:replace="fragments/cafe(${cafe.id.cafe})"></div>
 					</div>
 				</div>
