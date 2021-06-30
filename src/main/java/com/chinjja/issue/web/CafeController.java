@@ -29,7 +29,6 @@ import com.chinjja.issue.form.CafeForm;
 import com.chinjja.issue.form.CategoryForm;
 import com.chinjja.issue.form.CommentForm;
 import com.chinjja.issue.form.JoinCafeForm;
-import com.chinjja.issue.form.LikeCountForm;
 import com.chinjja.issue.form.PostForm;
 import com.chinjja.issue.service.CafeService;
 import com.chinjja.issue.service.UserService;
@@ -262,13 +261,12 @@ public class CafeController {
 	}
 	
 	@PreAuthorize("isAuthenticated() and @cafeService.isJoined(#cafe, #user)")
-	@PostMapping("/toggle-like")
+	@GetMapping("/toggle-like")
 	public String toggleLike(
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe,
-			@ModelAttribute("activePost") Post post,
-			@Valid LikeCountForm form) {
-		cafeService.toggleLikeCount(user, form);
+			@ModelAttribute("activePost") Post post) {
+		cafeService.toggleLikeCount(user, post);
 		return "redirect:" + toPostUrl(post);
 	}
 	

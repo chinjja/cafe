@@ -10,7 +10,6 @@ import com.chinjja.issue.form.CafeForm;
 import com.chinjja.issue.form.CategoryForm;
 import com.chinjja.issue.form.CommentForm;
 import com.chinjja.issue.form.JoinCafeForm;
-import com.chinjja.issue.form.LikeCountForm;
 import com.chinjja.issue.form.PostForm;
 
 import lombok.RequiredArgsConstructor;
@@ -27,11 +26,6 @@ public class CafeControllerAdvice {
 	@ModelAttribute
 	public CommentForm commentData() {
 		return new CommentForm();
-	}
-	
-	@ModelAttribute
-	public LikeCountForm likeCountData() {
-		return new LikeCountForm();
 	}
 	
 	@ModelAttribute

@@ -31,7 +31,6 @@ import com.chinjja.issue.form.CafeForm;
 import com.chinjja.issue.form.CategoryForm;
 import com.chinjja.issue.form.CommentForm;
 import com.chinjja.issue.form.JoinCafeForm;
-import com.chinjja.issue.form.LikeCountForm;
 import com.chinjja.issue.form.PostForm;
 
 import lombok.Data;
@@ -224,20 +223,23 @@ public class CafeService {
 	}
 	
 	@Transactional
-	public LikeCount createLikeCount(User user, LikeCountForm form) {
-		val likable = likableRepo.findById(form.getLikableId()).get();
+	public LikeCount createLikeCount(User user, Likable likable) {
 		val likeCount = LikeCount.create(likable, user);
 		return likeCountRepo.save(likeCount);
 	}
 	
 	@Transactional
-	public void toggleLikeCount(User user, LikeCountForm form) {
-		val likable = likableRepo.findById(form.getLikableId()).get();
-		val like = likeCountRepo.findById(new LikeCount.Id(likable, user)).orElse(null);
+	public void deleteLikeCount(LikeCount id) {
+		likeCountRepo.delete(id);
+	}
+	
+	@Transactional
+	public void toggleLikeCount(User user, Likable likable) {
+		val like = getLikeCount(likable, user);
 		if(like == null) {
-			createLikeCount(user, form);
+			createLikeCount(user, likable);
 		} else {
-			likeCountRepo.delete(like);
+			deleteLikeCount(like);
 		}
 	}
 	
