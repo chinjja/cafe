@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.chinjja.issue.domain.Cafe;
+import com.chinjja.issue.domain.CafeMember;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.LikeCount;
 import com.chinjja.issue.domain.Category.Type;
@@ -28,6 +29,7 @@ import com.chinjja.issue.domain.User;
 import com.chinjja.issue.form.CafeForm;
 import com.chinjja.issue.form.CategoryForm;
 import com.chinjja.issue.form.CommentForm;
+import com.chinjja.issue.form.JoinCafeForm;
 import com.chinjja.issue.form.PostForm;
 import com.chinjja.issue.service.CafeService;
 import com.chinjja.issue.service.UserService;
@@ -46,11 +48,18 @@ public class CafeServiceTests {
 	
 	@Nested
 	class WithUser {
-		User user;
+		User owner;
+		
+		User new_user(String username, String password) {
+			return userService.create(User.builder()
+					.username(username)
+					.password(password)
+					.build());
+		}
 		
 		@BeforeEach
 		void createCafe() {
-			user = userService.byUsername(username);
+			owner = userService.byUsername(username);
 		}
 		
 		@Test
@@ -95,7 +104,7 @@ public class CafeServiceTests {
 			form.setNeedApproval(false);
 			form.setPrivacy(false);
 			
-			return cafeService.createCafe(form, user);
+			return cafeService.createCafe(form, owner);
 		}
 		
 		@Nested
@@ -210,7 +219,7 @@ public class CafeServiceTests {
 						val form = new PostForm();
 						form.setTitle("post1");
 						form.setContents("post1's content");
-						return cafeService.createPost(user, category, form);
+						return cafeService.createPost(owner, category, form);
 					}
 					
 					@Nested
@@ -251,20 +260,20 @@ public class CafeServiceTests {
 						@Test
 						void shouldFailWithoutCommentText() {
 							val form = new CommentForm();
-							cafeService.createComment(user, post, form);
+							cafeService.createComment(owner, post, form);
 							assertThrows(Throwable.class, () -> {
 								em.flush();
 							});
 						}
 						
 						LikeCount new_like_count() {
-							return cafeService.createLikeCount(user, post);
+							return cafeService.createLikeCount(owner, post);
 						}
 						
 						Comment new_comment(Likable likable) {
 							val form = new CommentForm();
 							form.setComment("hi");
-							return cafeService.createComment(user, likable, form);
+							return cafeService.createComment(owner, likable, form);
 						}
 						
 						@Nested
@@ -354,6 +363,95 @@ public class CafeServiceTests {
 					}
 				}
 			}
+			
+			@Test
+			void shouldFailWithoutGreeting() {
+				val form = new JoinCafeForm();
+				form.setGreeting("");
+				assertThrows(Throwable.class, () -> {
+					cafeService.joinCafe(cafe, owner, form);
+					em.flush();
+				});
+			}
+			
+			@Test
+			void shouldHaveEmptyMember() {
+				em.flush();
+				em.clear();
+				val load_cafe = cafeService.getCafeById(cafe.getId());
+				assertEquals(0, load_cafe.getMemberCount());
+				assertTrue(load_cafe.getMembers().isEmpty());
+			}
+			
+			@Test
+			void onwerCannotBeMember() {
+				assertThrows(Throwable.class, () -> {
+					val form = new JoinCafeForm();
+					form.setGreeting("hi");
+					cafeService.joinCafe(cafe, owner, form);
+				});
+			}
+			
+			@Test
+			void shouldBeOwnerAtThisCafe() {
+				assertTrue(cafeService.isOwner(cafe, owner));
+				assertTrue(cafeService.isJoined(cafe, owner));
+			}
+			
+			@Nested
+			class Join {
+				CafeMember cafeMember;
+				User member;
+				
+				@BeforeEach
+				void create() {
+					member = new_user("other", "1234");
+					
+					val form = new JoinCafeForm();
+					form.setGreeting("hi");
+					cafeMember = cafeService.joinCafe(cafe, member, form);
+					em.flush();
+				}
+				
+				@Test
+				void shouldBeMemberAtThisCafe() {
+					assertTrue(cafeService.isMember(cafe, member));
+					assertTrue(cafeService.isJoined(cafe, member));
+				}
+				
+				@Test
+				void shouldExistsMember() {
+					assertNotNull(cafeMember);
+					assertEquals(cafeMember, cafeService.getCafeMemberById(cafeMember.getId()));
+					assertTrue(cafeService.isMember(cafe, member));
+					
+					em.flush();
+					em.clear();
+					val load_cafe = cafeService.getCafeById(cafe.getId());
+					
+					assertEquals(1, load_cafe.getMemberCount());
+					assertEquals(1, load_cafe.getMembers().size());
+				}
+				
+				@Test
+				void delete() {
+					em.flush();
+					cafeService.leaveCafe(cafe, member);
+					assertFalse(cafeService.isMember(cafe, member));
+					
+					em.flush();
+					em.clear();
+					val load_cafe = cafeService.getCafeById(cafe.getId());
+					assertEquals(0, load_cafe.getMemberCount());
+					assertTrue(load_cafe.getMembers().isEmpty());
+				}
+				
+				@Test
+				void cascadeDelete() {
+					em.flush();
+					deleteCafe();
+				}
+			}
 		}
 		
 		@Nested
@@ -369,7 +467,7 @@ public class CafeServiceTests {
 				form.setNeedApproval(false);
 				form.setPrivacy(true);
 				
-				cafe = cafeService.createCafe(form, user);
+				cafe = cafeService.createCafe(form, owner);
 			}
 			
 			@Test
@@ -398,7 +496,7 @@ public class CafeServiceTests {
 				form.setNeedApproval(true);
 				form.setPrivacy(false);
 				
-				cafe = cafeService.createCafe(form, user);
+				cafe = cafeService.createCafe(form, owner);
 			}
 			
 			@Test
