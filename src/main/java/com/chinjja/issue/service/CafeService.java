@@ -81,6 +81,10 @@ public class CafeService {
 		postRepo.delete(post);
 	}
 	
+	public Post getPostById(Long id) {
+		return postRepo.findById(id).get();
+	}
+	
 	@Transactional
 	public void deleteComment(Comment comment) {
 		for(val child : comment.getComments()) {
@@ -109,6 +113,10 @@ public class CafeService {
 		return cafe.getOwner().getId().equals(user.getId());
 	}
 	
+	public boolean isOwner(String cafeId, User user) {
+		return isOwner(getCafeById(cafeId), user);
+	}
+	
 	public boolean isMember(Cafe cafe, User user) {
 		val cm = cafeMemberRepo.findById(new CafeMember.Id(cafe, user)).orElse(null);
 		if(cm == null) return false;
@@ -126,20 +134,20 @@ public class CafeService {
 	}
 	
 	@Transactional
-	public void approveMember(Cafe cafe, User member) {
+	public CafeMember approveMember(Cafe cafe, User member) {
 		val cm = cafeMemberRepo.findById(new CafeMember.Id(cafe, member)).get();
 		cm.setApproved(true);
-		cafeMemberRepo.save(cm);
+		return cafeMemberRepo.save(cm);
 	}
 	
 	@Transactional
-	public void joinCafe(Cafe cafe, User user, JoinCafeForm form) {
+	public CafeMember joinCafe(Cafe cafe, User user, JoinCafeForm form) {
 		val cm = CafeMember.builder()
 				.id(new CafeMember.Id(cafe, user))
 				.greeting(form.getGreeting())
 				.approved(!cafe.isNeedApproval())
 				.build();
-		cafeMemberRepo.save(cm);
+		return cafeMemberRepo.save(cm);
 	}
 	
 	@Transactional
@@ -147,8 +155,12 @@ public class CafeService {
 		cafeMemberRepo.deleteById(new CafeMember.Id(cafe, user));
 	}
 	
-	public boolean isAuthor(Likable target, User user) {
-		return target.getUser().getId().equals(user.getId());
+	public boolean isAuthor(Likable likable, User user) {
+		return likable.getUser().getId().equals(user.getId());
+	}
+	
+	public boolean isAuthor(Long likableId, User user) {
+		return isAuthor(getLikableById(likableId), user);
 	}
 	
 	public boolean hasCafe(String id) {
@@ -156,7 +168,7 @@ public class CafeService {
 	}
 	
 	@Transactional
-	public void createCafe(CafeForm form, User user) {
+	public Cafe createCafe(CafeForm form, User user) {
 		if(hasCafe(form.getId())) throw new IllegalArgumentException(form.getId() +" already exists");
 		val cafe = Cafe.builder()
 				.id(form.getId())
@@ -165,7 +177,7 @@ public class CafeService {
 				.needApproval(form.isNeedApproval())
 				.owner(user)
 				.build();
-		cafeRepo.save(cafe);
+		return cafeRepo.save(cafe);
 	}
 	
 	@Transactional
@@ -180,6 +192,14 @@ public class CafeService {
 		cafeRepo.delete(cafe);
 	}
 	
+	public Iterable<Cafe> getCafeList() {
+		return cafeRepo.findAll();
+	}
+	
+	public Cafe getCafeById(String id) {
+		return cafeRepo.findById(id).get();
+	}
+	
 	@Transactional
 	public Comment createComment(User user, CommentForm form) {
 		Comment comment = Comment.builder()
@@ -190,17 +210,25 @@ public class CafeService {
 		return commentRepo.save(comment);
 	}
 	
+	public Comment getCommentById(Long id) {
+		return commentRepo.findById(id).get();
+	}
+	
+	public Likable getLikableById(Long id) {
+		return likableRepo.findById(id).get();
+	}
+	
 	@Transactional
 	public LikeCount createLikeCount(User user, LikeCountForm form) {
-		val target = likableRepo.findById(form.getLikableId()).get();
-		val likeCount = LikeCount.create(target, user);
+		val likable = likableRepo.findById(form.getLikableId()).get();
+		val likeCount = LikeCount.create(likable, user);
 		return likeCountRepo.save(likeCount);
 	}
 	
 	@Transactional
 	public void toggleLikeCount(User user, LikeCountForm form) {
-		val target = likableRepo.findById(form.getLikableId()).get();
-		val like = likeCountRepo.findById(new LikeCount.Id(target, user)).orElse(null);
+		val likable = likableRepo.findById(form.getLikableId()).get();
+		val like = likeCountRepo.findById(new LikeCount.Id(likable, user)).orElse(null);
 		if(like == null) {
 			createLikeCount(user, form);
 		} else {
@@ -223,6 +251,14 @@ public class CafeService {
 		return categoryRepo.save(category);
 	}
 	
+	public Category getCategoryById(Long id) {
+		return categoryRepo.findById(id).get();
+	}
+	
+	public Iterable<Category> getRootCateforyList(Cafe cafe) {
+		return categoryRepo.findAllByCafeAndParentIsNull(cafe);
+	}
+	
 	public Iterable<CafeMember> getNotApprovedMembers(User owner) {
 		val list = new ArrayList<CafeMember>();
 		for(val cafe : owner.getCafes()) {
@@ -231,8 +267,8 @@ public class CafeService {
 		return list;
 	}
 	
-	public boolean canLikeCount(Likable target, User user) {
-		val like = likeCountRepo.findById(new LikeCount.Id(target, user)).orElse(null);
+	public boolean canLikeCount(Likable likable, User user) {
+		val like = likeCountRepo.findById(new LikeCount.Id(likable, user)).orElse(null);
 		return like == null;
 	}
 	
