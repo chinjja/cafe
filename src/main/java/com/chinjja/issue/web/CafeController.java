@@ -227,7 +227,7 @@ public class CafeController {
 		val post = cafeService.getPostById(postId);
 		model.addAttribute("activeCafe", post.getCategory().getCafe());
 		model.addAttribute("activePost", post);
-		model.addAttribute("canLike", cafeService.canLikeCount(post, user));
+		model.addAttribute("isLiked", cafeService.isLiked(post, user));
 		model.addAttribute("activeCategory", post.getCategory());
 		
 		cafeService.visit(user, post);

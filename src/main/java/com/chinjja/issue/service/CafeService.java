@@ -234,6 +234,11 @@ public class CafeService {
 	}
 	
 	@Transactional
+	public void toggleLikeCount(LikeCount likeCount) {
+		toggleLikeCount(likeCount.getId().getUser(), likeCount.getId().getLikable());
+	}
+	
+	@Transactional
 	public void toggleLikeCount(User user, Likable likable) {
 		val like = getLikeCount(likable, user);
 		if(like == null) {
@@ -272,11 +277,6 @@ public class CafeService {
 			list.addAll(cafeMemberRepo.findByIdCafeAndApproved(cafe, false));
 		}
 		return list;
-	}
-	
-	public boolean canLikeCount(Likable likable, User user) {
-		val like = likeCountRepo.findById(new LikeCount.Id(likable, user)).orElse(null);
-		return like == null;
 	}
 	
 	public void visit(User user, Post post) {
