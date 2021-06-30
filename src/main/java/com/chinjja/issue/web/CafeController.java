@@ -283,7 +283,11 @@ public class CafeController {
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe,
 			@Valid CategoryForm form,
+			BindingResult errors,
 			Model model) {
+		if(errors.hasErrors()) {
+			return "cafe";
+		}
 		cafeService.createCategory(cafe, form);
 		val categoryList = cafeService.getRootCateforyList(cafe);
 		model.addAttribute("categoryList", categoryList);
