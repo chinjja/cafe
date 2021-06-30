@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.chinjja.issue.domain.Cafe;
@@ -144,10 +145,12 @@ public class CafeController {
 	public String approveMember(
 			@AuthenticationPrincipal User user,
 			@RequestParam String cafeId,
-			@RequestParam Long memberId) {
+			@RequestParam Long memberId,
+			RedirectAttributes rttr) {
 		val cafe = cafeService.getCafeById(cafeId);
 		val member = userService.byId(memberId);
 		cafeService.approveMember(cafe, member);
+		rttr.addFlashAttribute("active_tab", 2);
 		return "redirect:/my-cafe";
 	}
 	

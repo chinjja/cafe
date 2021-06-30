@@ -2,13 +2,13 @@
 	<div layout:fragment="content">
 		<nav>
 			<div class="nav nav-tabs" id="nav-tab" role="tablist">
-				<button class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-owner" type="button" role="tab" th:text="|#{cafe.myCafe} ${user.cafes.size()}|"></button>
-				<button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-member" type="button" role="tab" th:text="|#{cafe.memberCafe} ${user.joinedCafes.size()}|"></button>
-				<button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-request" type="button" role="tab" th:text="|#{cafe.requestToJoin} ${notApprovedMemberList.size()}|"></button>
+				<button class="nav-link" th:classappend="${active_tab == null OR active_tab == 0} ? 'active'" data-bs-toggle="tab" data-bs-target="#nav-owner" type="button" role="tab" th:text="|#{cafe.myCafe} ${user.cafes.size()}|"></button>
+				<button class="nav-link" th:classappend="${active_tab == 1} ? 'active'" data-bs-toggle="tab" data-bs-target="#nav-member" type="button" role="tab" th:text="|#{cafe.memberCafe} ${user.joinedCafes.size()}|"></button>
+				<button class="nav-link" th:classappend="${active_tab == 2} ? 'active'" data-bs-toggle="tab" data-bs-target="#nav-request" type="button" role="tab" th:text="|#{cafe.requestToJoin} ${notApprovedMemberList.size()}|"></button>
 			</div>
 		</nav>
 		<div class="tab-content py-2" id="nav-tabContent">
-			<div class="tab-pane fade show active" id="nav-owner" role="tabpanel">
+			<div class="tab-pane fade" th:classappend="${active_tab == null OR active_tab == 0} ? 'show active'" id="nav-owner" role="tabpanel">
 				<a class="btn btn-primary mb-2" role="button" th:href="@{/create-cafe}" th:text="#{cafe.newCafe}"></a>
 				<div class="row g-2" th:if="${user != null}">
 					<div class="col-12 col-md-6" th:each="cafe : ${user.cafes}">
@@ -16,14 +16,14 @@
 					</div>
 				</div>
 			</div>
-			<div class="tab-pane fade" id="nav-member" role="tabpanel">
+			<div class="tab-pane fade" th:classappend="${active_tab == 1} ? 'show active'" id="nav-member" role="tabpanel">
 				<div class="row g-2" th:if="${user != null}">
 					<div class="col-12 col-md-6" th:each="cafe : ${user.joinedCafes}">
 						<div th:replace="fragments/cafe(${cafe.id.cafe})"></div>
 					</div>
 				</div>
 			</div>
-			<div class="tab-pane fade" id="nav-request" role="tabpanel">
+			<div class="tab-pane fade" th:classappend="${active_tab == 2} ? 'show active'" id="nav-request" role="tabpanel">
 				<table class="table table-bordered">
 					<thead>
 						<tr>
