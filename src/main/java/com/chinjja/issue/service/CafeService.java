@@ -63,10 +63,10 @@ public class CafeService {
 	}
 	
 	@Transactional
-	public Post createPost(User user, PostForm form) {
+	public Post createPost(User user, Category category, PostForm form) {
 		Post post = Post.builder()
 				.user(user)
-				.category(categoryRepo.findById(form.getCategoryId()).get())
+				.category(category)
 				.title(form.getTitle())
 				.contents(form.getContents())
 				.build();
