@@ -144,6 +144,9 @@ public class CafeService {
 	
 	@Transactional
 	public CafeMember joinCafe(Cafe cafe, User user, JoinCafeForm form) {
+		if(cafe.getOwner().getId() == user.getId())
+			throw new IllegalArgumentException("owner cannot be member");
+		
 		val cm = CafeMember.builder()
 				.id(new CafeMember.Id(cafe, user))
 				.greeting(form.getGreeting())
