@@ -2,9 +2,9 @@
 	<div class="container-fluid">
 		<a class="navbar-brand" th:href="@{/}" th:text="#{fragments.nav.brand}"></a>
 		<div class="d-flex flex-row me-auto">
-			<div class="badge rounded-pill bg-secondary me-2" th:each="profile : ${activeProfileList}" th:if="${profile != 'prod'}" th:text="${profile}"></div>
+			<div class="badge rounded-pill bg-danger me-2" th:each="profile : ${activeProfileList}" th:if="${profile != 'prod'}" th:text="${profile}"></div>
 			<div th:if="${user != null}">
-				<div th:replace="links/user(${user}, 'badge rounded-pill bg-danger me-2')"></div>
+				<div th:replace="links/user(${user}, 'badge rounded-pill me-2 ' + ${user.isAdmin() ? 'bg-primary' : 'bg-secondary'})"></div>
 			</div>
 		</div>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
