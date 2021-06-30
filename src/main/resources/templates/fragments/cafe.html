@@ -1,0 +1,18 @@
+<div th:fragment="cafe(cafe)">
+	<div class="card pb-3">
+		<div class="card-body">
+			<div class="row">
+				<div class="d-flex">
+					<div th:replace="links/cafe(${cafe}, 'stretched-link h5')"></div>
+					<span class="text-muted ms-3" th:if="${cafe.privacy}">privacy</span>
+				</div>
+				<span class="text-muted" th:text="#{fragments.cafe.createdAt} + ': ' + ${#temporals.format(cafe.createdAt)}"></span>
+				<span class="text-muted" th:text="#{fragments.cafe.owner} + ': ' + ${cafe.owner.username}"></span>
+				<div class="d-flex justify-content-between">
+					<span class="text-muted" th:text="#{fragments.cafe.memberCount} + ': ' + ${cafe.memberCount}"></span>
+					<span class="text-muted" th:text="${cafe.needApproval} ? '관리자 승인'"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

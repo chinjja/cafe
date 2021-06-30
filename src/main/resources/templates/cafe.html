@@ -1,0 +1,5 @@
+<html layout:decorate="~{layouts/sidebarLayout}">
+	<div layout:fragment="content">
+		<div th:replace="fragments/posts(${activeCategory})"></div>
+	</div>
+</html>

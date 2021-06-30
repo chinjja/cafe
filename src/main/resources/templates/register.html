@@ -1,10 +1,10 @@
-<html layout:decorate="~{layouts/layout}">
+<html layout:decorate="~{layouts/navLayout}">
 	<div layout:fragment="content">
 		<div class="page-header">
 			<h1 th:text="#{register.header}"></h1>
 		</div>
 	
-		<form method="POST" th:object="${registerForm}" th:action="@{/register}" id="loginForm">
+		<form method="POST" th:object="${registerForm}" th:action="@{/create-user}" id="loginForm">
 			<div class="row-cols-1">
 				<div class="form-group mb-2">
 					<label for="username" th:text="#{register.username}">: </label>

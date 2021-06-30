@@ -1,0 +1,1 @@
+<a th:fragment="user(user, class)" th:class="${class}" th:href="@{/user/{username}(username=${user.username})}" th:text="${user.username}"></a>

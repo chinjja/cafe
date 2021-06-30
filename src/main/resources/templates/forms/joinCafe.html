@@ -1,0 +1,15 @@
+<div th:fragment="joinCafe(cafe)">
+	<div class="mb-2">
+		<span class="text-danger" th:if="${cafe.needApproval}">운영자의 승인이 필요한 카페입니다.</span>
+	</div>
+	<form method="POST" th:action="@{/join-cafe}" th:object="${joinCafeForm}" id="joinCafe" class="row g-3">
+		<div class="form-floating">
+			<input class="form-control" th:field="*{greeting}" th:placeholder="#{forms.joinCafe.greeting}" autocomplete="off"/>
+			<label for="greeting" th:text="#{forms.joinCafe.greeting}"></label>
+			<div class="alert alert-danger" th:errors="*{greeting}"></div>
+		</div>
+		<div class="form-group">
+			<input type="submit" class="btn btn-outline-primary w-100" th:value="#{forms.joinCafe.submit}"/>
+		</div>
+	</form>
+</div>

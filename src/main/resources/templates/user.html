@@ -1,25 +1,45 @@
-<html layout:decorate="~{layouts/layout}">
-	<div layout:fragment="content">
+<html layout:decorate="~{layouts/navLayout}">
+	<div layout:fragment="content" class="row g-2">
 		<div class="page-header">
 			<h1 th:text="#{user.header}"></h1>
 		</div>
-		<div class="input-group mb-2">
+		<div class="input-group">
 			<span class="input-group-text w-25" th:text="#{user.username}"></span>
-			<input type="datetime" class="form-control" th:if="${selectedUser != null}" th:value="${selectedUser.username}"/>
+			<input class="form-control" th:if="${activeUser != null}" th:value="${activeUser.username}"/>
 		</div>
 		<div class="input-group">
 			<span class="input-group-text w-25" th:text="#{user.role}"></span>
 			<div class="form-control">
-				<ul class="list-group list-group-flush" th:if="${selectedUser != null}" >
-					<li class="list-group-item" th:each="authority : ${selectedUser.authorities}">
-						<span th:text="${authority}"></span>
+				<ul class="list-group list-group-flush" th:if="${activeUser != null}" >
+					<li class="list-group-item" th:each="role : ${activeUser.roles}">
+						<span th:text="${role.id.role}"></span>
 					</li>
 				</ul>
 			</div>
 		</div>
-		<div th:if="${selectedUser == user}">
+		<div class="input-group" th:if="${user != null} AND ${activeUser != null} AND ${user.id == activeUser.id}">
+			<span class="input-group-text w-25" th:text="#{user.ownerCafes}"></span>
+			<div class="form-control">
+				<ul class="list-group list-group-flush" th:if="${activeUser != null}" >
+					<li class="list-group-item" th:each="cafe : ${activeUser.cafes}">
+						<div th:replace="links/cafe(${cafe}, null)"></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="input-group">
+			<span class="input-group-text w-25" th:text="#{user.memberCafes}"></span>
+			<div class="form-control">
+				<ul class="list-group list-group-flush" th:if="${activeUser != null}" >
+					<li class="list-group-item" th:each="cafe : ${activeUser.joinedCafes}">
+						<div th:replace="links/cafe(${cafe.id.cafe}, null)"></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div th:if="${user != null} AND ${activeUser != null} AND ${user.id == activeUser.id}">
 			<hr/>
-			<div th:replace="forms/changePassword(${user})"></div>
+			<div th:replace="forms/changePassword(${activeUser})"></div>
 		</div>
 	</div>
 </html>
