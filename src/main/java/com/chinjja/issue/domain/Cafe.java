@@ -28,13 +28,14 @@ import lombok.ToString;
 @NoArgsConstructor
 public class Cafe {
 	@Builder(toBuilder = true)
-	public Cafe(String id, String name, String description, boolean needApproval, LocalDateTime createdAt, User owner) {
+	public Cafe(String id, String name, String description, boolean needApproval, LocalDateTime createdAt, User owner, boolean privacy) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.needApproval = needApproval;
 		this.createdAt = createdAt;
 		this.owner = owner;
+		this.privacy = privacy;
 	}
 	
 	@Id
@@ -45,6 +46,7 @@ public class Cafe {
 	private String description;
 	private boolean needApproval;
 	private LocalDateTime createdAt;
+	private boolean privacy;
 	
 	@PrePersist
 	private void createdAt() {

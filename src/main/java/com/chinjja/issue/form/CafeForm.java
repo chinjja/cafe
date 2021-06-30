@@ -13,4 +13,5 @@ public class CafeForm {
 	private String name;
 	private String description;
 	private boolean needApproval;
+	private boolean privacy;
 }

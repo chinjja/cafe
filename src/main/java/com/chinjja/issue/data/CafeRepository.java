@@ -9,4 +9,5 @@ import com.chinjja.issue.domain.User;
 
 public interface CafeRepository extends PagingAndSortingRepository<Cafe, String> {
 	List<Cafe> findAllByOwner(User owner);
+	List<Cafe> findAllByPrivacy(boolean privacy);
 }

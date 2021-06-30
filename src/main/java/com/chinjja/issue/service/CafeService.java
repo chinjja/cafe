@@ -176,6 +176,7 @@ public class CafeService {
 				.description(form.getDescription())
 				.needApproval(form.isNeedApproval())
 				.owner(user)
+				.privacy(form.isPrivacy())
 				.build();
 		return cafeRepo.save(cafe);
 	}
@@ -193,7 +194,7 @@ public class CafeService {
 	}
 	
 	public Iterable<Cafe> getCafeList() {
-		return cafeRepo.findAll();
+		return cafeRepo.findAllByPrivacy(false);
 	}
 	
 	public Cafe getCafeById(String id) {
