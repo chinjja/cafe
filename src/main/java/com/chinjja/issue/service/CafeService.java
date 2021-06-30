@@ -81,7 +81,7 @@ public class CafeService {
 	}
 	
 	public Post getPostById(Long id) {
-		return postRepo.findById(id).get();
+		return postRepo.findById(id).orElse(null);
 	}
 	
 	@Transactional
@@ -117,7 +117,7 @@ public class CafeService {
 	}
 	
 	public boolean isMember(Cafe cafe, User user) {
-		val cm = cafeMemberRepo.findById(new CafeMember.Id(cafe, user)).orElse(null);
+		val cm = getCafeMemberById(new CafeMember.Id(cafe, user));
 		if(cm == null) return false;
 		return cm.isApproved();
 	}
@@ -127,14 +127,17 @@ public class CafeService {
 	}
 	
 	public boolean isApproving(Cafe cafe, User user) {
-		val cm = cafeMemberRepo.findById(new CafeMember.Id(cafe, user)).orElse(null);
+		val cm = getCafeMemberById(new CafeMember.Id(cafe, user));
 		if(cm == null) return false;
 		return !cm.isApproved();
 	}
 	
+	public CafeMember getCafeMemberById(CafeMember.Id id) {
+		return cafeMemberRepo.findById(id).orElse(null);
+	}
 	@Transactional
 	public CafeMember approveMember(Cafe cafe, User member) {
-		val cm = cafeMemberRepo.findById(new CafeMember.Id(cafe, member)).get();
+		val cm = getCafeMemberById(new CafeMember.Id(cafe, member));
 		cm.setApproved(true);
 		return cafeMemberRepo.save(cm);
 	}
@@ -182,10 +185,10 @@ public class CafeService {
 	
 	@Transactional
 	public void deleteCafe(Cafe cafe) {
+		cafe = getCafeById(cafe.getId());
 		for(val category : categoryRepo.findAllByCafeAndParentIsNull(cafe)) {
 			deleteCategory(category);
 		}
-		cafe = cafeRepo.findById(cafe.getId()).get();
 		for(val member : cafe.getMembers()) {
 			cafeMemberRepo.delete(member);
 		}
@@ -201,7 +204,7 @@ public class CafeService {
 	}
 	
 	public Cafe getCafeById(String id) {
-		return cafeRepo.findById(id).get();
+		return cafeRepo.findById(id).orElse(null);
 	}
 	
 	@Transactional
@@ -215,11 +218,31 @@ public class CafeService {
 	}
 	
 	public Comment getCommentById(Long id) {
-		return commentRepo.findById(id).get();
+		return commentRepo.findById(id).orElse(null);
 	}
 	
 	public Likable getLikableById(Long id) {
-		return likableRepo.findById(id).get();
+		return likableRepo.findById(id).orElse(null);
+	}
+	
+	public LikeCount getLikeCountById(LikeCount.Id id) {
+		return likeCountRepo.findById(id).orElse(null);
+	}
+	
+	public LikeCount getLikeCount(Likable likable, User user) {
+		return getLikeCountById(new LikeCount.Id(likable, user));
+	}
+	
+	public boolean isLiked(LikeCount likeCount) {
+		return isLiked(likeCount.getId());
+	}
+	
+	public boolean isLiked(LikeCount.Id id) {
+		return likeCountRepo.existsById(id);
+	}
+	
+	public boolean isLiked(Likable likable, User user) {
+		return likeCountRepo.existsById(new LikeCount.Id(likable, user));
 	}
 	
 	@Transactional
@@ -252,7 +275,7 @@ public class CafeService {
 	public Category createCategory(Cafe cafe, CategoryForm form) {
 		Category parent = null;
 		if(form.getParentCategoryId() != null) {
-			parent = categoryRepo.findById(form.getParentCategoryId()).get();
+			parent = getCategoryById(form.getParentCategoryId());
 		}
 		val category = Category.builder()
 				.cafe(cafe)
@@ -264,7 +287,7 @@ public class CafeService {
 	}
 	
 	public Category getCategoryById(Long id) {
-		return categoryRepo.findById(id).get();
+		return categoryRepo.findById(id).orElse(null);
 	}
 	
 	public Iterable<Category> getRootCateforyList(Cafe cafe) {
