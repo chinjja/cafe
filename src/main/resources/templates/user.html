@@ -17,7 +17,7 @@
 				</ul>
 			</div>
 		</div>
-		<div class="input-group">
+		<div class="input-group" th:if="${user != null} AND ${activeUser != null} AND ${user.id == activeUser.id}">
 			<span class="input-group-text w-25" th:text="#{user.ownerCafes}"></span>
 			<div class="form-control">
 				<ul class="list-group list-group-flush" th:if="${activeUser != null}" >
