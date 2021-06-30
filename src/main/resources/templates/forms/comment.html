@@ -3,7 +3,6 @@
 		<div class="form-group">
 			<span class="h5" th:text="${user.username}"></span>
 		</div>
-		<input type="hidden" th:value="${likable.id}" th:name="likableId"/>
 		<div class="form-group">
 			<textarea class="form-control" th:field="*{comment}" th:placeholder="#{forms.comment.enterComment}" rows="4"></textarea>
 			<div class="alert alert-danger" th:errors="*{comment}"></div>

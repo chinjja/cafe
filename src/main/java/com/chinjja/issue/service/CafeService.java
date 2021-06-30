@@ -205,10 +205,10 @@ public class CafeService {
 	}
 	
 	@Transactional
-	public Comment createComment(User user, CommentForm form) {
+	public Comment createComment(User user, Likable likable, CommentForm form) {
 		Comment comment = Comment.builder()
 				.user(user)
-				.likable(likableRepo.findById(form.getLikableId()).get())
+				.likable(likable)
 				.comment(form.getComment())
 				.build();
 		return commentRepo.save(comment);
