@@ -2,6 +2,7 @@ package com.chinjja.issue.web;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,7 +39,7 @@ import lombok.val;
 
 @Controller
 @RequiredArgsConstructor
-@SessionAttributes({"activeCafe", "activePost", "categoryList", "activeCategory", "postPage", "postPageSize", "isJoined", "isApproving", "canLike"})
+@SessionAttributes({"activeCafe", "activePost", "categoryList", "activeCategory", "postPage", "isJoined", "isApproving", "canLike"})
 public class CafeController {
 	private final CafeService cafeService;
 	private final UserService userService;
@@ -109,7 +110,7 @@ public class CafeController {
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe) {
 		if(cafeService.isJoined(cafe, user)) {
-			return "redirect:/cafe/"+cafe.getId();
+			return "redirect:" + toCafeUrl(cafe, null, null);
 		}
 		return "joinCafe";
 	}
@@ -127,7 +128,7 @@ public class CafeController {
 		if(!cafeService.isJoined(cafe, user)) {
 			cafeService.joinCafe(cafe, user, form);
 		}
-		return "redirect:/cafe/"+cafe.getId();
+		return "redirect:" + toCafeUrl(cafe, null, null);
 	}
 	
 	@GetMapping("/leave-cafe")
@@ -136,7 +137,7 @@ public class CafeController {
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe) {
 		cafeService.leaveCafe(cafe, user);
-		return "redirect:/cafe/"+cafe.getId();
+		return "redirect:" + toCafeUrl(cafe, null, null);
 	}
 	
 	@GetMapping("/approve-member")
@@ -178,13 +179,8 @@ public class CafeController {
 		}
 		model.addAttribute("activeCafe", cafe);
 		model.addAttribute("categoryList", categoryList);
-		model.addAttribute("postList", posts);
+		model.addAttribute("postPage", posts);
 		model.addAttribute("activeCategory", activeCategory);
-		model.addAttribute("postFirstPage", posts.getPageable().first());
-		model.addAttribute("postPrevPage", posts.previousOrFirstPageable());
-		model.addAttribute("postNextPage", posts.nextOrLastPageable());
-		model.addAttribute("postPage", page);
-		model.addAttribute("postPageSize", size);
 		return "cafe";
 	}
 	
@@ -201,13 +197,14 @@ public class CafeController {
 	public String createPostForm(
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe,
+			@ModelAttribute("activeCategory") Category category,
 			@Valid PostForm form,
 			BindingResult errors) {
 		if(errors.hasErrors()) {
 			return "createPost";
 		}
-		cafeService.createPost(user, form);
-		return "redirect:/cafe/" + cafe.getId() + "?category=" + form.getCategoryId();
+		cafeService.createPost(user, category, form);
+		return "redirect:" + toCafeUrl(cafe, category, null);
 	}
 	
 	@PreAuthorize("isAuthenticated() and @cafeService.isAuthor(#postId, #user)")
@@ -216,12 +213,11 @@ public class CafeController {
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe,
 			@ModelAttribute("activeCategory") Category category,
-			@ModelAttribute("postPage") Integer page,
-			@ModelAttribute("postPageSize") Integer size,
+			@ModelAttribute("postPage") Page<Post> postPage,
 			@RequestParam("postId") Long postId) {
 		val post = cafeService.getPostById(postId);
 		cafeService.deletePost(post);
-		return "redirect:" + toCafeUrl(cafe, category, page, size);
+		return "redirect:" + toCafeUrl(cafe, category, postPage);
 	}
 	
 	@GetMapping("/post/{postId}")
@@ -293,7 +289,7 @@ public class CafeController {
 		cafeService.createCategory(cafe, form);
 		val categoryList = cafeService.getRootCateforyList(cafe);
 		model.addAttribute("categoryList", categoryList);
-		return "redirect:" + toCafeUrl(cafe, null, null, null);
+		return "redirect:" + toCafeUrl(cafe, null, null);
 	}
 	
 	@PreAuthorize("isAuthenticated() and @cafeService.isOwner(#cafe, #user)")
@@ -307,16 +303,21 @@ public class CafeController {
 		cafeService.deleteCategory(category);
 		val categoryList = cafeService.getRootCateforyList(cafe);
 		model.addAttribute("categoryList", categoryList);
-		return "redirect:" + toCafeUrl(cafe, null, null, null);
+		return "redirect:" + toCafeUrl(cafe, null, null);
 	}
 	
-	private String toCafeUrl(Cafe cafe, Category category, Integer page, Integer size) {
-		return UriComponentsBuilder.newInstance()
-				.path("/cafe/{cafeId}")
-				.queryParam("category", category == null ? null : category.getId())
-				.queryParam("page", page)
-				.queryParam("size", size)
-				.buildAndExpand(cafe.getId())
+	private String toCafeUrl(Cafe cafe, Category category, Page<Post> postPage) {
+		val builder =  UriComponentsBuilder.newInstance()
+				.path("/cafe/{cafeId}");
+		if(category != null) {
+			builder.queryParam("category", category.getId());
+		}
+		if(postPage != null) {
+			builder
+			.queryParam("page", postPage.getNumber())
+			.queryParam("size", postPage.getSize());
+		}
+		return builder.buildAndExpand(cafe.getId())
 				.encode().toUriString();
 	}
 }
