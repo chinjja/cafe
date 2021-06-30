@@ -193,8 +193,12 @@ public class CafeService {
 		cafeRepo.delete(cafe);
 	}
 	
-	public Iterable<Cafe> getCafeList() {
+	public Iterable<Cafe> getPublicCafeList() {
 		return cafeRepo.findAllByPrivacy(false);
+	}
+	
+	public long countPublicCafeList() {
+		return cafeRepo.countByPrivacy(false);
 	}
 	
 	public Cafe getCafeById(String id) {

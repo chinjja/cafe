@@ -49,7 +49,7 @@ public class CafeController {
 		if(user != null) {
 			return "redirect:/my-cafe";
 		}
-		model.addAttribute("cafeList", cafeService.getCafeList());
+		model.addAttribute("cafeList", cafeService.getPublicCafeList());
 		model.addAttribute("activeCafe", null);
 		return "cafes";
 	}
@@ -68,7 +68,7 @@ public class CafeController {
 	public String searchCafe(
 			@RequestParam(required = false) String search,
 			Model model) {
-		model.addAttribute("cafeList", cafeService.getCafeList());
+		model.addAttribute("cafeList", cafeService.getPublicCafeList());
 		model.addAttribute("activeCafe", null);
 		return "cafes";
 	}
