@@ -38,6 +38,7 @@ public class Category {
 	private final Long id = null;
 	
 	@NotBlank
+	@NotNull
 	private String name;
 	
 	@Builder.Default

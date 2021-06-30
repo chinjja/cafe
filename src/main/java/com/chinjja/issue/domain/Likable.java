@@ -35,7 +35,10 @@ public class Likable {
 	@Id
 	@GeneratedValue
 	private Long id;
+	
+	@NotNull
 	private LocalDateTime createdAt;
+	
 	@ManyToOne
 	@NotNull
 	private User user;

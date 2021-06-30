@@ -25,5 +25,6 @@ public class Comment extends Likable {
 	private Likable likable;
 	
 	@NotBlank
+	@NotNull
 	private String comment;
 }

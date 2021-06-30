@@ -30,9 +30,11 @@ public class Post extends Likable {
 	private Category category;
 	
 	@NotBlank
+	@NotNull
 	private String title;
 	
 	@NotBlank
+	@NotNull
 	private String contents;
 	
 	private int viewCount;

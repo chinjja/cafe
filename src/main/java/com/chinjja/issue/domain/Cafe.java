@@ -41,10 +41,14 @@ public class Cafe {
 	@Id
 	@Pattern(regexp = "[a-z0-9]{1,20}")
 	private String id;
+	
 	@NotBlank
+	@NotNull
 	private String name;
 	private String description;
 	private boolean needApproval;
+	
+	@NotNull
 	private LocalDateTime createdAt;
 	private boolean privacy;
 	
