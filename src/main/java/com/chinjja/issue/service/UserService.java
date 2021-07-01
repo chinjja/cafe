@@ -1,10 +1,10 @@
 package com.chinjja.issue.service;
 
 import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.chinjja.issue.data.UserRepository;
 import com.chinjja.issue.data.UserRoleRepository;
@@ -17,6 +17,7 @@ import lombok.val;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
 	private final UserRepository userRepo;
 	private final UserRoleRepository userRoleRepo;

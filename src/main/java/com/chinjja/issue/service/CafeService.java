@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.transaction.Transactional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.chinjja.issue.data.CafeMemberRepository;
 import com.chinjja.issue.data.CafeRepository;
@@ -39,6 +38,7 @@ import lombok.val;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CafeService {
 	private final LikableRepository likableRepo;
 	private final PostRepository postRepo;
