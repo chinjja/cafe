@@ -190,7 +190,7 @@ public class CafeService {
 	@Transactional
 	public void deleteCafe(Cafe cafe) {
 		cafe = getCafeById(cafe.getId());
-		for(val category : categoryRepo.findAllByCafeAndParentIsNull(cafe)) {
+		for(val category : cafe.getRootCategories()) {
 			deleteCategory(category);
 		}
 		for(val member : cafe.getMembers()) {
