@@ -83,6 +83,8 @@ public class User implements UserDetails {
 	private final ArrayList<GrantedAuthority> authorities = new ArrayList<>();
 	
 	@Formula("(select count(ur.role) from user_role ur where ur.user_id = id and ur.role = 'ROLE_ADMIN')")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	@Setter(AccessLevel.NONE)
 	private boolean admin;
 	
