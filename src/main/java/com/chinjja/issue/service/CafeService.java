@@ -304,6 +304,7 @@ public class CafeService {
 		return list;
 	}
 	
+	@Transactional
 	public void visit(User user, Post post) {
 		if(user == null) return;
 		val now = LocalDateTime.now();
