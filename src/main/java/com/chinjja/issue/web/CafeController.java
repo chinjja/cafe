@@ -39,7 +39,7 @@ import lombok.val;
 
 @Controller
 @RequiredArgsConstructor
-@SessionAttributes({"activeCafe", "activePost", "categoryList", "activeCategory", "postPage"})
+@SessionAttributes({"activeCafe", "activePost", "activeCategory", "postPage"})
 public class CafeController {
 	private final CafeService cafeService;
 	private final UserService userService;
@@ -167,7 +167,6 @@ public class CafeController {
 		if(category != null) {
 			activeCategory = cafeService.getCategoryById(category);
 		}
-		val categoryList = cafeService.getRootCateforyList(cafe);
 		if(page == null || size == null) {
 			page = 0;
 			size = 20;
@@ -176,7 +175,6 @@ public class CafeController {
 		
 		val posts = cafeService.getPostList(cafe, activeCategory, pageable);
 		model.addAttribute("activeCafe", cafe);
-		model.addAttribute("categoryList", categoryList);
 		model.addAttribute("postPage", posts);
 		model.addAttribute("activeCategory", activeCategory);
 		return "cafe";
@@ -287,8 +285,6 @@ public class CafeController {
 			return "cafe";
 		}
 		cafeService.createCategory(cafe, form);
-		val categoryList = cafeService.getRootCateforyList(cafe);
-		model.addAttribute("categoryList", categoryList);
 		return "redirect:" + toCafeUrl(cafe, null, null);
 	}
 	
@@ -301,8 +297,6 @@ public class CafeController {
 			Model model) {
 		val category = cafeService.getCategoryById(categoryId);
 		cafeService.deleteCategory(category);
-		val categoryList = cafeService.getRootCateforyList(cafe);
-		model.addAttribute("categoryList", categoryList);
 		return "redirect:" + toCafeUrl(cafe, null, null);
 	}
 	

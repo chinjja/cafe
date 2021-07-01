@@ -1,7 +1,9 @@
 package com.chinjja.issue.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -14,6 +16,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.Where;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -52,6 +55,13 @@ public class Cafe {
 	@ToString.Exclude
 	@Setter(AccessLevel.NONE)
 	private Set<CafeMember> members = new HashSet<>();
+	
+	@OneToMany(mappedBy = "cafe")
+	@Where(clause = "parent_id is null")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	@Setter(AccessLevel.NONE)
+	private List<Category> rootCategories = new ArrayList<>();
 	
 	@Formula("(select count(cm.member_id) from cafe_member cm where cm.cafe_id = id and cm.approved = true)")
 	@EqualsAndHashCode.Exclude
