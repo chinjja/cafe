@@ -76,6 +76,9 @@ public class CafeService {
 		for(val comment : post.getComments()) {
 			deleteComment(comment);
 		}
+		for(val like : post.getLikes()) {
+			deleteLikeCount(like);
+		}
 		postRepo.delete(post);
 	}
 	
@@ -88,6 +91,9 @@ public class CafeService {
 		for(val child : comment.getComments()) {
 			deleteComment(child);
 		}
+		for(val like : comment.getLikes()) {
+			deleteLikeCount(like);
+		}
 		commentRepo.delete(comment);
 	}
 	
@@ -96,15 +102,10 @@ public class CafeService {
 		for(val child : category.getCategories()) {
 			deleteCategory(child);
 		}
-		switch(category.getType()) {
-		case POST:
-			for(val post : category.getPosts()) {
-				deletePost(post);
-			}
-		case DIRECTORY:
-			categoryRepo.delete(category);
-			break;
+		for(val post : category.getPosts()) {
+			deletePost(post);
 		}
+		categoryRepo.delete(category);
 	}
 	
 	public boolean isOwner(Cafe cafe, User user) {
