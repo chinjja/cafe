@@ -67,6 +67,16 @@ public class User implements UserDetails {
 	@ToString.Exclude
 	private final List<CafeMember> joinedCafes = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "user")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private final List<Post> posts = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "user")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private final List<Comment> comments = new ArrayList<>();
+	
 	@Transient
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
