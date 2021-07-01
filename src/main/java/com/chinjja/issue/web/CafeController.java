@@ -39,7 +39,7 @@ import lombok.val;
 
 @Controller
 @RequiredArgsConstructor
-@SessionAttributes({"activeCafe", "activePost", "categoryList", "activeCategory", "postPage", "isJoined", "isApproving", "canLike"})
+@SessionAttributes({"activeCafe", "activePost", "categoryList", "activeCategory", "postPage", "isJoined", "isApproving", "isLiked"})
 public class CafeController {
 	private final CafeService cafeService;
 	private final UserService userService;
