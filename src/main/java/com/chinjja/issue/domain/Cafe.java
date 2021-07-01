@@ -34,6 +34,13 @@ public class Cafe {
 	@NotBlank
 	@NotNull
 	private String name;
+	
+	@NotBlank
+	@NotNull
+	private String welcome;
+	
+	@NotBlank
+	@NotNull
 	private String description;
 	private boolean needApproval;
 	

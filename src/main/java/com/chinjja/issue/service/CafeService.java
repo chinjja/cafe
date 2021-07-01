@@ -183,6 +183,7 @@ public class CafeService {
 		cafe.setId(form.getId());
 		cafe.setName(form.getName());
 		cafe.setDescription(form.getDescription());
+		cafe.setWelcome(form.getWelcome());
 		cafe.setNeedApproval(form.isNeedApproval());
 		cafe.setOwner(user);
 		cafe.setPrivacy(form.isPrivacy());

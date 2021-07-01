@@ -1,6 +1,11 @@
 <div th:fragment="joinCafe(cafe)">
 	<div class="mb-2">
-		<span class="text-danger" th:if="${cafe.needApproval}">운영자의 승인이 필요한 카페입니다.</span>
+		<div>
+			<span class="text-danger" th:if="${cafe.needApproval}">운영자의 승인이 필요한 카페입니다.</span>
+		</div>
+		<div>
+			<span th:text="${cafe.welcome}"></span>
+		</div>
 	</div>
 	<form method="POST" th:action="@{/join-cafe}" th:object="${joinCafeForm}" id="joinCafe" class="row g-3">
 		<div class="form-floating">

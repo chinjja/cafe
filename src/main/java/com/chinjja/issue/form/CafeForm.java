@@ -11,6 +11,9 @@ public class CafeForm {
 	private String id;
 	@NotBlank
 	private String name;
+	@NotBlank
+	private String welcome;
+	@NotBlank
 	private String description;
 	private boolean needApproval;
 	private boolean privacy;
