@@ -12,7 +12,7 @@
 					<ul class="list-group">
 						<li class="list-group-item" th:each="member : ${activeCafe.members}">
 							<span th:text="${member.greeting}"></span>
-							<div class="d-flex justify-content-between" th:if="${user != null} AND ${activeCafe.owner.id == user.id}">
+							<div class="d-flex justify-content-between" th:if="${isOwner}">
 								<div th:replace="links/user(${member.id.member}, '')"></div>
 								<span class="text-muted" th:text="${#temporals.format(member.createdAt)}"></span>
 							</div>
@@ -37,7 +37,7 @@
 				<span class="h4" th:text="${activeCafe.name}"></span>
 			</div>
 			<div th:if="${user != null}">
-				<a class="btn btn-danger" th:if="${activeCafe.owner.id == user.id}" th:href="@{/delete-cafe}" th:text="#{deleteCafe}"></a>
+				<a class="btn btn-danger" th:if="${isOwner}" th:href="@{/delete-cafe}" th:text="#{deleteCafe}"></a>
 				<div class="d-flex" th:if="${activeCafe.owner.id != user.id}">
 					<a class="btn btn-warning" th:if="${isApproving}" th:href="@{/leave-cafe}">요청취소</a>
 					<a class="btn btn-primary" th:if="${isJoined == false} AND ${isApproving == false}" th:href="@{/join-cafe}" th:text="#{joinCafe}"></a>
@@ -54,7 +54,7 @@
 			<div class="w-100">
 				<a class="btn btn-outline-primary text-start w-100 mb-2" th:classappend="${activeCategory == null}? 'active'" th:href="@{/cafe/{cafe}(cafe=${activeCafe.id})}" th:text="#{fragments.sidebar.all}"></a>
 				<div th:replace="fragments/categoryList(${categoryList})"></div>
-				<div th:if="${user != null} AND ${activeCafe.owner.id == user.id}">
+				<div th:if="${isOwner}">
 					<div th:replace="forms/category(null)"></div>
 				</div>
 			</div>

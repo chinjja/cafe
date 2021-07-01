@@ -39,7 +39,7 @@ import lombok.val;
 
 @Controller
 @RequiredArgsConstructor
-@SessionAttributes({"activeCafe", "activePost", "categoryList", "activeCategory", "postPage", "isJoined", "isApproving", "isLiked"})
+@SessionAttributes({"activeCafe", "activePost", "categoryList", "activeCategory", "postPage"})
 public class CafeController {
 	private final CafeService cafeService;
 	private final UserService userService;
@@ -175,10 +175,6 @@ public class CafeController {
 		val pageable = PageRequest.of(page, size, Direction.DESC, "createdAt");
 		
 		val posts = cafeService.getPostList(cafe, activeCategory, pageable);
-		if(user != null) {
-			model.addAttribute("isJoined", cafeService.isJoined(cafe, user));
-			model.addAttribute("isApproving", cafeService.isApproving(cafe, user));
-		}
 		model.addAttribute("activeCafe", cafe);
 		model.addAttribute("categoryList", categoryList);
 		model.addAttribute("postPage", posts);
@@ -230,7 +226,6 @@ public class CafeController {
 		val post = cafeService.getPostById(postId);
 		model.addAttribute("activeCafe", post.getCategory().getCafe());
 		model.addAttribute("activePost", post);
-		model.addAttribute("isLiked", cafeService.isLiked(post, user));
 		model.addAttribute("activeCategory", post.getCategory());
 		
 		cafeService.visit(user, post);
