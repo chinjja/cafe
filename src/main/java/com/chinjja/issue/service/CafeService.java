@@ -108,14 +108,17 @@ public class CafeService {
 	}
 	
 	public boolean isOwner(Cafe cafe, User user) {
+		if(user == null) return false;
 		return cafe.getOwner().getId().equals(user.getId());
 	}
 	
 	public boolean isOwner(String cafeId, User user) {
+		if(user == null) return false;
 		return isOwner(getCafeById(cafeId), user);
 	}
 	
 	public boolean isMember(Cafe cafe, User user) {
+		if(user == null) return false;
 		val cm = getCafeMemberById(new CafeMember.Id(cafe, user));
 		if(cm == null) return false;
 		return cm.isApproved();
@@ -126,6 +129,7 @@ public class CafeService {
 	}
 	
 	public boolean isApproving(Cafe cafe, User user) {
+		if(user == null) return false;
 		val cm = getCafeMemberById(new CafeMember.Id(cafe, user));
 		if(cm == null) return false;
 		return !cm.isApproved();
