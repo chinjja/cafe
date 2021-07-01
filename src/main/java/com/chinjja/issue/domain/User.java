@@ -1,5 +1,6 @@
 package com.chinjja.issue.domain;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -11,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -41,6 +43,14 @@ public class User implements UserDetails {
 	
 	@NotNull
 	private String password;
+	
+	@NotNull
+	private LocalDateTime createdAt;
+	
+	@PrePersist
+	private void createdAt() {
+		createdAt = LocalDateTime.now();
+	}
 	
 	@OneToMany(mappedBy = "id.user", fetch = FetchType.EAGER)
 	@EqualsAndHashCode.Exclude
