@@ -19,7 +19,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.chinjja.issue.data.UserRepository;
@@ -40,21 +39,19 @@ public class UserTests {
 	static final String password = "1234";
 
 	User new_user() {
-		return User.builder()
-				.id(null)
-				.username(username)
-				.password(password)
-				.build();
+		val user = new User();
+		user.setId(null);
+		user.setUsername(username);
+		user.setPassword(password);
+		return user;
 	}
 	
 	@Test
 	void shouleFailIfPasswordIsNull() {
 		assertThrows(Throwable.class, () -> {
-			userRepo.save(User.builder()
-					.id(null)
-					.username(username)
-					.password(null)
-					.build());
+			val user = new_user();
+			user.setPassword(null);
+			userRepo.save(user);
 			em.flush();
 		});
 	}
@@ -70,12 +67,12 @@ public class UserTests {
 	
 	@ParameterizedTest
 	@MethodSource
-	void shouldFailWithInvalidPattern(String username) {
-		val user = User.builder()
-				.id(null)
-				.username(username)
-				.password("1234")
-				.build();
+	void shouldFailWithInvalidPattern(String name) {
+		val user = new User();
+		user.setId(null);
+		user.setUsername(name);
+		user.setPassword("1234");
+		
 		assertThrows(Throwable.class, () -> {
 			userRepo.save(user);
 			em.flush();

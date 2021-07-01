@@ -10,17 +10,15 @@ import javax.persistence.PrePersist;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.Value;
 
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder(toBuilder = true)
 public class CafeMember {
 	@EmbeddedId
 	private Id id;
@@ -40,7 +38,7 @@ public class CafeMember {
 	}
 	
 	@Value
-	@NoArgsConstructor(force = true)
+	@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 	@AllArgsConstructor
 	public static class Id implements Serializable {
 		@ManyToOne

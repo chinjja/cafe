@@ -51,10 +51,10 @@ public class CafeServiceTests {
 		User owner;
 		
 		User new_user(String username, String password) {
-			return userService.create(User.builder()
-					.username(username)
-					.password(password)
-					.build());
+			val user = new User();
+			user.setUsername(username);
+			user.setPassword(password);
+			return userService.create(user);
 		}
 		
 		@BeforeEach

@@ -26,10 +26,9 @@ public class UserService {
 	@Transactional
 	public void onCreate() {
 		if(userRepo.findByUsername("admin") == null) {
-			val user = User.builder()
-					.username("admin")
-					.password("1234")
-					.build();
+			val user = new User();
+			user.setUsername("admin");
+			user.setPassword("1234");
 			create(user, "ROLE_ADMIN");
 		}
 	}
@@ -69,18 +68,15 @@ public class UserService {
 		if(password1 == null || !password1.equals(password2)) {
 			throw new IllegalArgumentException("invalid password");
 		}
-		val user = User.builder()
-				.username(form.getUsername())
-				.password(password1)
-				.build();
+		val user = new User();
+		user.setUsername(form.getUsername());
+		user.setPassword(password1);
 		return create(user);
 	}
 	
 	@Transactional
 	public User changePassword(User user, String newPassword) {
-		user = user.toBuilder()
-				.password(passwordEncoder.encode(newPassword))
-				.build();
+		user.setPassword(passwordEncoder.encode(newPassword));
 		return userRepo.save(user);
 	}
 	

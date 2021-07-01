@@ -17,19 +17,13 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Formula;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.experimental.SuperBuilder;
 
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@SuperBuilder(builderMethodName = "likable", toBuilder = true)
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Likable {
 	@Id

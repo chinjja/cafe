@@ -20,67 +20,50 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import lombok.Builder;
+import lombok.AccessLevel;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.val;
 
 @Entity
-@NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(onlyExplicitlyIncluded = true)
+@Data
 public class User implements UserDetails {
-	@Builder(toBuilder = true)
-	public User(Long id, String username, String password) {
-		this.id = id;
-		this.username = username;
-		this.password = password;
-	}
-	
 	@Id
 	@GeneratedValue
-	@EqualsAndHashCode.Include
-	@ToString.Include
-	@Getter
-	@Setter
 	private Long id;
 	
 	@Column(unique = true)
 	@NotNull
 	@Pattern(regexp = "[a-z0-9]{4,20}")
-	@EqualsAndHashCode.Include
-	@ToString.Include
-	@Getter
-	@Setter
 	private String username;
 	
 	@NotNull
-	@EqualsAndHashCode.Include
-	@ToString.Include
-	@Getter
-	@Setter
 	private String password;
 	
 	@OneToMany(mappedBy = "id.user", fetch = FetchType.EAGER)
-	@Getter
-	private List<UserRole> roles = new ArrayList<>();
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private final List<UserRole> roles = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "owner")
-	@Getter
-	private List<Cafe> cafes = new ArrayList<>();
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private final List<Cafe> cafes = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "id.member")
-	@Getter
-	private List<CafeMember> joinedCafes = new ArrayList<>();
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private final List<CafeMember> joinedCafes = new ArrayList<>();
 	
 	@Transient
-	private ArrayList<GrantedAuthority> authorities = new ArrayList<>();
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private final ArrayList<GrantedAuthority> authorities = new ArrayList<>();
 	
 	@Formula("(select count(ur.role) from user_role ur where ur.user_id = id and ur.role = 'ROLE_ADMIN')")
-	@Getter
+	@Setter(AccessLevel.NONE)
 	private boolean admin;
 	
 	@PostLoad

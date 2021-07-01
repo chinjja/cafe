@@ -16,28 +16,14 @@ import javax.validation.constraints.Pattern;
 import org.hibernate.annotations.Formula;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
 @Data
-@NoArgsConstructor
 public class Cafe {
-	@Builder(toBuilder = true)
-	public Cafe(String id, String name, String description, boolean needApproval, LocalDateTime createdAt, User owner, boolean privacy) {
-		this.id = id;
-		this.name = name;
-		this.description = description;
-		this.needApproval = needApproval;
-		this.createdAt = createdAt;
-		this.owner = owner;
-		this.privacy = privacy;
-	}
-	
 	@Id
 	@Pattern(regexp = "[a-z0-9]{1,20}")
 	private String id;

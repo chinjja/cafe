@@ -63,12 +63,11 @@ public class CafeService {
 	
 	@Transactional
 	public Post createPost(User user, Category category, PostForm form) {
-		Post post = Post.builder()
-				.user(user)
-				.category(category)
-				.title(form.getTitle())
-				.contents(form.getContents())
-				.build();
+		val post = new Post();
+		post.setUser(user);
+		post.setCategory(category);
+		post.setTitle(form.getTitle());
+		post.setContents(form.getContents());
 		return postRepo.save(post);
 	}
 	
@@ -147,11 +146,10 @@ public class CafeService {
 		if(cafe.getOwner().getId() == user.getId())
 			throw new IllegalArgumentException("owner cannot be member");
 		
-		val cm = CafeMember.builder()
-				.id(new CafeMember.Id(cafe, user))
-				.greeting(form.getGreeting())
-				.approved(!cafe.isNeedApproval())
-				.build();
+		val cm = new CafeMember();
+		cm.setId(new CafeMember.Id(cafe, user));
+		cm.setGreeting(form.getGreeting());
+		cm.setApproved(!cafe.isNeedApproval());
 		return cafeMemberRepo.save(cm);
 	}
 	
@@ -175,14 +173,13 @@ public class CafeService {
 	@Transactional
 	public Cafe createCafe(CafeForm form, User user) {
 		if(hasCafe(form.getId())) throw new IllegalArgumentException(form.getId() +" already exists");
-		val cafe = Cafe.builder()
-				.id(form.getId())
-				.name(form.getName())
-				.description(form.getDescription())
-				.needApproval(form.isNeedApproval())
-				.owner(user)
-				.privacy(form.isPrivacy())
-				.build();
+		val cafe = new Cafe();
+		cafe.setId(form.getId());
+		cafe.setName(form.getName());
+		cafe.setDescription(form.getDescription());
+		cafe.setNeedApproval(form.isNeedApproval());
+		cafe.setOwner(user);
+		cafe.setPrivacy(form.isPrivacy());
 		return cafeRepo.save(cafe);
 	}
 	
@@ -212,11 +209,10 @@ public class CafeService {
 	
 	@Transactional
 	public Comment createComment(User user, Likable likable, CommentForm form) {
-		Comment comment = Comment.builder()
-				.user(user)
-				.likable(likable)
-				.comment(form.getComment())
-				.build();
+		val comment = new Comment();
+		comment.setUser(user);
+		comment.setLikable(likable);
+		comment.setComment(form.getComment());
 		return commentRepo.save(comment);
 	}
 	
@@ -280,12 +276,11 @@ public class CafeService {
 		if(form.getParentCategoryId() != null) {
 			parent = getCategoryById(form.getParentCategoryId());
 		}
-		val category = Category.builder()
-				.cafe(cafe)
-				.parent(parent)
-				.name(form.getName())
-				.type(form.getType())
-				.build();
+		val category = new Category();
+		category.setCafe(cafe);
+		category.setParent(parent);
+		category.setName(form.getName());
+		category.setType(form.getType());
 		return categoryRepo.save(category);
 	}
 	
