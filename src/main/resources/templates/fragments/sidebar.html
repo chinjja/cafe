@@ -11,10 +11,10 @@
 				<div class="modal-body">
 					<ul class="list-group">
 						<li class="list-group-item" th:each="member : ${activeCafe.members}">
-							<span th:text="${member.greeting}"></span>
-							<div class="d-flex justify-content-between" th:if="${isOwner}">
+							<span th:if="${isOwner}" th:text="${member.greeting}"></span>
+							<div class="d-flex justify-content-between">
 								<div th:replace="links/user(${member.id.member}, '')"></div>
-								<span class="text-muted" th:text="${#temporals.format(member.createdAt)}"></span>
+								<span th:if="${isOwner}" class="text-muted" th:text="${#temporals.format(member.createdAt)}"></span>
 							</div>
 						</li>
 					</ul>
