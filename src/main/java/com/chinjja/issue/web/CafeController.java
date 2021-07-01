@@ -154,6 +154,19 @@ public class CafeController {
 		return "redirect:/my-cafe";
 	}
 	
+	@GetMapping("/expulse-member")
+	@PreAuthorize("isAuthenticated() and @cafeService.isOwner(#cafe, #user)")
+	public String expulseMember(
+			@AuthenticationPrincipal User user,
+			@ModelAttribute("activeCafe") Cafe cafe,
+			@RequestParam Long memberId,
+			RedirectAttributes rttr) {
+		val member = userService.byId(memberId);
+		cafeService.leaveCafe(cafe, member);
+		rttr.addFlashAttribute("show_member", 2);
+		return "redirect:" + toCafeUrl(cafe, null, null);
+	}
+	
 	@GetMapping("/cafe/{cafeId:[a-z0-9]+}")
 	public String cafe(
 			@AuthenticationPrincipal User user,

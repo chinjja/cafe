@@ -11,10 +11,15 @@
 				<div class="modal-body">
 					<ul class="list-group">
 						<li class="list-group-item" th:each="member : ${activeCafe.members}">
-							<span th:if="${isOwner}" th:text="${member.greeting}"></span>
-							<div class="d-flex justify-content-between">
-								<div th:replace="links/user(${member.id.member}, '')"></div>
-								<span th:if="${isOwner}" class="text-muted" th:text="${#temporals.format(member.createdAt)}"></span>
+							<div class="d-flex justify-content-between align-items-center">
+								<div class="flex-fill me-2">
+									<span th:if="${isOwner}" th:text="${member.greeting}"></span>
+									<div class="d-flex justify-content-between">
+										<div th:replace="links/user(${member.id.member}, '')"></div>
+										<span th:if="${isOwner}" class="text-muted" th:text="${#temporals.format(member.createdAt)}"></span>
+									</div>
+								</div>
+								<a th:if="${isOwner}" th:href="@{/expulse-member(memberId=${member.id.member.id})}" class="btn btn-danger">강퇴</a>
 							</div>
 						</li>
 					</ul>
