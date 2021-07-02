@@ -1,0 +1,37 @@
+<div th:fragment="cafe(cafe)">
+	<div class="page-header">
+		<h1>Edit cafe</h1>
+	</div>
+	<form method="POST" th:action="@{/edit-cafe}" th:object="${cafeForm}" id="editCafe" class="row g-3">
+		<div class="form-floating">
+			<input class="form-control" disabled id="id" name="id" th:value="${cafe.id}" th:placeholder="#{forms.cafe.id}" autocomplete="off"/>
+			<label for="id" th:text="#{forms.cafe.id}"></label>
+		</div>
+		<div class="form-floating">
+			<input class="form-control" id="name" name="name" th:value="${cafe.name}" th:placeholder="#{forms.cafe.name}" autocomplete="off"/>
+			<label for="name" th:text="#{forms.cafe.name}"></label>
+			<div class="alert alert-danger" th:errors="*{name}"></div>
+		</div>
+		<div class="form-floating">
+			<textarea class="form-control" id="description" name="description" th:text="${cafe.description}" th:placeholder="#{forms.cafe.description}" style="height: 100px"></textarea>
+			<label for="description" th:text="#{forms.cafe.description}"></label>
+			<div class="alert alert-danger" th:errors="*{description}"></div>
+		</div>
+		<div class="form-floating">
+			<input class="form-control" id="welcome" name="welcome" th:value="${cafe.welcome}" th:placeholder="#{forms.cafe.welcome}" autocomplete="off"/>
+			<label for="welcome" th:text="#{forms.cafe.welcome}"></label>
+			<div class="alert alert-danger" th:errors="*{welcome}"></div>
+		</div>
+		<div class="form-group">
+			<input class="form-check-input" type="checkbox" id="needApproval" name="needApproval" th:checked="${cafe.needApproval == true} ? 'checked'"/>
+			<label class="form-check-label" for="needApproval"> Require approval </label>
+		</div>
+		<div class="form-group">
+			<input class="form-check-input" type="checkbox" id="privacy" name="privacy" th:checked="${cafe.privacy == true} ? 'checked'"/>
+			<label class="form-check-label" for="privacy"> Privacy cafe </label>
+		</div>
+		<div class="form-group mt-3">
+			<input type="submit" class="btn btn-outline-primary w-100"/>
+		</div>
+	</form>
+</div>

@@ -95,6 +95,25 @@ public class CafeController {
 		return "redirect:/";
 	}
 	
+	@GetMapping("/edit-cafe")
+	@PreAuthorize("isAuthenticated() and @cafeService.isOwner(#cafe, #user)")
+	public String editCafe(
+			@AuthenticationPrincipal User user,
+			@ModelAttribute("activeCafe") Cafe cafe) {
+		return "editCafe";
+	}
+	
+	@PostMapping("/edit-cafe")
+	@PreAuthorize("isAuthenticated() and @cafeService.isOwner(#cafe, #user)")
+	public String editCafeForm(
+			@AuthenticationPrincipal User user,
+			@ModelAttribute("activeCafe") Cafe cafe,
+			@ModelAttribute("cafeForm") @Valid CafeForm form,
+			BindingResult errors) {
+		cafeService.editCafe(cafe, form);
+		return "redirect:" + toCafeUrl(cafe, null, null);
+	}
+	
 	@GetMapping("/delete-cafe")
 	@PreAuthorize("isAuthenticated() and @cafeService.isOwner(#cafe, #user)")
 	public String deleteCafe(

@@ -191,6 +191,16 @@ public class CafeService {
 	}
 	
 	@Transactional
+	public Cafe editCafe(Cafe cafe, CafeForm form) {
+		cafe.setName(form.getName());
+		cafe.setDescription(form.getDescription());
+		cafe.setWelcome(form.getWelcome());
+		cafe.setNeedApproval(form.isNeedApproval());
+		cafe.setPrivacy(form.isPrivacy());
+		return cafeRepo.save(cafe);
+	}
+	
+	@Transactional
 	public void deleteCafe(Cafe cafe) {
 		cafe = getCafeById(cafe.getId());
 		for(val category : cafe.getRootCategories()) {
