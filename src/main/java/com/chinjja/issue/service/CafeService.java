@@ -181,7 +181,7 @@ public class CafeService {
 		if(hasCafe(form.getId())) throw new IllegalArgumentException(form.getId() +" already exists");
 		val cafe = new Cafe();
 		cafe.setId(form.getId());
-		cafe.setName(form.getName());
+		cafe.setTitle(form.getTitle());
 		cafe.setDescription(form.getDescription());
 		cafe.setWelcome(form.getWelcome());
 		cafe.setNeedApproval(form.isNeedApproval());
@@ -192,7 +192,7 @@ public class CafeService {
 	
 	@Transactional
 	public Cafe editCafe(Cafe cafe, CafeForm form) {
-		cafe.setName(form.getName());
+		cafe.setTitle(form.getTitle());
 		cafe.setDescription(form.getDescription());
 		cafe.setWelcome(form.getWelcome());
 		cafe.setNeedApproval(form.isNeedApproval());

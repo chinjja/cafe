@@ -31,7 +31,7 @@ public class Cafe {
 	
 	@NotBlank
 	@NotNull
-	private String name;
+	private String title;
 	
 	@NotBlank
 	@NotNull

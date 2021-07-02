@@ -101,7 +101,7 @@ public class CafeServiceTests {
 			form.setDescription("this cafe is public");
 			form.setWelcome("welcome");
 			form.setId(id);
-			form.setName(name);
+			form.setTitle(name);
 			form.setNeedApproval(false);
 			form.setPrivacy(false);
 			
@@ -466,7 +466,7 @@ public class CafeServiceTests {
 				val form = new CafeForm();
 				form.setDescription("this cafe is privacy");
 				form.setId("cafe");
-				form.setName("Privacy cafe");
+				form.setTitle("Privacy cafe");
 				form.setWelcome("welcome");
 				form.setNeedApproval(false);
 				form.setPrivacy(true);
@@ -496,7 +496,7 @@ public class CafeServiceTests {
 				val form = new CafeForm();
 				form.setDescription("this cafe is approval");
 				form.setId("cafe");
-				form.setName("Approval cafe");
+				form.setTitle("Approval cafe");
 				form.setWelcome("welcome");
 				form.setNeedApproval(true);
 				form.setPrivacy(false);

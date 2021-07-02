@@ -9,9 +9,9 @@
 			<div class="alert alert-danger" th:errors="*{id}"></div>
 		</div>
 		<div class="form-floating">
-			<input class="form-control" th:field="*{name}" th:placeholder="#{forms.cafe.name}" autocomplete="off"/>
-			<label for="name" th:text="#{forms.cafe.name}"></label>
-			<div class="alert alert-danger" th:errors="*{name}"></div>
+			<input class="form-control" th:field="*{title}" th:placeholder="#{forms.cafe.name}" autocomplete="off"/>
+			<label for="title" th:text="#{forms.cafe.name}"></label>
+			<div class="alert alert-danger" th:errors="*{title}"></div>
 		</div>
 		<div class="form-floating">
 			<textarea class="form-control" th:field="*{description}" th:placeholder="#{forms.cafe.description}" style="height: 100px"></textarea>

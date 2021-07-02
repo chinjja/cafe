@@ -32,7 +32,7 @@ public class TestEntityGenerator {
 	Cafe cafe(String id, User owner) {
 		val cafe = new Cafe();
 		cafe.setId(id);
-		cafe.setName("cafe");
+		cafe.setTitle("cafe");
 		cafe.setDescription("cafe");
 		cafe.setOwner(owner);
 		cafe.setWelcome("cafe");

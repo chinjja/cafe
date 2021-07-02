@@ -8,8 +8,8 @@
 		<div th:replace="links/user(${activeCafe.owner}, 'badge rounded-pill bg-secondary me-2')"></div>
 		<div class="d-flex flex-fill justify-content-between align-items-center">
 			<div>
-				<a class="h4" th:if="${isOwner}" th:href="@{/edit-cafe}" th:text="${activeCafe.name}"></a>
-				<span class="h4" th:unless="${isOwner}" th:text="${activeCafe.name}"></span>
+				<a class="h4" th:if="${isOwner}" th:href="@{/edit-cafe}" th:text="${activeCafe.title}"></a>
+				<span class="h4" th:unless="${isOwner}" th:text="${activeCafe.title}"></span>
 			</div>
 			<div th:if="${user != null}">
 				<a class="btn btn-danger" th:if="${isOwner}" th:href="@{/delete-cafe}" th:text="#{deleteCafe}"></a>

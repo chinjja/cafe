@@ -8,9 +8,9 @@
 			<label for="id" th:text="#{forms.cafe.id}"></label>
 		</div>
 		<div class="form-floating">
-			<input class="form-control" id="name" name="name" th:value="${cafe.name}" th:placeholder="#{forms.cafe.name}" autocomplete="off"/>
-			<label for="name" th:text="#{forms.cafe.name}"></label>
-			<div class="alert alert-danger" th:errors="*{name}"></div>
+			<input class="form-control" id="title" name="title" th:value="${cafe.title}" th:placeholder="#{forms.cafe.name}" autocomplete="off"/>
+			<label for="title" th:text="#{forms.cafe.name}"></label>
+			<div class="alert alert-danger" th:errors="*{title}"></div>
 		</div>
 		<div class="form-floating">
 			<textarea class="form-control" id="description" name="description" th:text="${cafe.description}" th:placeholder="#{forms.cafe.description}" style="height: 100px"></textarea>
