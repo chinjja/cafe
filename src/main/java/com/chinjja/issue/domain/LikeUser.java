@@ -8,19 +8,15 @@ import javax.persistence.ManyToOne;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Value;
+import lombok.val;
 
 @Entity
-@Value
-@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
-@AllArgsConstructor
-@Builder(toBuilder = true)
-public class LikeCount {
+@Data
+public class LikeUser {
 	@EmbeddedId
-	@NonNull
 	private Id id;
 	
 	@Value
@@ -34,7 +30,9 @@ public class LikeCount {
 		private User user;
 	}
 	
-	public static LikeCount create(Likable likable, User user) {
-		return new LikeCount(new Id(likable, user));
+	public static LikeUser create(Likable likable, User user) {
+		val o = new LikeUser();
+		o.setId(new Id(likable, user));
+		return o;
 	}
 }

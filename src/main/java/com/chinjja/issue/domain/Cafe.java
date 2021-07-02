@@ -1,8 +1,8 @@
 package com.chinjja.issue.domain;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,37 +14,31 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.Where;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
 @Data
-@NoArgsConstructor
 public class Cafe {
-	@Builder(toBuilder = true)
-	public Cafe(String id, String name, String description, boolean needApproval, LocalDateTime createdAt, User owner, boolean privacy) {
-		this.id = id;
-		this.name = name;
-		this.description = description;
-		this.needApproval = needApproval;
-		this.createdAt = createdAt;
-		this.owner = owner;
-		this.privacy = privacy;
-	}
-	
 	@Id
 	@Pattern(regexp = "[a-z0-9]{1,20}")
 	private String id;
 	
 	@NotBlank
 	@NotNull
-	private String name;
+	private String title;
+	
+	@NotBlank
+	@NotNull
+	private String welcome;
+	
+	@NotBlank
+	@NotNull
 	private String description;
 	private boolean needApproval;
 	
@@ -62,10 +56,24 @@ public class Cafe {
 	private User owner;
 	
 	@OneToMany(mappedBy = "id.cafe")
+	@Where(clause = "approved = true")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@Setter(AccessLevel.NONE)
-	private Set<CafeMember> members = new HashSet<>();
+	private List<CafeMember> members = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "id.cafe")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	@Setter(AccessLevel.NONE)
+	private List<CafeMember> allMembers = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "cafe")
+	@Where(clause = "parent_id is null")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	@Setter(AccessLevel.NONE)
+	private List<Category> rootCategories = new ArrayList<>();
 	
 	@Formula("(select count(cm.member_id) from cafe_member cm where cm.cafe_id = id and cm.approved = true)")
 	@EqualsAndHashCode.Exclude

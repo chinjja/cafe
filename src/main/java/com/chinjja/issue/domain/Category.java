@@ -13,20 +13,16 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import org.hibernate.annotations.Formula;
+
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
-import lombok.With;
 
 @Entity
 @Data
-@NoArgsConstructor(force = true)
-@AllArgsConstructor
-@With
-@Builder(toBuilder = true)
 public class Category {
 	public static enum Type {
 		DIRECTORY,
@@ -35,13 +31,12 @@ public class Category {
 	
 	@Id
 	@GeneratedValue
-	private final Long id = null;
+	private Long id;
 	
 	@NotBlank
 	@NotNull
 	private String name;
 	
-	@Builder.Default
 	@Enumerated(EnumType.STRING)
 	@NotNull
 	private Type type = Type.DIRECTORY;
@@ -58,10 +53,22 @@ public class Category {
 	@ToString.Exclude
 	private final List<Category> categories = new ArrayList<>();
 	
+	@Formula("(select count(c.id) from category c where c.parent_id = id)")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	@Setter(AccessLevel.NONE)
+	private int categoryCount;
+	
 	@OneToMany(mappedBy = "category")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	private final List<Post> posts = new ArrayList<>();
+	
+	@Formula("(select count(p.id) from post p where p.category_id = id)")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	@Setter(AccessLevel.NONE)
+	private int postCount;
 	
 	public boolean isDirectory() {
 		return type == Type.DIRECTORY;

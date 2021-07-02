@@ -5,26 +5,25 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.transaction.Transactional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.chinjja.issue.data.CafeMemberRepository;
 import com.chinjja.issue.data.CafeRepository;
 import com.chinjja.issue.data.CategoryRepository;
 import com.chinjja.issue.data.CommentRepository;
 import com.chinjja.issue.data.LikableRepository;
-import com.chinjja.issue.data.LikeCountRepository;
+import com.chinjja.issue.data.LikeUserRepository;
 import com.chinjja.issue.data.PostRepository;
 import com.chinjja.issue.domain.Cafe;
 import com.chinjja.issue.domain.CafeMember;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.Comment;
 import com.chinjja.issue.domain.Likable;
-import com.chinjja.issue.domain.LikeCount;
+import com.chinjja.issue.domain.LikeUser;
 import com.chinjja.issue.domain.Post;
 import com.chinjja.issue.domain.User;
 import com.chinjja.issue.form.CafeForm;
@@ -39,11 +38,12 @@ import lombok.val;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CafeService {
 	private final LikableRepository likableRepo;
 	private final PostRepository postRepo;
 	private final CommentRepository commentRepo;
-	private final LikeCountRepository likeCountRepo;
+	private final LikeUserRepository likeCountRepo;
 	private final CategoryRepository categoryRepo;
 	private final CafeRepository cafeRepo;
 	private final CafeMemberRepository cafeMemberRepo;
@@ -63,12 +63,11 @@ public class CafeService {
 	
 	@Transactional
 	public Post createPost(User user, Category category, PostForm form) {
-		Post post = Post.builder()
-				.user(user)
-				.category(category)
-				.title(form.getTitle())
-				.contents(form.getContents())
-				.build();
+		val post = new Post();
+		post.setUser(user);
+		post.setCategory(category);
+		post.setTitle(form.getTitle());
+		post.setText(form.getText());
 		return postRepo.save(post);
 	}
 	
@@ -76,6 +75,9 @@ public class CafeService {
 	public void deletePost(Post post) {
 		for(val comment : post.getComments()) {
 			deleteComment(comment);
+		}
+		for(val like : post.getLikes()) {
+			deleteLikeUser(like);
 		}
 		postRepo.delete(post);
 	}
@@ -89,6 +91,9 @@ public class CafeService {
 		for(val child : comment.getComments()) {
 			deleteComment(child);
 		}
+		for(val like : comment.getLikes()) {
+			deleteLikeUser(like);
+		}
 		commentRepo.delete(comment);
 	}
 	
@@ -97,26 +102,24 @@ public class CafeService {
 		for(val child : category.getCategories()) {
 			deleteCategory(child);
 		}
-		switch(category.getType()) {
-		case POST:
-			for(val post : category.getPosts()) {
-				deletePost(post);
-			}
-		case DIRECTORY:
-			categoryRepo.delete(category);
-			break;
+		for(val post : category.getPosts()) {
+			deletePost(post);
 		}
+		categoryRepo.delete(category);
 	}
 	
 	public boolean isOwner(Cafe cafe, User user) {
+		if(user == null) return false;
 		return cafe.getOwner().getId().equals(user.getId());
 	}
 	
 	public boolean isOwner(String cafeId, User user) {
+		if(user == null) return false;
 		return isOwner(getCafeById(cafeId), user);
 	}
 	
 	public boolean isMember(Cafe cafe, User user) {
+		if(user == null) return false;
 		val cm = getCafeMemberById(new CafeMember.Id(cafe, user));
 		if(cm == null) return false;
 		return cm.isApproved();
@@ -127,6 +130,7 @@ public class CafeService {
 	}
 	
 	public boolean isApproving(Cafe cafe, User user) {
+		if(user == null) return false;
 		val cm = getCafeMemberById(new CafeMember.Id(cafe, user));
 		if(cm == null) return false;
 		return !cm.isApproved();
@@ -144,14 +148,13 @@ public class CafeService {
 	
 	@Transactional
 	public CafeMember joinCafe(Cafe cafe, User user, JoinCafeForm form) {
-		if(cafe.getOwner().getId() == user.getId())
+		if(isOwner(cafe, user))
 			throw new IllegalArgumentException("owner cannot be member");
 		
-		val cm = CafeMember.builder()
-				.id(new CafeMember.Id(cafe, user))
-				.greeting(form.getGreeting())
-				.approved(!cafe.isNeedApproval())
-				.build();
+		val cm = new CafeMember();
+		cm.setId(new CafeMember.Id(cafe, user));
+		cm.setGreeting(form.getGreeting());
+		cm.setApproved(!cafe.isNeedApproval());
 		return cafeMemberRepo.save(cm);
 	}
 	
@@ -161,6 +164,7 @@ public class CafeService {
 	}
 	
 	public boolean isAuthor(Likable likable, User user) {
+		if(user == null) return false;
 		return likable.getUser().getId().equals(user.getId());
 	}
 	
@@ -175,24 +179,34 @@ public class CafeService {
 	@Transactional
 	public Cafe createCafe(CafeForm form, User user) {
 		if(hasCafe(form.getId())) throw new IllegalArgumentException(form.getId() +" already exists");
-		val cafe = Cafe.builder()
-				.id(form.getId())
-				.name(form.getName())
-				.description(form.getDescription())
-				.needApproval(form.isNeedApproval())
-				.owner(user)
-				.privacy(form.isPrivacy())
-				.build();
+		val cafe = new Cafe();
+		cafe.setId(form.getId());
+		cafe.setTitle(form.getTitle());
+		cafe.setDescription(form.getDescription());
+		cafe.setWelcome(form.getWelcome());
+		cafe.setNeedApproval(form.isNeedApproval());
+		cafe.setOwner(user);
+		cafe.setPrivacy(form.isPrivacy());
+		return cafeRepo.save(cafe);
+	}
+	
+	@Transactional
+	public Cafe editCafe(Cafe cafe, CafeForm form) {
+		cafe.setTitle(form.getTitle());
+		cafe.setDescription(form.getDescription());
+		cafe.setWelcome(form.getWelcome());
+		cafe.setNeedApproval(form.isNeedApproval());
+		cafe.setPrivacy(form.isPrivacy());
 		return cafeRepo.save(cafe);
 	}
 	
 	@Transactional
 	public void deleteCafe(Cafe cafe) {
 		cafe = getCafeById(cafe.getId());
-		for(val category : categoryRepo.findAllByCafeAndParentIsNull(cafe)) {
+		for(val category : cafe.getRootCategories()) {
 			deleteCategory(category);
 		}
-		for(val member : cafe.getMembers()) {
+		for(val member : cafe.getAllMembers()) {
 			cafeMemberRepo.delete(member);
 		}
 		cafeRepo.delete(cafe);
@@ -211,12 +225,11 @@ public class CafeService {
 	}
 	
 	@Transactional
-	public Comment createComment(User user, Likable likable, CommentForm form) {
-		Comment comment = Comment.builder()
-				.user(user)
-				.likable(likable)
-				.comment(form.getComment())
-				.build();
+	public Comment createComment(User user, CommentForm form) {
+		val comment = new Comment();
+		comment.setUser(user);
+		comment.setLikable(likableRepo.findById(form.getLikableId()).get());
+		comment.setText(form.getText());
 		return commentRepo.save(comment);
 	}
 	
@@ -228,49 +241,49 @@ public class CafeService {
 		return likableRepo.findById(id).orElse(null);
 	}
 	
-	public LikeCount getLikeCountById(LikeCount.Id id) {
+	public LikeUser getLikeCountById(LikeUser.Id id) {
 		return likeCountRepo.findById(id).orElse(null);
 	}
 	
-	public LikeCount getLikeCount(Likable likable, User user) {
-		return getLikeCountById(new LikeCount.Id(likable, user));
+	public LikeUser getLikeUser(Likable likable, User user) {
+		return getLikeCountById(new LikeUser.Id(likable, user));
 	}
 	
-	public boolean isLiked(LikeCount likeCount) {
+	public boolean isLiked(LikeUser likeCount) {
 		return isLiked(likeCount.getId());
 	}
 	
-	public boolean isLiked(LikeCount.Id id) {
+	public boolean isLiked(LikeUser.Id id) {
 		return likeCountRepo.existsById(id);
 	}
 	
 	public boolean isLiked(Likable likable, User user) {
-		return likeCountRepo.existsById(new LikeCount.Id(likable, user));
+		return likeCountRepo.existsById(new LikeUser.Id(likable, user));
 	}
 	
 	@Transactional
-	public LikeCount createLikeCount(User user, Likable likable) {
-		val likeCount = LikeCount.create(likable, user);
+	public LikeUser createLikeUser(User user, Likable likable) {
+		val likeCount = LikeUser.create(likable, user);
 		return likeCountRepo.save(likeCount);
 	}
 	
 	@Transactional
-	public void deleteLikeCount(LikeCount id) {
+	public void deleteLikeUser(LikeUser id) {
 		likeCountRepo.delete(id);
 	}
 	
 	@Transactional
-	public void toggleLikeCount(LikeCount likeCount) {
-		toggleLikeCount(likeCount.getId().getUser(), likeCount.getId().getLikable());
+	public void toggleLike(LikeUser likeCount) {
+		toggleLike(likeCount.getId().getUser(), likeCount.getId().getLikable());
 	}
 	
 	@Transactional
-	public void toggleLikeCount(User user, Likable likable) {
-		val like = getLikeCount(likable, user);
+	public void toggleLike(User user, Likable likable) {
+		val like = getLikeUser(likable, user);
 		if(like == null) {
-			createLikeCount(user, likable);
+			createLikeUser(user, likable);
 		} else {
-			deleteLikeCount(like);
+			deleteLikeUser(like);
 		}
 	}
 	
@@ -280,12 +293,11 @@ public class CafeService {
 		if(form.getParentCategoryId() != null) {
 			parent = getCategoryById(form.getParentCategoryId());
 		}
-		val category = Category.builder()
-				.cafe(cafe)
-				.parent(parent)
-				.name(form.getName())
-				.type(form.getType())
-				.build();
+		val category = new Category();
+		category.setCafe(cafe);
+		category.setParent(parent);
+		category.setName(form.getName());
+		category.setType(form.getType());
 		return categoryRepo.save(category);
 	}
 	
@@ -305,6 +317,7 @@ public class CafeService {
 		return list;
 	}
 	
+	@Transactional
 	public void visit(User user, Post post) {
 		if(user == null) return;
 		val now = LocalDateTime.now();

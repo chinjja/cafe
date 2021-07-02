@@ -1,0 +1,8 @@
+<html layout:decorate="~{layouts/sidebarLayout}">
+	<div layout:fragment="content">
+		<div class="page-header">
+			<h4>Member list</h4>
+		</div>
+		<div th:replace="fragments/members(${activeCafe})"></div>
+	</div>
+</html>

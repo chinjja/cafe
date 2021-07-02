@@ -10,7 +10,6 @@ import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -74,21 +73,27 @@ public class UserServiceTests {
 	@ParameterizedTest
 	@MethodSource
 	void shouldCreateUser(List<String> roles) {
-		val expect = User.builder()
-				.id(null)
-				.username("admin")
-				.password(encoder.encode("1234"));
+		val user1 = new User();
+		user1.setId(null);
+		user1.setUsername("admin");
+		user1.setPassword(encoder.encode("1234"));
 		
-		doReturn(expect.id(1L).build()).when(userRepo).save(expect.id(null).build());
+		val user2 = new User();
+		user2.setId(1L);
+		user2.setUsername("admin");
+		user2.setPassword(encoder.encode("1234"));
 		
-		val raw = User.builder()
-				.id(null)
-				.username("admin")
-				.password("1234");
-		val user = service.create(raw.build(), roles.toArray(new String[roles.size()]));
-		assertEquals(expect.id(1L).build(), user);
+		doReturn(user2).when(userRepo).save(user1);
 		
-		verify(userRepo).save(expect.id(null).build());
+
+		val user3 = new User();
+		user3.setId(null);
+		user3.setUsername("admin");
+		user3.setPassword("1234");
+		val user = service.create(user3, roles.toArray(new String[roles.size()]));
+		assertEquals(user2, user);
+		
+		verify(userRepo).save(user3);
 		for(val role : roles) {
 			verify(userRoleRepo).save(UserRole.create(user, role));
 		}
@@ -96,28 +101,33 @@ public class UserServiceTests {
 	
 	@Test
 	void shouldCreateAdminUserIfNotExists() {
-		val template = User.builder()
-				.id(null)
-				.username("admin")
-				.password(encoder.encode("1234"));
+		val withId = new User();
+		withId.setId(1L);
+		withId.setUsername("admin");
+		withId.setPassword(encoder.encode("1234"));
 		
 		doReturn(null).when(userRepo).findByUsername("admin");
-		doReturn(template.id(1L).build()).when(userRepo).save(any());
+		doReturn(withId).when(userRepo).save(any());
 		
 		service.onCreate();
 		
-		verify(userRepo).save(template.id(null).build());
-		verify(userRoleRepo).save(UserRole.create(template.id(1L).build(), "ROLE_ADMIN"));
+		val withoutId = new User();
+		withoutId.setId(null);
+		withoutId.setUsername("admin");
+		withoutId.setPassword(encoder.encode("1234"));
+		
+		verify(userRepo).save(withoutId);
+		verify(userRoleRepo).save(UserRole.create(withId, "ROLE_ADMIN"));
 	}
 	
 	@Test
 	void shouldNotCreateAdminUserIfExists() {
-		val template = User.builder()
-				.id(null)
-				.username("admin")
-				.password(encoder.encode("1234"));
+		val user1 = new User();
+		user1.setId(1L);
+		user1.setUsername("admin");
+		user1.setPassword(encoder.encode("1234"));
 		
-		doReturn(template.id(1L).build()).when(userRepo).findByUsername("admin");
+		doReturn(user1).when(userRepo).findByUsername("admin");
 		
 		service.onCreate();
 		
@@ -127,21 +137,27 @@ public class UserServiceTests {
 	
 	@Test
 	void register() {
-		val template = User.builder()
-				.id(null)
-				.username("user1")
-				.password(encoder.encode("1234"));
-		doReturn(template.id(1L).build()).when(userRepo).save(any());
+		val withId = new User();
+		withId.setId(1L);
+		withId.setUsername("admin");
+		withId.setPassword(encoder.encode("1234"));
+		
+		doReturn(withId).when(userRepo).save(any());
 		
 		val form = new RegisterForm();
-		form.setUsername("user1");
+		form.setUsername("admin");
 		form.setPassword("1234");
 		form.setConfirm("1234");
 		
 		val new_user = service.register(form);
 		assertEquals(encoder.encode("1234"), new_user.getPassword());
 		
-		verify(userRepo).save(template.id(null).build());
+		val withoutId = new User();
+		withoutId.setId(null);
+		withoutId.setUsername("admin");
+		withoutId.setPassword(encoder.encode("1234"));
+		
+		verify(userRepo).save(withoutId);
 		verify(userRoleRepo, never()).save(any());
 	}
 	
@@ -170,11 +186,10 @@ public class UserServiceTests {
 		
 		@BeforeEach
 		void beforeEach() {
-			user = User.builder()
-					.id(1L)
-					.username("admin")
-					.password(encoder.encode("1234"))
-					.build();
+			user = new User();
+			user.setId(1L);
+			user.setUsername("admin");
+			user.setPassword(encoder.encode("1234"));
 		}
 		
 		@Test
@@ -203,17 +218,21 @@ public class UserServiceTests {
 		
 		@Test
 		void shouldChangePassword() {
-			val template = User.builder()
-					.id(1L)
-					.username("admin")
-					.password(encoder.encode("5678"));
+			val user1 = new User();
+			user1.setId(1L);
+			user1.setUsername("admin");
+			user1.setPassword(encoder.encode("5678"));
 			
-			doReturn(template.build()).when(userRepo).save(any());
+			doReturn(user1).when(userRepo).save(any());
 			
 			val changed_user = service.changePassword(user, "5678");
 			assertEquals(encoder.encode("5678"), changed_user.getPassword());
 			
-			verify(userRepo).save(template.build());
+			val user2 = new User();
+			user2.setId(1L);
+			user2.setUsername("admin");
+			user2.setPassword(encoder.encode("5678"));
+			verify(userRepo).save(user2);
 			verify(userRoleRepo, never()).save(any());
 		}
 	}

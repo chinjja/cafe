@@ -9,15 +9,13 @@ import javax.validation.constraints.NotBlank;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Value;
+import lombok.val;
 
 @Entity
-@Value
-@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
-@AllArgsConstructor
-@Builder(toBuilder = true)
+@Data
 public class UserRole {
 	@EmbeddedId
 	private Id id;
@@ -33,6 +31,8 @@ public class UserRole {
 	}
 	
 	public static UserRole create(User user, String role) {
-		return new UserRole(new Id(user, role));
+		val o = new UserRole();
+		o.setId(new Id(user, role));
+		return o;
 	}
 }

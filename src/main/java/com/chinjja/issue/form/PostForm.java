@@ -10,5 +10,5 @@ public class PostForm {
 	private String title;
 	
 	@NotBlank
-	private String contents;
+	private String text;
 }
