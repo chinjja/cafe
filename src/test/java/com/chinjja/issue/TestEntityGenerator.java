@@ -6,6 +6,7 @@ import com.chinjja.issue.domain.Cafe;
 import com.chinjja.issue.domain.CafeMember;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.Category.Type;
+import com.chinjja.issue.domain.Post;
 import com.chinjja.issue.domain.User;
 
 import lombok.val;
@@ -48,5 +49,14 @@ public class TestEntityGenerator {
 		category.setName("category");
 		category.setType(Type.DIRECTORY);
 		return em.persist(category);
+	}
+	
+	Post post(Category category, User author) {
+		val post = new Post();
+		post.setCategory(category);
+		post.setUser(author);
+		post.setTitle("title");
+		post.setContents("contents");
+		return em.persist(post);
 	}
 }

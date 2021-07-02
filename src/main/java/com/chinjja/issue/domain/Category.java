@@ -13,8 +13,12 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Formula;
+
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -49,10 +53,22 @@ public class Category {
 	@ToString.Exclude
 	private final List<Category> categories = new ArrayList<>();
 	
+	@Formula("(select count(c.id) from category c where c.parent_id = id)")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	@Setter(AccessLevel.NONE)
+	private int categoryCount;
+	
 	@OneToMany(mappedBy = "category")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	private final List<Post> posts = new ArrayList<>();
+	
+	@Formula("(select count(p.id) from post p where p.category_id = id)")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	@Setter(AccessLevel.NONE)
+	private int postCount;
 	
 	public boolean isDirectory() {
 		return type == Type.DIRECTORY;
