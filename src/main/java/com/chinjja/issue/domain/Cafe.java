@@ -2,9 +2,7 @@ package com.chinjja.issue.domain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -62,7 +60,7 @@ public class Cafe {
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@Setter(AccessLevel.NONE)
-	private Set<CafeMember> members = new HashSet<>();
+	private List<CafeMember> members = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "cafe")
 	@Where(clause = "parent_id is null")
