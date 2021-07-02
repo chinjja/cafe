@@ -206,7 +206,7 @@ public class CafeService {
 		for(val category : cafe.getRootCategories()) {
 			deleteCategory(category);
 		}
-		for(val member : cafe.getMembers()) {
+		for(val member : cafe.getAllMembers()) {
 			cafeMemberRepo.delete(member);
 		}
 		cafeRepo.delete(cafe);

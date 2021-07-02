@@ -62,6 +62,12 @@ public class Cafe {
 	@Setter(AccessLevel.NONE)
 	private List<CafeMember> members = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "id.cafe")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	@Setter(AccessLevel.NONE)
+	private List<CafeMember> allMembers = new ArrayList<>();
+	
 	@OneToMany(mappedBy = "cafe")
 	@Where(clause = "parent_id is null")
 	@EqualsAndHashCode.Exclude

@@ -515,6 +515,24 @@ public class CafeServiceTests {
 				assertNotNull(cafe);
 				assertTrue(cafe.isNeedApproval());
 			}
+			
+			@Test
+			void shouldDeleteCafeIfCafeHasThatUserIsNotMemberYet() {
+				val user = new User();
+				user.setUsername("other");
+				user.setPassword("1234");
+				userService.create(user);
+				em.flush();
+				
+				val form = new JoinCafeForm();
+				form.setGreeting("hi");
+				cafeService.joinCafe(cafe, user, form);
+				em.flush();
+				em.clear();
+				
+				cafeService.deleteCafe(cafe);
+				em.flush();
+			}
 		}
 	}
 }
