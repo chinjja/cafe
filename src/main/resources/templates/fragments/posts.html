@@ -1,13 +1,13 @@
 <div th:fragment="posts(category)">
 	<div class="page-header" th:if="${category != null}">
 		<div class="d-flex justify-content-between align-items-end">
-			<h1 th:text="${category.name}"></h1>
+			<h4 th:text="${category.name}"></h4>
 			<a class="btn btn-primary" role="button" th:if="${isJoined}" th:href="@{/create-post}" th:text="#{fragments.posts.newPost}"></a>
 		</div>
 		<hr/>
 	</div>
 	<div class="page-header">
-		<h1 th:text="#{fragments.posts.header}"></h1>
+		<h4 th:text="#{fragments.posts.header}"></h4>
 	</div>
 	<table class="table table-bordered">
 		<thead>
