@@ -11,6 +11,7 @@ import com.chinjja.issue.domain.Likable;
 import com.chinjja.issue.domain.LikeUser;
 import com.chinjja.issue.domain.Post;
 import com.chinjja.issue.domain.User;
+import com.chinjja.issue.domain.UserRole;
 
 import lombok.val;
 
@@ -36,6 +37,12 @@ public class TestEntityGenerator {
 		cafe.setOwner(owner);
 		cafe.setWelcome("cafe");
 		return em.persist(cafe);
+	}
+	
+	UserRole role(User user, String role) {
+		val o = new UserRole();
+		o.setId(new UserRole.Id(user, role));
+		return em.persist(o);
 	}
 	
 	CafeMember member(Cafe cafe, User user) {
