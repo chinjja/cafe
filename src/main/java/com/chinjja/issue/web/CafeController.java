@@ -178,12 +178,20 @@ public class CafeController {
 	public String expulseMember(
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe,
-			@RequestParam Long memberId,
-			RedirectAttributes rttr) {
+			@RequestParam Long memberId) {
 		val member = userService.byId(memberId);
 		cafeService.leaveCafe(cafe, member);
-		rttr.addFlashAttribute("show_member", 2);
-		return "redirect:" + toCafeUrl(cafe, null, null);
+		return "redirect:/members";
+	}
+	
+	@GetMapping("/members")
+	@PreAuthorize("isAuthenticated()")
+	public String members(
+			@AuthenticationPrincipal User user,
+			@ModelAttribute("activeCafe") Cafe cafe,
+			Model model) {
+		model.addAttribute("activeCafe", cafeService.getCafeById(cafe.getId()));
+		return "members";
 	}
 	
 	@GetMapping("/cafe/{cafeId:[a-z0-9]+}")
