@@ -4,7 +4,7 @@
 			<div class="d-flex flex-fill" th:if="*{isPost()}">
 				<a class="btn btn-outline-primary text-start flex-fill" th:classappend="${activeCategory} and ${activeCategory.id == category.id} ? 'active'" th:text="*{name}" th:href="@{/cafe/{cafe}(cafe=${activeCafe.id},category=*{id})}"></a>
 			</div>
-			<div class="py-2" th:unless="*{isPost()}">
+			<div class="py-2 ps-1" th:unless="*{isPost()}">
 				<span th:text="*{name}"></span>
 			</div>
 			<div class="d-flex justify-content-end align-items-baseline">
