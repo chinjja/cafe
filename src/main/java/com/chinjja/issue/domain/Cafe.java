@@ -58,6 +58,7 @@ public class Cafe {
 	private User owner;
 	
 	@OneToMany(mappedBy = "id.cafe")
+	@Where(clause = "approved = true")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@Setter(AccessLevel.NONE)
