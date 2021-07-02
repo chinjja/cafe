@@ -67,7 +67,7 @@ public class CafeService {
 		post.setUser(user);
 		post.setCategory(category);
 		post.setTitle(form.getTitle());
-		post.setContents(form.getContents());
+		post.setText(form.getText());
 		return postRepo.save(post);
 	}
 	
@@ -219,7 +219,7 @@ public class CafeService {
 		val comment = new Comment();
 		comment.setUser(user);
 		comment.setLikable(likable);
-		comment.setComment(form.getComment());
+		comment.setText(form.getText());
 		return commentRepo.save(comment);
 	}
 	

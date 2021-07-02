@@ -13,6 +13,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Formula;
@@ -38,6 +39,10 @@ public class Likable {
 	@ManyToOne
 	@NotNull
 	private User user;
+
+	@NotBlank
+	@NotNull
+	private String text;
 	
 	@PrePersist
 	private void createdAt() {

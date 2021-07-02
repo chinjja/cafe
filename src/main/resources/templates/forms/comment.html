@@ -4,8 +4,8 @@
 			<span class="h5" th:text="${user.username}"></span>
 		</div>
 		<div class="form-group">
-			<textarea class="form-control" th:field="*{comment}" th:placeholder="#{forms.comment.enterComment}" rows="4"></textarea>
-			<div class="alert alert-danger" th:errors="*{comment}"></div>
+			<textarea class="form-control" th:field="*{text}" th:placeholder="#{forms.comment.enterComment}" rows="4"></textarea>
+			<div class="alert alert-danger" th:errors="*{text}"></div>
 		</div>
 		<div class="form-group">
 			<input type="submit" class="btn btn-outline-primary w-100" th:value="#{forms.comment.submit}"/>

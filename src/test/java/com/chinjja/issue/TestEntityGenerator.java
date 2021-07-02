@@ -66,7 +66,7 @@ public class TestEntityGenerator {
 		post.setCategory(category);
 		post.setUser(author);
 		post.setTitle("title");
-		post.setContents("contents");
+		post.setText("contents");
 		return em.persist(post);
 	}
 	
@@ -74,7 +74,7 @@ public class TestEntityGenerator {
 		val comment = new Comment();
 		comment.setLikable(likable);
 		comment.setUser(author);
-		comment.setComment("comment");
+		comment.setText("comment");
 		return em.persist(comment);
 	}
 	

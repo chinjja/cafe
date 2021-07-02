@@ -25,7 +25,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<pre class="border rounded-3 p-3" th:text="${activePost.contents}"></pre>
+		<pre class="border rounded-3 p-3" th:text="${activePost.text}"></pre>
 		<div class="d-flex justify-content-between align-items-start mb-2">
 			<a class="btn btn-outline-primary" th:classappend="${#bools.isTrue(isLiked)} ? 'active'" th:href="@{/toggle-like}" th:text="#{posts.like}"/>
 			<div th:if="${user != null}">

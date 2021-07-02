@@ -219,7 +219,7 @@ public class CafeServiceTests {
 					Post new_post() {
 						val form = new PostForm();
 						form.setTitle("post1");
-						form.setContents("post1's content");
+						form.setText("post1's content");
 						return cafeService.createPost(owner, category, form);
 					}
 					
@@ -238,7 +238,7 @@ public class CafeServiceTests {
 							assertNotNull(post);
 							assertEquals(post, cafeService.getPostById(post.getId()));
 							assertEquals("post1", post.getTitle());
-							assertEquals("post1's content", post.getContents());
+							assertEquals("post1's content", post.getText());
 							assertEquals(category, post.getCategory());
 							assertEquals(0, post.getComments().size());
 							assertEquals(0, post.getLikeCount());
@@ -273,7 +273,7 @@ public class CafeServiceTests {
 						
 						Comment new_comment(Likable likable) {
 							val form = new CommentForm();
-							form.setComment("hi");
+							form.setText("hi");
 							return cafeService.createComment(owner, likable, form);
 						}
 						
