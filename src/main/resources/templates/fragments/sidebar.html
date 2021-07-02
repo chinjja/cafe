@@ -6,14 +6,14 @@
 			</button>
 		</div>
 		<div th:replace="links/user(${activeCafe.owner}, 'badge rounded-pill bg-secondary me-2')"></div>
-		<div class="d-flex w-100 justify-content-between align-items-center">
+		<div class="d-flex flex-fill justify-content-between align-items-center">
 			<div>
 				<a class="h4" th:if="${isOwner}" th:href="@{/edit-cafe}" th:text="${activeCafe.name}"></a>
 				<span class="h4" th:unless="${isOwner}" th:text="${activeCafe.name}"></span>
 			</div>
 			<div th:if="${user != null}">
 				<a class="btn btn-danger" th:if="${isOwner}" th:href="@{/delete-cafe}" th:text="#{deleteCafe}"></a>
-				<div class="d-flex" th:if="${activeCafe.owner.id != user.id}">
+				<div th:if="${activeCafe.owner.id != user.id}">
 					<a class="btn btn-warning" th:if="${isApproving}" th:href="@{/leave-cafe}">요청취소</a>
 					<a class="btn btn-primary" th:if="${isJoined == false} AND ${isApproving == false}" th:href="@{/join-cafe}" th:text="#{joinCafe}"></a>
 					<a class="btn btn-warning" th:if="${isJoined}" th:href="@{/leave-cafe}" th:text="#{leaveCafe}"></a>
@@ -26,7 +26,7 @@
 	</a>
 	<nav class="navbar navbar-expand-md">
 		<div class="collapse navbar-collapse" id="navbarSupportedContent2">
-			<div class="w-100">
+			<div class="flex-fill">
 				<a class="btn btn-outline-primary text-start w-100 mb-2" th:classappend="${activeCategory == null}? 'active'" th:href="@{/cafe/{cafe}(cafe=${activeCafe.id})}" th:text="#{fragments.sidebar.all}"></a>
 				<div th:replace="fragments/categoryList(${activeCafe.rootCategories})"></div>
 				<div th:if="${isOwner}">
