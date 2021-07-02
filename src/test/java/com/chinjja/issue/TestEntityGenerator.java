@@ -6,6 +6,9 @@ import com.chinjja.issue.domain.Cafe;
 import com.chinjja.issue.domain.CafeMember;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.Category.Type;
+import com.chinjja.issue.domain.Comment;
+import com.chinjja.issue.domain.Likable;
+import com.chinjja.issue.domain.LikeCount;
 import com.chinjja.issue.domain.Post;
 import com.chinjja.issue.domain.User;
 
@@ -58,5 +61,19 @@ public class TestEntityGenerator {
 		post.setTitle("title");
 		post.setContents("contents");
 		return em.persist(post);
+	}
+	
+	Comment comment(Likable likable, User author) {
+		val comment = new Comment();
+		comment.setLikable(likable);
+		comment.setUser(author);
+		comment.setComment("comment");
+		return em.persist(comment);
+	}
+	
+	LikeCount like(Likable likable, User user) {
+		val like = new LikeCount();
+		like.setId(new LikeCount.Id(likable, user));
+		return em.persist(like);
 	}
 }
