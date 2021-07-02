@@ -16,14 +16,14 @@ import com.chinjja.issue.data.CafeRepository;
 import com.chinjja.issue.data.CategoryRepository;
 import com.chinjja.issue.data.CommentRepository;
 import com.chinjja.issue.data.LikableRepository;
-import com.chinjja.issue.data.LikeCountRepository;
+import com.chinjja.issue.data.LikeUserRepository;
 import com.chinjja.issue.data.PostRepository;
 import com.chinjja.issue.domain.Cafe;
 import com.chinjja.issue.domain.CafeMember;
 import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.Comment;
 import com.chinjja.issue.domain.Likable;
-import com.chinjja.issue.domain.LikeCount;
+import com.chinjja.issue.domain.LikeUser;
 import com.chinjja.issue.domain.Post;
 import com.chinjja.issue.domain.User;
 import com.chinjja.issue.form.CafeForm;
@@ -43,7 +43,7 @@ public class CafeService {
 	private final LikableRepository likableRepo;
 	private final PostRepository postRepo;
 	private final CommentRepository commentRepo;
-	private final LikeCountRepository likeCountRepo;
+	private final LikeUserRepository likeCountRepo;
 	private final CategoryRepository categoryRepo;
 	private final CafeRepository cafeRepo;
 	private final CafeMemberRepository cafeMemberRepo;
@@ -77,7 +77,7 @@ public class CafeService {
 			deleteComment(comment);
 		}
 		for(val like : post.getLikes()) {
-			deleteLikeCount(like);
+			deleteLikeUser(like);
 		}
 		postRepo.delete(post);
 	}
@@ -92,7 +92,7 @@ public class CafeService {
 			deleteComment(child);
 		}
 		for(val like : comment.getLikes()) {
-			deleteLikeCount(like);
+			deleteLikeUser(like);
 		}
 		commentRepo.delete(comment);
 	}
@@ -231,49 +231,49 @@ public class CafeService {
 		return likableRepo.findById(id).orElse(null);
 	}
 	
-	public LikeCount getLikeCountById(LikeCount.Id id) {
+	public LikeUser getLikeCountById(LikeUser.Id id) {
 		return likeCountRepo.findById(id).orElse(null);
 	}
 	
-	public LikeCount getLikeCount(Likable likable, User user) {
-		return getLikeCountById(new LikeCount.Id(likable, user));
+	public LikeUser getLikeUser(Likable likable, User user) {
+		return getLikeCountById(new LikeUser.Id(likable, user));
 	}
 	
-	public boolean isLiked(LikeCount likeCount) {
+	public boolean isLiked(LikeUser likeCount) {
 		return isLiked(likeCount.getId());
 	}
 	
-	public boolean isLiked(LikeCount.Id id) {
+	public boolean isLiked(LikeUser.Id id) {
 		return likeCountRepo.existsById(id);
 	}
 	
 	public boolean isLiked(Likable likable, User user) {
-		return likeCountRepo.existsById(new LikeCount.Id(likable, user));
+		return likeCountRepo.existsById(new LikeUser.Id(likable, user));
 	}
 	
 	@Transactional
-	public LikeCount createLikeCount(User user, Likable likable) {
-		val likeCount = LikeCount.create(likable, user);
+	public LikeUser createLikeUser(User user, Likable likable) {
+		val likeCount = LikeUser.create(likable, user);
 		return likeCountRepo.save(likeCount);
 	}
 	
 	@Transactional
-	public void deleteLikeCount(LikeCount id) {
+	public void deleteLikeUser(LikeUser id) {
 		likeCountRepo.delete(id);
 	}
 	
 	@Transactional
-	public void toggleLikeCount(LikeCount likeCount) {
-		toggleLikeCount(likeCount.getId().getUser(), likeCount.getId().getLikable());
+	public void toggleLike(LikeUser likeCount) {
+		toggleLike(likeCount.getId().getUser(), likeCount.getId().getLikable());
 	}
 	
 	@Transactional
-	public void toggleLikeCount(User user, Likable likable) {
-		val like = getLikeCount(likable, user);
+	public void toggleLike(User user, Likable likable) {
+		val like = getLikeUser(likable, user);
 		if(like == null) {
-			createLikeCount(user, likable);
+			createLikeUser(user, likable);
 		} else {
-			deleteLikeCount(like);
+			deleteLikeUser(like);
 		}
 	}
 	

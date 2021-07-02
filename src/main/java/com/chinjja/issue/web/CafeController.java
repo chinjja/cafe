@@ -275,7 +275,7 @@ public class CafeController {
 			@AuthenticationPrincipal User user,
 			@ModelAttribute("activeCafe") Cafe cafe,
 			@ModelAttribute("activePost") Post post) {
-		cafeService.toggleLikeCount(user, post);
+		cafeService.toggleLike(user, post);
 		return "redirect:" + toPostUrl(post);
 	}
 	

@@ -45,9 +45,9 @@ public class Likable {
 	@OneToMany(mappedBy = "id.likable")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	private final List<LikeCount> likes = new ArrayList<>();
+	private final List<LikeUser> likes = new ArrayList<>();
 	
-	@Formula("(select count(lc.user_id) from like_count lc where lc.likable_id = id)")
+	@Formula("(select count(lu.user_id) from like_user lu where lu.likable_id = id)")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@Setter(AccessLevel.NONE)

@@ -15,7 +15,7 @@ import lombok.val;
 
 @Entity
 @Data
-public class LikeCount {
+public class LikeUser {
 	@EmbeddedId
 	private Id id;
 	
@@ -30,8 +30,8 @@ public class LikeCount {
 		private User user;
 	}
 	
-	public static LikeCount create(Likable likable, User user) {
-		val o = new LikeCount();
+	public static LikeUser create(Likable likable, User user) {
+		val o = new LikeUser();
 		o.setId(new Id(likable, user));
 		return o;
 	}

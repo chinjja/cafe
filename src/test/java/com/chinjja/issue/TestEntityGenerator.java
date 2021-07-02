@@ -8,7 +8,7 @@ import com.chinjja.issue.domain.Category;
 import com.chinjja.issue.domain.Category.Type;
 import com.chinjja.issue.domain.Comment;
 import com.chinjja.issue.domain.Likable;
-import com.chinjja.issue.domain.LikeCount;
+import com.chinjja.issue.domain.LikeUser;
 import com.chinjja.issue.domain.Post;
 import com.chinjja.issue.domain.User;
 
@@ -71,9 +71,9 @@ public class TestEntityGenerator {
 		return em.persist(comment);
 	}
 	
-	LikeCount like(Likable likable, User user) {
-		val like = new LikeCount();
-		like.setId(new LikeCount.Id(likable, user));
+	LikeUser like(Likable likable, User user) {
+		val like = new LikeUser();
+		like.setId(new LikeUser.Id(likable, user));
 		return em.persist(like);
 	}
 }

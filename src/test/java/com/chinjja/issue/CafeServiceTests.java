@@ -20,7 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 import com.chinjja.issue.domain.Cafe;
 import com.chinjja.issue.domain.CafeMember;
 import com.chinjja.issue.domain.Category;
-import com.chinjja.issue.domain.LikeCount;
+import com.chinjja.issue.domain.LikeUser;
 import com.chinjja.issue.domain.Category.Type;
 import com.chinjja.issue.domain.Comment;
 import com.chinjja.issue.domain.Likable;
@@ -267,8 +267,8 @@ public class CafeServiceTests {
 							});
 						}
 						
-						LikeCount new_like_count() {
-							return cafeService.createLikeCount(owner, post);
+						LikeUser new_like_count() {
+							return cafeService.createLikeUser(owner, post);
 						}
 						
 						Comment new_comment(Likable likable) {
@@ -279,7 +279,7 @@ public class CafeServiceTests {
 						
 						@Nested
 						class WithLike {
-							LikeCount likeCount;
+							LikeUser likeCount;
 							
 							@BeforeEach
 							void create() {
@@ -294,13 +294,13 @@ public class CafeServiceTests {
 							
 							@Test
 							void shouldNotExistAfterToggle() {
-								cafeService.toggleLikeCount(likeCount);
+								cafeService.toggleLike(likeCount);
 								assertFalse(cafeService.isLiked(likeCount));
 							}
 							
 							@Test
 							void shouldNotExistAfterDelete() {
-								cafeService.deleteLikeCount(likeCount);
+								cafeService.deleteLikeUser(likeCount);
 								assertFalse(cafeService.isLiked(likeCount));
 							}
 							
