@@ -1,25 +1,27 @@
 <div th:fragment="category(category)" class="d-flex border-bottom mb-2">
-	<div class="w-100" th:object="${category}">
+	<div class="flex-fill" th:object="${category}">
 		<div class="d-flex align-items-baseline justify-content-between">
-			<div class="d-flex w-100" th:if="*{isPost()}">
-				<a class="btn btn-outline-primary text-start w-100" th:classappend="${activeCategory} and ${activeCategory.id == category.id} ? 'active'" th:text="*{name}" th:href="@{/cafe/{cafe}(cafe=${activeCafe.id},category=*{id})}"></a>
+			<div class="d-flex flex-fill" th:if="*{isPost()}">
+				<a class="btn btn-outline-primary text-start flex-fill" th:classappend="${activeCategory} and ${activeCategory.id == category.id} ? 'active'" th:text="*{name}" th:href="@{/cafe/{cafe}(cafe=${activeCafe.id},category=*{id})}"></a>
 			</div>
 			<div class="py-2" th:unless="*{isPost()}">
 				<span th:text="*{name}"></span>
 			</div>
-			<div th:if="${user != null} AND ${activeCafe.owner.id == user.id} AND *{isDirectory()}">
-				<div class="d-flex justify-content-end align-items-baseline">
-					<a class="btn text-muted" th:href="@{/delete-category(categoryId=${category.id})}" th:text=#{delete}></a>
+			<div class="d-flex justify-content-end align-items-baseline">
+				<div th:if="${isOwner} AND *{isDirectory()}">
 					<button class="btn text-muted" type="button"
 					data-bs-toggle="collapse"
 					th:data-bs-target="'#collapseExample' + *{id}"
 					th:text="#{fragments.category.add}">
 					</button>
 				</div>
+				<div>
+					<a class="btn text-muted" th:if="${isOwner}" th:href="@{/delete-category(categoryId=${category.id})}" th:text=#{delete}></a>
+				</div>
 			</div>
 		</div>
 		<div class="collapse" th:id="'collapseExample' + *{id}">
-		<div th:replace="forms/category(${category})"></div>
+			<div th:replace="forms/category(${category})"></div>
 		</div>
 	</div>
 </div>
