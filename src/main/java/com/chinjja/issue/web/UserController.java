@@ -30,14 +30,14 @@ public class UserController {
 	private final UserService userService;
 	
 	@GetMapping("/create-user")
-	public String register() {
-		return "register";
+	public String createUser() {
+		return "createUser";
 	}
 	
 	@PostMapping("/create-user")
-	public String registerForm(@Valid RegisterForm form, Errors errors) {
+	public String createUserForm(@Valid RegisterForm form, Errors errors) {
 		if(errors.hasErrors()) {
-			return "register";
+			return "createUser";
 		}
 		userService.register(form);
 		return "redirect:/login";
