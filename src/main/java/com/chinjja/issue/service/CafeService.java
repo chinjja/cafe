@@ -215,10 +215,10 @@ public class CafeService {
 	}
 	
 	@Transactional
-	public Comment createComment(User user, Likable likable, CommentForm form) {
+	public Comment createComment(User user, CommentForm form) {
 		val comment = new Comment();
 		comment.setUser(user);
-		comment.setLikable(likable);
+		comment.setLikable(likableRepo.findById(form.getLikableId()).get());
 		comment.setText(form.getText());
 		return commentRepo.save(comment);
 	}

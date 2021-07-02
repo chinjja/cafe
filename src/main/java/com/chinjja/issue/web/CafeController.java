@@ -254,7 +254,7 @@ public class CafeController {
 		if(errors.hasErrors()) {
 			return "posts";
 		}
-		cafeService.createComment(user, post, form);
+		cafeService.createComment(user, form);
 		return "redirect:" + toPostUrl(post);
 	}
 	

@@ -261,7 +261,8 @@ public class CafeServiceTests {
 						@Test
 						void shouldFailWithoutCommentText() {
 							val form = new CommentForm();
-							cafeService.createComment(owner, post, form);
+							form.setLikableId(post.getId());
+							cafeService.createComment(owner, form);
 							assertThrows(Throwable.class, () -> {
 								em.flush();
 							});
@@ -273,8 +274,9 @@ public class CafeServiceTests {
 						
 						Comment new_comment(Likable likable) {
 							val form = new CommentForm();
+							form.setLikableId(likable.getId());
 							form.setText("hi");
-							return cafeService.createComment(owner, likable, form);
+							return cafeService.createComment(owner, form);
 						}
 						
 						@Nested
