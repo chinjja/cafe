@@ -18,6 +18,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -68,14 +69,16 @@ public class User implements UserDetails {
 	private final List<CafeMember> joinedCafes = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "user")
+	@Where(clause = "dtype = 'Post'")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	private final List<Post> posts = new ArrayList<>();
+	private final List<Likable> posts = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "user")
+	@Where(clause = "dtype = 'Comment'")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	private final List<Comment> comments = new ArrayList<>();
+	private final List<Likable> comments = new ArrayList<>();
 	
 	@Transient
 	@EqualsAndHashCode.Exclude

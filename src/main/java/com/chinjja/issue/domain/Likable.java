@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -25,6 +26,7 @@ import lombok.ToString;
 @Entity
 @Data
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn
 public class Likable {
 	@Id
 	@GeneratedValue
