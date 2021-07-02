@@ -15,8 +15,8 @@
 					th:text="#{fragments.category.add}">
 					</button>
 				</div>
-				<div>
-					<a class="btn text-muted" th:if="${isOwner}" th:href="@{/delete-category(categoryId=${category.id})}" th:text=#{delete}></a>
+				<div th:if="${isOwner}">
+					<div th:replace="modals/yesno('deleteCategory'+ *{id}, #{delete}, '['+ *{name} + '] 삭제하시겠습니까?',@{/delete-category(categoryId=${category.id})},'btn text-muted')"></div>
 				</div>
 			</div>
 		</div>

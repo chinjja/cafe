@@ -12,11 +12,17 @@
 				<span class="h4" th:unless="${isOwner}" th:text="${activeCafe.title}"></span>
 			</div>
 			<div th:if="${user != null}">
-				<a class="btn btn-danger" th:if="${isOwner}" th:href="@{/delete-cafe}" th:text="#{deleteCafe}"></a>
+				<div th:if="${isOwner}">
+					<div th:replace="modals/yesno('deleteCafe', #{deleteCafe},'정말 카페를 삭제하시겠습니까?',@{/delete-cafe},'btn btn-danger')"></div>
+				</div>
 				<div th:if="${activeCafe.owner.id != user.id}">
-					<a class="btn btn-warning" th:if="${isApproving}" th:href="@{/leave-cafe}">요청취소</a>
+					<div th:if="${isApproving}">
+						<div th:replace="modals/yesno('cancelRequest', '요청취소','가입 요청을 취소하시겠습니까?',@{/leave-cafe},'btn btn-warning')"></div>
+					</div>
 					<a class="btn btn-primary" th:if="${isJoined == false} AND ${isApproving == false}" th:href="@{/join-cafe}" th:text="#{joinCafe}"></a>
-					<a class="btn btn-warning" th:if="${isJoined}" th:href="@{/leave-cafe}" th:text="#{leaveCafe}"></a>
+					<div th:if="${isJoined}">
+						<div th:replace="modals/yesno('leaveCafe', #{leaveCafe},'정말 카페를 탈퇴하시겠습니까?',@{/leave-cafe},'btn btn-warning')"></div>
+					</div>
 				</div>
 			</div>
 			<a class="btn btn-primary" th:if="${user == null}" th:href="@{/join-cafe}" th:text="#{joinCafe}"></a>
