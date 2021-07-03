@@ -9,9 +9,9 @@
 			<label for="type" th:text="#{forms.category.type}"></label>
 		</div>
 		<div class="form-floating">
-			<input class="form-control" th:field="*{name}" th:placeholder="#{forms.category.title}" autocomplete="off"/>
-			<label for="name" th:text="#{forms.category.title}"></label>
-			<div class="alert alert-danger" th:errors="*{name}"></div>
+			<input class="form-control" th:field="*{title}" th:placeholder="#{forms.category.title}" autocomplete="off"/>
+			<label for="title" th:text="#{forms.category.title}"></label>
+			<div class="alert alert-danger" th:errors="*{title}"></div>
 		</div>
 		<div class="form-group">
 			<input type="submit" class="btn btn-outline-primary w-100" th:value="#{forms.category.submit}"/>

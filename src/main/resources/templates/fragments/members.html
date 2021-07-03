@@ -9,7 +9,9 @@
 						<span th:if="${isOwner}" class="text-muted" th:text="${#temporals.format(member.createdAt)}"></span>
 					</div>
 				</div>
-				<a th:if="${isOwner}" th:href="@{/expulse-member(memberId=${member.id.member.id})}" class="btn btn-danger">강퇴</a>
+				<div th:if="${isOwner}">
+					<div th:replace="modals/yesno('deleteMember'+ ${member.id.member.id}, '강퇴', '[' + ${member.id.member.username}+'] 강퇴하시겠습니까?',@{/expulse-member(memberId=${member.id.member.id})},'btn btn-danger')"></div>
+				</div>
 			</div>
 		</li>
 	</ul>

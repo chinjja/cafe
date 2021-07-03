@@ -138,7 +138,7 @@ public class CafeServiceTests {
 			
 			Category new_root_directory() {
 				val form = new CategoryForm();
-				form.setName("category");
+				form.setTitle("category");
 				form.setParentCategoryId(null);
 				form.setType(Type.DIRECTORY);
 				return cafeService.createCategory(cafe, form);
@@ -178,7 +178,7 @@ public class CafeServiceTests {
 				
 				Category new_category() {
 					val form = new CategoryForm();
-					form.setName("post");
+					form.setTitle("post");
 					form.setParentCategoryId(directory.getId());
 					form.setType(Type.POST);
 					return cafeService.createCategory(cafe, form);

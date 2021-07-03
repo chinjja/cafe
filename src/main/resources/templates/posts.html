@@ -1,6 +1,6 @@
 <html layout:decorate="~{layouts/sidebarLayout}">
 	<div layout:fragment="content" th:with="isLiked = ${@cafeService.isLiked(activePost, user)}">
-		<h1 th:text="${activePost.category.name}"></h1>
+		<h4 th:text="${activePost.category.title}"></h4>
 		<hr/>
 		<span class="text-muted" th:text="${#temporals.format(activePost.createdAt)}"></span>
 		<table class="table table-bordered">
@@ -32,10 +32,10 @@
 				<a class="btn btn-muted" th:if="${activePost.user.id == user.id}" th:href="@{/delete-post(postId=${activePost.id})}" th:text="#{delete}"></a>
 			</div>
 		</div>
+		<hr/>
 		<div class="page-header">
-			<h4 th:text="#{posts.comment}"></h4>
+			<h5 th:text="#{posts.comment}"></h5>
 		</div>
-			<hr/>
 		<div th:replace="fragments/commentList(${activePost.comments})"></div>
 		<div class="mt-3" th:if="${user != null} AND ${isJoined}">
 			<div th:replace="forms/comment(${activePost})"></div>
