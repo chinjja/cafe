@@ -34,4 +34,8 @@
 			<input type="submit" class="btn btn-outline-primary w-100"/>
 		</div>
 	</form>
+	<hr/>
+	<div th:if="${isOwner}">
+		<div th:replace="modals/yesno('deleteCafe', #{deleteCafe},'정말 카페를 삭제하시겠습니까?',@{/delete-cafe},'btn btn-danger')"></div>
+	</div>
 </div>
