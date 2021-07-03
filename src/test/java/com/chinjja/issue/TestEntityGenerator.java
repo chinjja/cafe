@@ -56,7 +56,7 @@ public class TestEntityGenerator {
 		val category = new Category();
 		category.setCafe(cafe);
 		category.setParent(parent);
-		category.setName("category");
+		category.setTitle("category");
 		category.setType(Type.DIRECTORY);
 		return em.persist(category);
 	}

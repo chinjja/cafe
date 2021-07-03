@@ -1,6 +1,6 @@
 <html layout:decorate="~{layouts/sidebarLayout}">
 	<div layout:fragment="content" th:with="isLiked = ${@cafeService.isLiked(activePost, user)}">
-		<h4 th:text="${activePost.category.name}"></h4>
+		<h4 th:text="${activePost.category.title}"></h4>
 		<hr/>
 		<span class="text-muted" th:text="${#temporals.format(activePost.createdAt)}"></span>
 		<table class="table table-bordered">

@@ -35,7 +35,7 @@ public class Category {
 	
 	@NotBlank
 	@NotNull
-	private String name;
+	private String title;
 	
 	@Enumerated(EnumType.STRING)
 	@NotNull

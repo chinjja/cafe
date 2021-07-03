@@ -2,10 +2,10 @@
 	<div class="flex-fill" th:object="${category}">
 		<div class="d-flex align-items-baseline justify-content-between">
 			<div class="d-flex flex-fill" th:if="*{isPost()}">
-				<a class="btn btn-outline-primary text-start flex-fill" th:classappend="${activeCategory} and ${activeCategory.id == category.id} ? 'active'" th:text="*{name}" th:href="@{/cafe/{cafe}(cafe=${activeCafe.id},category=*{id})}"></a>
+				<a class="btn btn-outline-primary text-start flex-fill" th:classappend="${activeCategory} and ${activeCategory.id == category.id} ? 'active'" th:text="*{title}" th:href="@{/cafe/{cafe}(cafe=${activeCafe.id},category=*{id})}"></a>
 			</div>
 			<div class="py-2 ps-1" th:unless="*{isPost()}">
-				<span th:text="*{name}"></span>
+				<span th:text="*{title}"></span>
 			</div>
 			<div class="d-flex justify-content-end align-items-baseline">
 				<div th:if="${isOwner} AND *{isDirectory()}">
@@ -16,7 +16,7 @@
 					</button>
 				</div>
 				<div th:if="${isOwner}">
-					<div th:replace="modals/yesno('deleteCategory'+ *{id}, #{delete}, '['+ *{name} + '] 삭제하시겠습니까?',@{/delete-category(categoryId=${category.id})},'btn text-muted')"></div>
+					<div th:replace="modals/yesno('deleteCategory'+ *{id}, #{delete}, '['+ *{title} + '] 삭제하시겠습니까?',@{/delete-category(categoryId=${category.id})},'btn text-muted')"></div>
 				</div>
 			</div>
 		</div>

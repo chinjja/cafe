@@ -296,7 +296,7 @@ public class CafeService {
 		val category = new Category();
 		category.setCafe(cafe);
 		category.setParent(parent);
-		category.setName(form.getName());
+		category.setTitle(form.getTitle());
 		category.setType(form.getType());
 		return categoryRepo.save(category);
 	}

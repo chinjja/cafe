@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class CategoryForm {
 	@NotBlank
-	private String name;
+	private String title;
 	
 	@NotNull
 	private Type type;
