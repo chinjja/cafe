@@ -5,9 +5,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-import com.chinjja.issue.domain.Category;
-import com.chinjja.issue.domain.Comment;
-import com.chinjja.issue.domain.Post;
 import com.chinjja.issue.form.CafeForm;
 import com.chinjja.issue.form.CategoryForm;
 import com.chinjja.issue.form.CommentForm;
