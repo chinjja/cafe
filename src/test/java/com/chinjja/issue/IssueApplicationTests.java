@@ -13,6 +13,7 @@ import javax.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.chinjja.issue.data.UserRepository;
@@ -23,6 +24,7 @@ import com.chinjja.issue.domain.UserRole;
 import lombok.val;
 
 @SpringBootTest
+@ActiveProfiles("test")
 public class IssueApplicationTests {
 	@Autowired EntityManager em;
 	@Autowired UserRepository userRepo;
