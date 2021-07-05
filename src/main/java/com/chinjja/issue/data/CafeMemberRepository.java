@@ -8,5 +8,7 @@ import com.chinjja.issue.domain.Cafe;
 import com.chinjja.issue.domain.CafeMember;
 
 public interface CafeMemberRepository extends CrudRepository<CafeMember, CafeMember.Id> {
-	List<CafeMember> findByIdCafeAndApproved(Cafe cafe, boolean approved);
+	List<CafeMember> findByIdCafeAndLevelGreaterThan(Cafe cafe, int level);
+	List<CafeMember> findByIdCafeAndLevelLessThan(Cafe cafe, int level);
+	List<CafeMember> findByIdCafeAndLevel(Cafe cafe, int level);
 }

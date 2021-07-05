@@ -122,7 +122,7 @@ public class CafeService {
 		if(user == null) return false;
 		val cm = getCafeMemberById(new CafeMember.Id(cafe, user));
 		if(cm == null) return false;
-		return cm.isApproved();
+		return cm.getLevel() > 0;
 	}
 	
 	public boolean isJoined(Cafe cafe, User user) {
@@ -133,7 +133,7 @@ public class CafeService {
 		if(user == null) return false;
 		val cm = getCafeMemberById(new CafeMember.Id(cafe, user));
 		if(cm == null) return false;
-		return !cm.isApproved();
+		return cm.getLevel() == 0;
 	}
 	
 	public CafeMember getCafeMemberById(CafeMember.Id id) {
@@ -142,7 +142,7 @@ public class CafeService {
 	@Transactional
 	public CafeMember approveMember(Cafe cafe, User member) {
 		val cm = getCafeMemberById(new CafeMember.Id(cafe, member));
-		cm.setApproved(true);
+		cm.setLevel(1);
 		return cafeMemberRepo.save(cm);
 	}
 	
@@ -154,7 +154,7 @@ public class CafeService {
 		val cm = new CafeMember();
 		cm.setId(new CafeMember.Id(cafe, user));
 		cm.setGreeting(form.getGreeting());
-		cm.setApproved(!cafe.isNeedApproval());
+		cm.setLevel(cafe.isNeedApproval() ? 0 : 1);
 		return cafeMemberRepo.save(cm);
 	}
 	
@@ -312,7 +312,7 @@ public class CafeService {
 	public Iterable<CafeMember> getNotApprovedMembers(User owner) {
 		val list = new ArrayList<CafeMember>();
 		for(val cafe : owner.getCafes()) {
-			list.addAll(cafeMemberRepo.findByIdCafeAndApproved(cafe, false));
+			list.addAll(cafeMemberRepo.findByIdCafeAndLevel(cafe, 0));
 		}
 		return list;
 	}

@@ -29,7 +29,7 @@ public class CafeMember {
 	@NotNull
 	private String greeting;
 	
-	private boolean approved;
+	private int level;
 	
 	@PrePersist
 	private void createdAt() {

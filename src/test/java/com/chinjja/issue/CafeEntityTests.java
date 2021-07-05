@@ -61,7 +61,7 @@ public class CafeEntityTests {
 	@Test
 	void shouldHaveNoMemberIfInsertedMemberIsNotApproved() {
 		val member = gen.member(cafe, user1);
-		member.setApproved(false);
+		member.setLevel(0);
 		
 		val load = load_cafe();
 		assertEquals(0, load.getMemberCount());
@@ -71,7 +71,7 @@ public class CafeEntityTests {
 	@Test
 	void shouldHaveOneMemberIfInsertedMemberIsApproved() {
 		val member = gen.member(cafe, user1);
-		member.setApproved(true);
+		member.setLevel(1);
 		
 		val load = load_cafe();
 		assertEquals(1, load.getMemberCount());

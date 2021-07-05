@@ -56,7 +56,7 @@ public class Cafe {
 	private User owner;
 	
 	@OneToMany(mappedBy = "id.cafe")
-	@Where(clause = "approved = true")
+	@Where(clause = "level > 0")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@Setter(AccessLevel.NONE)
@@ -75,7 +75,7 @@ public class Cafe {
 	@Setter(AccessLevel.NONE)
 	private List<Category> rootCategories = new ArrayList<>();
 	
-	@Formula("(select count(cm.member_id) from cafe_member cm where cm.cafe_id = id and cm.approved = true)")
+	@Formula("(select count(cm.member_id) from cafe_member cm where cm.cafe_id = id and cm.level > 0)")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@Setter(AccessLevel.NONE)
